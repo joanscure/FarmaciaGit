@@ -1,0 +1,259 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package farmacia.vista;
+
+import farmacia.calculos.configuracionImagenes;
+import farmacia.vista.mantenimientoCliente.frmClientes;
+import farmacia.vista.mantenimientoEmpleado.frmEmpleados;
+import farmacia.vista.mantenimientoProductos.frmProducto;
+import farmacia.vista.mantenimientoTipoUsuario.frmTipousuario;
+import java.awt.Event;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.*;
+
+/**
+ *
+ * @author fecyp
+ */
+public class frmprincipal extends JFrame implements ActionListener, MouseListener {
+
+    private JMenu malmacen, mconsultas, mherramientas, mayuda, marchivo, mventas, mmantenimiento, manulaciones;
+    private JMenuItem iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
+    public static JDesktopPane desktopPane;
+    private JMenuBar barra;
+    public static String jlidpersona, jlnombre, jlapaterno, jlapmaterno, jlocupacion="vendedor";
+    Font fontgeneral = new Font("Geneva", 1, 15);
+    Font fontitem = new Font("Geneva", 1, 13);
+    frmClientes frmclientes;
+    frmProducto frmproducto;
+    frmTipousuario frmtipousuario;
+    frmEmpleados frmempleados;
+    configuracionImagenes imageconfig = new configuracionImagenes();
+
+    public frmprincipal() {
+        
+        inciar_componentes();
+        frmtipousuario = new frmTipousuario();
+        desktopPane.add(frmtipousuario);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(frmprincipal.MAXIMIZED_BOTH);
+        this.setTitle("SISTEMA DE VENTAS FARMACIA");
+        iproductos.addActionListener(this);
+        iusuarios_accesos.addActionListener(this);
+        iclientes.addActionListener(this);
+        icerrarsesion.addActionListener(this);
+        itipousuario.addActionListener(this);
+        
+        setVisible(true);
+        perzonalizartipoletra();
+    }
+
+    public void perzonalizartipoletra() {
+        malmacen.setFont(fontgeneral);
+        mconsultas.setFont(fontgeneral);
+        mherramientas.setFont(fontgeneral);
+        mayuda.setFont(fontgeneral);
+        marchivo.setFont(fontgeneral);
+        mventas.setFont(fontgeneral);
+        mmantenimiento.setFont(fontgeneral);
+        manulaciones.setFont(fontgeneral);
+
+        iproductos.setFont(fontitem);
+        isalir.setFont(fontitem);
+        icerrarsesion.setFont(fontitem);
+        iventas.setFont(fontitem);
+        iusuarios_accesos.setFont(fontitem);
+        itipousuario.setFont(fontitem);
+        icambiarPass.setFont(fontitem);
+        ianularventas.setFont(fontitem);
+        iclientes.setFont(fontitem);
+        iacercade.setFont(fontitem);
+        iayuda.setFont(fontitem);
+    }
+
+    public void inciar_componentes() {
+
+        desktopPane = new JDesktopPane();
+
+        barra = new JMenuBar();
+
+        mventas = new JMenu("Ventas");
+        mventas.setIcon(imageconfig.obtenerIcono("mventa.png", 32));
+
+        malmacen = new JMenu("Almacen");
+        malmacen.setIcon(imageconfig.obtenerIcono("almacen.png", 50));
+
+        marchivo = new JMenu("Archivo");
+        marchivo.setIcon(new ImageIcon(getClass().getResource("/Files/Archivo.png")));
+
+        mconsultas = new JMenu("Consultas");
+        mconsultas.setIcon(new ImageIcon(getClass().getResource("/Files/Consultas.png")));
+
+        mmantenimiento = new JMenu("Configuraciones");
+        mmantenimiento.setIcon(new ImageIcon(getClass().getResource("/Files/Configuraciones.png")));
+
+        mherramientas = new JMenu("Herramientas");
+        mherramientas.setIcon(new ImageIcon(getClass().getResource("/Files/Herramientas.png")));
+
+        manulaciones = new JMenu("Anulaciones");
+        manulaciones.setIcon(imageconfig.obtenerIcono("anulaciones.png", 32));
+
+        mayuda = new JMenu("Ayuda");
+        mayuda.setIcon(new ImageIcon(getClass().getResource("/Files/Ayuda.png")));
+
+        iventas = new JMenuItem("Ventas");
+        iventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
+        iventas.setIcon(new ImageIcon(getClass().getResource("/Files/ventas.png")));
+
+        iproductos = new JMenuItem("Productos");
+        iproductos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK));
+        iproductos.setIcon(new ImageIcon(getClass().getResource("/Files/productos.png")));
+
+        iusuarios_accesos = new JMenuItem("Usuarios y Accesos");
+        iusuarios_accesos.setIcon(new ImageIcon(getClass().getResource("/Files/trabajadores.png")));
+        iusuarios_accesos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Event.CTRL_MASK));
+
+        ianularventas = new JMenuItem("Anular Ventas");
+        ianularventas.setIcon(imageconfig.obtenerIcono("anularventas.png", 30));
+        ianularventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
+
+        icerrarsesion = new JMenuItem("Cerrar Sesion");
+        icerrarsesion.setIcon(imageconfig.obtenerIcono("desconectar.png", 30));
+        icerrarsesion.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+
+        iclientes = new JMenuItem("Clientes");
+        iclientes.setIcon(new ImageIcon(getClass().getResource("/Files/clientes.png")));
+        iclientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
+
+        itipousuario = new JMenuItem("Tipo de Usuario");
+        itipousuario.setIcon(imageconfig.obtenerIcono("tipousuario.png", 30));
+        itipousuario.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK));
+
+        isalir = new JMenuItem("Salir");
+        isalir.setIcon(imageconfig.obtenerIcono("salir.png", 30));
+        isalir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+
+        icambiarPass = new JMenuItem("Cambiar Contraseña");
+        icambiarPass.setIcon(imageconfig.obtenerIcono("cambioclave.png", 30));
+        icambiarPass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+
+        iacercade = new JMenuItem("Acerca De");
+        iacercade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
+
+        iayuda = new JMenuItem("Ayuda");
+        iayuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK));
+
+        marchivo.add(icerrarsesion);
+        marchivo.add(isalir);
+
+        malmacen.add(iproductos);
+
+        mventas.add(iventas);
+        mventas.add(iclientes);
+
+        mmantenimiento.add(iusuarios_accesos);
+        mmantenimiento.add(itipousuario);
+
+        manulaciones.add(ianularventas);
+
+        mherramientas.add(icambiarPass);
+
+        mayuda.add(iacercade);
+        mayuda.add(iayuda);
+
+        barra.add(marchivo);
+        barra.add(malmacen);
+        barra.add(mventas);
+        barra.add(mconsultas);
+        barra.add(mmantenimiento);
+        barra.add(mherramientas);
+        barra.add(manulaciones);
+        barra.add(mayuda);
+        this.setJMenuBar(barra);
+
+        add(desktopPane);
+
+    }
+
+    public static void main(String[] args) {
+        try {
+            javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        new frmprincipal().setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (source == iclientes) {
+            if (frmclientes == null) {
+                frmclientes = new frmClientes();
+                desktopPane.add(frmclientes);
+            }
+
+            frmclientes.toFront();
+            frmclientes.setVisible(true);
+            frmclientes.pane1.txtBuscar.requestFocus();
+        } else if (source == icerrarsesion) {
+            System.out.println("cerrar sesion");
+        } else if (source == iproductos) {
+            if (frmproducto == null) {
+                frmproducto = new frmProducto();
+                desktopPane.add(frmproducto);
+            }
+
+            frmproducto.toFront();
+            frmproducto.setVisible(true);
+            frmproducto.pane1.txtBuscar.requestFocus();
+
+        } else if (source == itipousuario) {
+
+            frmtipousuario.toFront();
+            frmtipousuario.setVisible(true);
+            frmtipousuario.pane1.txtBuscar.requestFocus();
+
+        }else if (source == iusuarios_accesos) {
+            if (frmempleados == null) {
+                frmempleados = new frmEmpleados();
+                desktopPane.add(frmempleados);
+            }
+
+            frmempleados.toFront();
+            frmempleados.setVisible(true);
+            frmempleados.pane1.txtBuscar.requestFocus();
+
+        } 
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+}

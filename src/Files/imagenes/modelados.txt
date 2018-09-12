@@ -1,0 +1,25 @@
+el sistema puede realizar:
+
+-vistas:
+ventas
+mostrar productos
+registrar productos
+mostrar clientes
+registrar clientes
+mostrar trabajadores
+registrar trabajadores
+tipo de trabajador
+login 
+anular ventas
+
+-herramientas:
+cambiar contraseña
+ayuda
+
+
+
+-consultas:
+reporte de ventas realizadas
+reporte de productos comprados
+reporte de clientes
+reporte de trabajadores

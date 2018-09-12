@@ -1,0 +1,13 @@
+vista/presentacion = es la interfaz grafica
+
+controlador /modelos=?????
+
+dao / operaciones= para hacer mantemientos de cada base de datos
+
+entidad = cada tabla de nuestra base de datos
+
+interaccion con el teclado
+configuracion de descuento
+
+
+CONTRASEÑAS:  ALGORITMO HASH-MD5
