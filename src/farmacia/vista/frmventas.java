@@ -10,6 +10,7 @@ import farmacia.calculos.configuracionImagenes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -37,8 +38,8 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
     //pane botones
     JButton bnguardar, bnnuevo, bnrecibo, bncancelar, bnsalir;
     //datos producto
-    JLabel jlidproducto, jlstock, jlprecio, jlnombre;
-    JTextField txtnombreProducto, txtcodigo;
+    JLabel jlidproducto, jlstock, jlprecio, jlnombreproducto;
+    JTextField txtnombreProducto, txtcodigo, txtstock, txtprecio;
     JButton bnagregproducto;
 
     //agrega
@@ -82,12 +83,38 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
     public void crear_paneventa() {
         paneventa = new JPanel(new BorderLayout());
         paneventa.setBackground(paneClaro);
+        
         JPanel panecabecera = new JPanel(new BorderLayout());
         panecabecera.setBackground(paneClaro);
-        JPanel panedatosventa = new JPanel(new BorderLayout());
+        
+        JPanel panedatosventa = new JPanel();
         panedatosventa.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(1, 1, 1, 1),
                 BorderFactory.createTitledBorder("Datos de la venta")));
+        panedatosventa.setBackground(paneClaro);
+       panedatosventa.add(crearDatosVenta());
+
+        //datos de producto
+        JPanel panedatosproducto = new JPanel(new BorderLayout());
+        panedatosproducto.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(1, 1, 1, 1),
+                BorderFactory.createTitledBorder("Datos de la venta")));
+        panedatosproducto.setBackground(paneClaro);
+
+        panedatosproducto.add(crearDatosProducto(),BorderLayout.WEST);
+       //
+        
+        panecabecera.add(panedatosventa, BorderLayout.NORTH);
+        panecabecera.add(panedatosproducto, BorderLayout.SOUTH);
+        
+        
+
+        paneventa.add(panecabecera, BorderLayout.WEST);
+
+    }
+    public JPanel crearDatosVenta()
+    {
+         JPanel panedatosventa = new JPanel(new BorderLayout());
         panedatosventa.setBackground(paneClaro);
         JPanel paneidcliente = new JPanel(new BorderLayout());
         paneidcliente.setBackground(paneClaro);
@@ -135,32 +162,66 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
 
         panedatosventa.add(cliente, BorderLayout.WEST);
         panedatosventa.add(datosComprobante, BorderLayout.EAST);
-        
-        //datos de producto
-        JPanel panedatosproducto=new JPanel(new BorderLayout());
-        panedatosproducto.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(1, 1, 1, 1),
-                BorderFactory.createTitledBorder("Datos de la venta")));
-        
-        JPanel panelidproducto=new JPanel(new BorderLayout());
-        jlidproducto=new JLabel("Codigo de Producto:");
-        JPanel panetextoboton=new JPanel(new BorderLayout());
-        bnagregproducto=new JButton("", new ImageIcon(getClass().getResource("/Files/buscar.png")));
-        txtcodigo=new JTextField(10);
-        panetextoboton.add(txtcodigo,BorderLayout.WEST);
-        panetextoboton.add(bnagregproducto,BorderLayout.EAST);
-        panetextoboton.setBackground(paneClaro);
-        panelidproducto.setBackground(paneClaro);
-        panelidproducto.add(panelidproducto,BorderLayout.NORTH);
-        panelidproducto.add(panetextoboton,BorderLayout.SOUTH);
-
-        panecabecera.add(panedatosventa, BorderLayout.NORTH);
-        
-
-        paneventa.add(panecabecera, BorderLayout.WEST);
-
+        return panedatosventa;
     }
 
+    public JPanel crearDatosProducto()
+    {
+        JPanel panedatosproducto = new JPanel(new BorderLayout());
+        panedatosproducto.setBackground(paneClaro);
+
+        JPanel westpaneproducto = new JPanel(new BorderLayout());
+        westpaneproducto.setBackground(paneClaro);
+        JPanel panelidproducto = new JPanel(new BorderLayout());
+        jlidproducto = new JLabel("Codigo de Producto:");
+        JPanel panetextoboton = new JPanel(new BorderLayout());
+        bnagregproducto = new JButton("", new ImageIcon(getClass().getResource("/Files/buscar.png")));
+        txtcodigo = new JTextField(10);
+        panetextoboton.add(txtcodigo, BorderLayout.WEST);
+        panetextoboton.add(bnagregproducto, BorderLayout.EAST);
+        panetextoboton.setBackground(paneClaro);
+        panelidproducto.setBackground(paneClaro);
+        panelidproducto.add(jlidproducto, BorderLayout.NORTH);
+        panelidproducto.add(panetextoboton, BorderLayout.SOUTH);
+
+        JPanel nombrepane = new JPanel(new BorderLayout());
+        txtnombreProducto = new JTextField(10);
+        jlnombreproducto = new JLabel("Nombre ");
+        nombrepane.add(txtnombreProducto, BorderLayout.SOUTH);
+        nombrepane.add(jlnombreproducto, BorderLayout.NORTH);
+        nombrepane.setBackground(paneClaro);
+        westpaneproducto.add(panelidproducto, BorderLayout.NORTH);
+        westpaneproducto.add(nombrepane, BorderLayout.SOUTH);
+
+        JPanel eastpaneproducto = new JPanel(new FlowLayout());
+        eastpaneproducto.setBackground(paneClaro);
+        eastpaneproducto.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JPanel todoeast = new JPanel(new BorderLayout());
+        todoeast.setBackground(paneClaro);
+
+        JPanel panestock = new JPanel(new BorderLayout());
+        jlstock = new JLabel("STOCK: ");
+        txtstock = new JTextField(10);
+        txtstock.setEnabled(false);
+        panestock.add(jlstock, BorderLayout.NORTH);
+        panestock.add(txtstock, BorderLayout.SOUTH);
+        panestock.setBackground(paneClaro);
+        JPanel panecantidad = new JPanel(new BorderLayout());
+        jlprecio=new JLabel("PRECIO: ");
+        txtprecio=new JTextField(10);
+        txtprecio.setEnabled(false);
+        panecantidad.add(jlprecio,BorderLayout.NORTH);
+        panecantidad.add(txtprecio,BorderLayout.SOUTH);
+        panecantidad.setBackground(paneClaro);
+
+        todoeast.add(panestock,BorderLayout.WEST);
+        todoeast.add(panecantidad,BorderLayout.EAST);
+        eastpaneproducto.add(todoeast);
+        
+        panedatosproducto.add(westpaneproducto, BorderLayout.WEST);
+        panedatosproducto.add(eastpaneproducto,BorderLayout.EAST);
+        return panedatosproducto;
+    }
     public void crear_panebotones() {
         panebotones = new JPanel(new GridLayout(5, 1));
         bnguardar = new JButton("Realizar Venta", configImage.obtenerIcono("generarventas.png", 42));
