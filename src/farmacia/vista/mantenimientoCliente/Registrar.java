@@ -44,14 +44,14 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     configuracionImagenes iamgeConfig = new configuracionImagenes();
     Color c = new java.awt.Color(255, 255, 153);
     Font fontboton = new Font("Geneva", 1, 13);
-    boolean teclaunida=false;
+    boolean teclaunida = false;
 
     public Registrar(frmClientes regis) {
         this.regis = regis;
         iniciar_componentes();
         setBackground(c);
         personalizartipoletra();
-        
+
         txtapellidop.addActionListener(this);
         txtnombre.addActionListener(this);
         txtdocumento.addActionListener(this);
@@ -116,9 +116,10 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyTyped(KeyEvent ke) {
         Object source = ke.getSource();
-        if(source!= cbxtipodocumento)
+        if (source != cbxtipodocumento) {
             ke.getComponent().setBackground(Color.white);
-        
+        }
+
         if (source == txtapellidom || source == txtapellidop || source == txtnombre || source == txtdireccion) {
             char c = ke.getKeyChar();
             if (Character.isLowerCase(c)) {
@@ -133,8 +134,18 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
                 ke.consume();
             }
+            if (source == txtdocumento) {
+                if (txtdocumento.getText().length() >= 8) {
+                    ke.consume();
+                }
+            }
+            if (source == txttelefono) {
+                if (txttelefono.getText().length() >= 9) {
+                    ke.consume();
+                }
+            }
         }
-       
+
     }
 
     @Override
@@ -146,22 +157,21 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
                 cbxtipodocumento.transferFocus();
             }
         }
-         if(ke.getKeyCode()==KeyEvent.VK_ESCAPE)
-            {
-                frmClientes.jbCancelar.doClick();
-                
-            }
-         if (ke.getExtendedKeyCode()== KeyEvent.VK_CONTROL ) {
-                  teclaunida=true;
-            }
+        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            frmClientes.jbCancelar.doClick();
+
+        }
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            teclaunida = true;
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_S &&teclaunida) {
-                    frmClientes.jbGuardar.doClick();
-                    teclaunida=false;
-                }
+        if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
+            frmClientes.jbGuardar.doClick();
+            teclaunida = false;
+        }
     }
 
     private void iniciar_componentes() {
