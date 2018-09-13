@@ -220,13 +220,13 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
              pane1.txtBuscar.requestFocus();
 
         } else if (source == jbEliminar) {
-          if(!acceso.verificarClienteEliminar())
-          {
-              frmpermiso from=new frmpermiso();
-              from.setVisible(true);
-              from.toFront();
-              
-          }
+//          if(!acceso.verificarClienteEliminar())
+//          {
+//              frmpermiso from=new frmpermiso();
+//              from.setVisible(true);
+//              from.toFront();
+//              
+//          }
             pane1.tabla.clearSelection();
             jbEliminar.setEnabled(false);
             jbModificar.setEnabled(false);

@@ -91,7 +91,8 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
 
         JPanel panecabecera = new JPanel(new BorderLayout());
         panecabecera.setBackground(paneClaro);
-
+        //pane iquierda o la cabecera izquierda
+        
         JPanel paneizquierda = new JPanel(new BorderLayout());
         paneizquierda.setBackground(paneClaro);
 
@@ -117,16 +118,19 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
 
         panedatos.add(panedatosventa, BorderLayout.NORTH);
         panedatos.add(panedatosproducto, BorderLayout.SOUTH);
-
+        //pane confi producto
         JPanel paneExtra = new JPanel(new BorderLayout());
         paneExtra.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
                 BorderFactory.createTitledBorder("")));
         paneExtra.setBackground(paneOscuro);
         paneExtra.add(crear_paneinformacionproducto());
-
+        
+        
         paneizquierda.add(panedatos, BorderLayout.NORTH);
         paneizquierda.add(paneExtra, BorderLayout.SOUTH);
+        
+        //pane derech o la imagen
 
         panecabecera.add(paneizquierda, BorderLayout.WEST);
         paneventa.add(panecabecera, BorderLayout.NORTH);
@@ -278,7 +282,7 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
         
         JPanel panebotonesconfig = new JPanel(new BorderLayout());
         bnagregar=new JButton("",configImage.obtenerIcono("agregar.png",30));
-        bnquitar=new JButton("",configImage.obtenerIcono("bnsacar.png",30));
+        bnquitar=new JButton("",configImage.obtenerIcono("eliminar.png",30));
         panebotonesconfig.setBackground(paneOscuro);
         panebotonesconfig.add(bnagregar,BorderLayout.WEST);
         panebotonesconfig.add(bnquitar,BorderLayout.EAST);
