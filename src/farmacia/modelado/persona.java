@@ -26,6 +26,9 @@ public class persona {
         this.status = status;
     }
 
+    public persona() {
+    }
+
     @Override
     public String toString() {
         return "Persona{" + "nombre=" + nombre + ", appaterno=" + appaterno + ", apmaterno=" + apmaterno + ", numerodni=" + numerodni + '}';

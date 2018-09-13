@@ -20,7 +20,7 @@ import javax.swing.*;
 public class frmventas extends JFrame implements ActionListener,KeyListener 
 {
     //paneles
-    JPanel paneprincipal,panewest,paneeast;
+    JPanel paneprincipal,paneventa,panebotones;
     //datos venta
     JLabel jlcliente,jbdtipocomprobante;
     JTextField txtidcliente,txtnombrecliente;
@@ -28,7 +28,8 @@ public class frmventas extends JFrame implements ActionListener,KeyListener
     JComboBox bcxtipocomprobante;
     JDateChooser fechaventa;
     
-    
+    //pane botones
+    JButton bnguardar,bnnuevo,bnrecibo,bncancelar,bnsalir;
     //datos producto
     JLabel jlidproducto,jlstock,jlprecio,jlnombre;
     JTextField txtnombre,codigo;
@@ -50,6 +51,15 @@ public class frmventas extends JFrame implements ActionListener,KeyListener
       {
           
       }
+   
+   public JPanel crear_paneventa()
+   {
+       
+   }
+   public JPanel crear_panebotones()
+   {
+       
+   }
     @Override
     public void actionPerformed(ActionEvent e) {
     }
