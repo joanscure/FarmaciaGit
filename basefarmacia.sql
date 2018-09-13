@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-09-2018 a las 02:29:06
+-- Tiempo de generación: 13-09-2018 a las 22:57:31
 -- Versión del servidor: 10.1.34-MariaDB
--- Versión de PHP: 7.2.7
+-- Versión de PHP: 7.1.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -45,6 +45,7 @@ CREATE TABLE `boletacabecera` (
 --
 
 CREATE TABLE `boletadetalle` (
+  `idboletadetalle` int(11) NOT NULL,
   `idboletacabecera` int(11) NOT NULL,
   `idproducto` int(11) NOT NULL,
   `cantidad` double(5,2) NOT NULL,
@@ -134,6 +135,7 @@ CREATE TABLE `facturacabecera` (
 --
 
 CREATE TABLE `facturadetalle` (
+  `idfacturadetalle` int(11) NOT NULL,
   `idfacturacabecera` int(11) NOT NULL,
   `idproducto` int(11) NOT NULL,
   `cantidad` double(5,2) NOT NULL,
@@ -167,7 +169,8 @@ CREATE TABLE `persona` (
 
 CREATE TABLE `personacliente` (
   `idpersonacliente` int(11) NOT NULL,
-  `idpersona` int(11) NOT NULL
+  `idpersona` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -195,6 +198,7 @@ CREATE TABLE `producto` (
 --
 
 CREATE TABLE `productodescuento` (
+  `idproductodescuent` int(11) NOT NULL,
   `idproducto` int(11) NOT NULL,
   `iddescuento` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
@@ -240,6 +244,7 @@ ALTER TABLE `boletacabecera`
 -- Indices de la tabla `boletadetalle`
 --
 ALTER TABLE `boletadetalle`
+  ADD PRIMARY KEY (`idboletadetalle`),
   ADD KEY `idboletacabecera` (`idboletacabecera`),
   ADD KEY `idproducto` (`idproducto`);
 
@@ -282,6 +287,7 @@ ALTER TABLE `facturacabecera`
 -- Indices de la tabla `facturadetalle`
 --
 ALTER TABLE `facturadetalle`
+  ADD PRIMARY KEY (`idfacturadetalle`),
   ADD KEY `idproducto` (`idproducto`),
   ADD KEY `idfacturacabecera` (`idfacturacabecera`);
 
@@ -308,6 +314,7 @@ ALTER TABLE `producto`
 -- Indices de la tabla `productodescuento`
 --
 ALTER TABLE `productodescuento`
+  ADD PRIMARY KEY (`idproductodescuent`),
   ADD KEY `PRODUCTO` (`idproducto`),
   ADD KEY `DESCUENTO` (`iddescuento`);
 
@@ -325,7 +332,13 @@ ALTER TABLE `tipotrabajador`
 -- AUTO_INCREMENT de la tabla `boletacabecera`
 --
 ALTER TABLE `boletacabecera`
-  MODIFY `idboletacabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idboletacabecera` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `boletadetalle`
+--
+ALTER TABLE `boletadetalle`
+  MODIFY `idboletadetalle` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `descuento`
@@ -358,6 +371,12 @@ ALTER TABLE `facturacabecera`
   MODIFY `idfacturacabecera` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `facturadetalle`
+--
+ALTER TABLE `facturadetalle`
+  MODIFY `idfacturadetalle` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
@@ -374,6 +393,12 @@ ALTER TABLE `personacliente`
 --
 ALTER TABLE `producto`
   MODIFY `idproducto` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `productodescuento`
+--
+ALTER TABLE `productodescuento`
+  MODIFY `idproductodescuent` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `tipotrabajador`
