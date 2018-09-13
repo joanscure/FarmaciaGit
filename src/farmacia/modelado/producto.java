@@ -102,3 +102,5 @@ public class producto {
         this.stock = stock;
     }
 }
+
+
