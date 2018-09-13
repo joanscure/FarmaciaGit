@@ -110,20 +110,20 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         mayuda.setIcon(new ImageIcon(getClass().getResource("/Files/Ayuda.png")));
 
         iventas = new JMenuItem("Ventas");
-        iventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
+        iventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
         iventas.setIcon(new ImageIcon(getClass().getResource("/Files/ventas.png")));
 
         iproductos = new JMenuItem("Productos");
-        iproductos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK));
+        iproductos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
         iproductos.setIcon(new ImageIcon(getClass().getResource("/Files/productos.png")));
 
         iusuarios_accesos = new JMenuItem("Usuarios y Accesos");
         iusuarios_accesos.setIcon(new ImageIcon(getClass().getResource("/Files/trabajadores.png")));
-        iusuarios_accesos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Event.CTRL_MASK));
+        iusuarios_accesos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
 
         ianularventas = new JMenuItem("Anular Ventas");
         ianularventas.setIcon(imageconfig.obtenerIcono("anularventas.png", 30));
-        ianularventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
+        ianularventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0));
 
         icerrarsesion = new JMenuItem("Cerrar Sesion");
         icerrarsesion.setIcon(imageconfig.obtenerIcono("desconectar.png", 30));
@@ -131,11 +131,11 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         iclientes = new JMenuItem("Clientes");
         iclientes.setIcon(new ImageIcon(getClass().getResource("/Files/clientes.png")));
-        iclientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
+        iclientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 
         itipousuario = new JMenuItem("Tipo de Usuario");
         itipousuario.setIcon(imageconfig.obtenerIcono("tipousuario.png", 30));
-        itipousuario.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK));
+        itipousuario.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 
         isalir = new JMenuItem("Salir");
         isalir.setIcon(imageconfig.obtenerIcono("salir.png", 30));
@@ -143,13 +143,13 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         icambiarPass = new JMenuItem("Cambiar Contraseña");
         icambiarPass.setIcon(imageconfig.obtenerIcono("cambioclave.png", 30));
-        icambiarPass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+        icambiarPass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
 
         iacercade = new JMenuItem("Acerca De");
-        iacercade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
+        iacercade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
 
         iayuda = new JMenuItem("Ayuda");
-        iayuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK));
+        iayuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
 
         marchivo.add(icerrarsesion);
         marchivo.add(isalir);

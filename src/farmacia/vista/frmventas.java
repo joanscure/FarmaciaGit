@@ -38,7 +38,7 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
     JButton bnguardar, bnnuevo, bnrecibo, bncancelar, bnsalir;
     //datos producto
     JLabel jlidproducto, jlstock, jlprecio, jlnombre;
-    JTextField txtnombreProducto, codigo;
+    JTextField txtnombreProducto, txtcodigo;
     JButton bnagregproducto;
 
     //agrega
@@ -135,8 +135,27 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
 
         panedatosventa.add(cliente, BorderLayout.WEST);
         panedatosventa.add(datosComprobante, BorderLayout.EAST);
+        
+        //datos de producto
+        JPanel panedatosproducto=new JPanel(new BorderLayout());
+        panedatosproducto.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(1, 1, 1, 1),
+                BorderFactory.createTitledBorder("Datos de la venta")));
+        
+        JPanel panelidproducto=new JPanel(new BorderLayout());
+        jlidproducto=new JLabel("Codigo de Producto:");
+        JPanel panetextoboton=new JPanel(new BorderLayout());
+        bnagregproducto=new JButton("", new ImageIcon(getClass().getResource("/Files/buscar.png")));
+        txtcodigo=new JTextField(10);
+        panetextoboton.add(txtcodigo,BorderLayout.WEST);
+        panetextoboton.add(bnagregproducto,BorderLayout.EAST);
+        panetextoboton.setBackground(paneClaro);
+        panelidproducto.setBackground(paneClaro);
+        panelidproducto.add(panelidproducto,BorderLayout.NORTH);
+        panelidproducto.add(panetextoboton,BorderLayout.SOUTH);
 
         panecabecera.add(panedatosventa, BorderLayout.NORTH);
+        
 
         paneventa.add(panecabecera, BorderLayout.WEST);
 
