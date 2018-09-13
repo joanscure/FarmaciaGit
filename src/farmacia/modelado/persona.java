@@ -6,7 +6,6 @@ public class persona {
     private int idPersona;
     private String nombre;//32
     private String appaterno;//32
-      
     private String apmaterno;//32
     private char[] numerodni;//8
     private int personaedad;// NULO
@@ -14,7 +13,7 @@ public class persona {
     private String telefono;//16 NULO
     private boolean status;
 
-    public persona(int idPersona, String nombre, String appaterno, String apmaterno, char[] numerodni, int personaedad, String direccion, String telefono, boolean status) {
+    public persona(int idPersona, String nombre, String appaterno, String apmaterno, char[] numerodni, int personaedad, String direccion, String telefono) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.appaterno = appaterno;
@@ -23,9 +22,10 @@ public class persona {
         this.personaedad = personaedad;
         this.direccion = direccion;
         this.telefono = telefono;
-        this.status = status;
+        status = true;
     }
 
+  
     public persona() {
     }
 

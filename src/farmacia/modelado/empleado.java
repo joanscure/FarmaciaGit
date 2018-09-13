@@ -16,6 +16,7 @@ public class empleado extends persona {
     private String password;//32
     private Date fechaalta;//nulo
     private int tipotrabajador;
+    private boolean status;
 
     @Override
     public String toString() {
@@ -23,17 +24,16 @@ public class empleado extends persona {
     }
 
         
-    public empleado(int idempleado, int idpersona, String login, String password, Date fechaalta, int tipotrabajador, boolean status) {
+    public empleado(int idempleado, int idpersona, String login, String password, Date fechaalta, int tipotrabajador) {
         this.idempleado = idempleado;
         this.idpersona = idpersona;
         this.login = login;
         this.password = password;
         this.fechaalta = fechaalta;
         this.tipotrabajador = tipotrabajador;
-        this.status = status;
+        status = true;
     }
-    private boolean status;
-
+   
     public int getIdempleado() {
         return idempleado;
     }

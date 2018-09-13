@@ -18,7 +18,7 @@ public class producto {
         return "Producto{" + "nombreproducto=" + nombreproducto + ", descripcionproducto=" + descripcionproducto + ", dosisproducto=" + dosisproducto + ", preciofinal=" + preciofinal + ", stock=" + stock + '}';
     }
 
-    public producto(int idproducto, String nombreproducto, String descripcionproducto, String dosisproducto, double precioventa, double igv, double preciofinal, int stock, boolean status) {
+    public producto(int idproducto, String nombreproducto, String descripcionproducto, String dosisproducto, double precioventa, double igv, double preciofinal, int stock) {
         this.idproducto = idproducto;
         this.nombreproducto = nombreproducto;
         this.descripcionproducto = descripcionproducto;
@@ -27,8 +27,10 @@ public class producto {
         this.igv = igv;
         this.preciofinal = preciofinal;
         this.stock = stock;
-        this.status = status;
+        status = true;
     }
+
+  
 
     public boolean isStatus() {
         return status;
