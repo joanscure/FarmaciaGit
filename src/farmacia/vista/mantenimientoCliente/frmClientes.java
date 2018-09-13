@@ -174,7 +174,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
                     return;
                 }
                 if (pane2.txtdocumento.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de Documento para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtdocumento.requestFocus();
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
@@ -182,7 +182,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
                 //verificar dni
                 if(pane2.txtdocumento.getText().length()!=8)
                 {
-                   JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de Documento Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                   JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtdocumento.requestFocus();
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
@@ -288,7 +288,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtdireccion.setEnabled(true);
         pane2.fecharegistro.setEnabled(true);
         pane2.txttelefono.setEnabled(true);
-        pane2.cbxtipodocumento.setEnabled(true);
+//        pane2.cbxtipodocumento.setEnabled(true);
 
         jbNuevo.setEnabled(true);
         jbEliminar.setEnabled(false);
@@ -305,7 +305,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtdocumento.setText("");
         pane2.txtdireccion.setText("");
         pane2.txttelefono.setText("");
-        pane2.cbxtipodocumento.setSelectedIndex(0);
+//        pane2.cbxtipodocumento.setSelectedIndex(0);
 
     }
 
@@ -317,7 +317,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtdireccion.setEnabled(false);
         pane2.fecharegistro.setEnabled(false);
         pane2.txttelefono.setEnabled(false);
-        pane2.cbxtipodocumento.setEnabled(false);
+//        pane2.cbxtipodocumento.setEnabled(false);
 
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);
@@ -332,7 +332,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtdocumento.setText("");
         pane2.txtdireccion.setText("");
         pane2.txttelefono.setText("");
-        pane2.cbxtipodocumento.setSelectedIndex(0);
+//        pane2.cbxtipodocumento.setSelectedIndex(0);
 
     }
 
