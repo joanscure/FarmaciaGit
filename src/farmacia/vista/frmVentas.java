@@ -7,25 +7,30 @@ package farmacia.vista;
 
 import com.toedter.calendar.JDateChooser;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.calculos.configuracionesTabla;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author fecyp
  */
-public class frmventas extends JFrame implements ActionListener, KeyListener {
+public class frmVentas extends JInternalFrame implements ActionListener, KeyListener {
 
     //paneles
     JPanel paneprincipal, paneventa, panebotones;
@@ -48,20 +53,36 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
     JTextField txtcantidad, txttotal;
     JButton bnagregar, bnquitar;
 
-    //productos
+    //imagen
+    JLabel jlcorrelativo;
+    JTextField txtcorrelativo;
+    JLabel jlimagen;
+    configuracionesTabla configtabla = new configuracionesTabla();
+    //total y subtotal
+    JLabel jltotalPago, jlsubtotal, jldescuento, jligv;
+    JTextField txttotalPago, txtsubtotal, txtdescuento, txtigv;
+
 //configuraciones
     configuracionImagenes configImage = new configuracionImagenes();
     Font fontbutton = new Font("Geneva", 1, 14);
     Font fonttexto = new Font("Geneva", 1, 13);
     Color colorButton = Color.WHITE;
-    Color paneClaro = new Color(255, 255, 153);
+    Color paneClaro = new java.awt.Color(255, 255, 153);
+//    Color paneClaro = Color.white;
     Color paneOscuro = new Color(255, 204, 102);
+    Color azulclaro = new Color(191, 198, 251);
+    Color amarilloclaro = new Color(253, 255, 189);
+    //tabla
+    JTable tabla;
+    DefaultTableModel modelo;
 
-    public frmventas() {
+    public frmVentas() {
+        super("Formulario Ventas", false, true, false, true);
         iniciar_componentes();
         changeFont();
         changeColor();
         personalizarboton();
+        inicializacionVariables();
     }
 
     public void iniciar_componentes() {
@@ -92,7 +113,7 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
         JPanel panecabecera = new JPanel(new BorderLayout());
         panecabecera.setBackground(paneClaro);
         //pane iquierda o la cabecera izquierda
-        
+
         JPanel paneizquierda = new JPanel(new BorderLayout());
         paneizquierda.setBackground(paneClaro);
 
@@ -123,17 +144,31 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
         paneExtra.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
                 BorderFactory.createTitledBorder("")));
-        paneExtra.setBackground(paneOscuro);
+        paneExtra.setBackground(paneClaro);
         paneExtra.add(crear_paneinformacionproducto());
-        
-        
+
         paneizquierda.add(panedatos, BorderLayout.NORTH);
         paneizquierda.add(paneExtra, BorderLayout.SOUTH);
-        
+
         //pane derech o la imagen
+        JPanel panederecha = new JPanel(new BorderLayout());
+        panederecha.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                BorderFactory.createTitledBorder("")));
+        panederecha.setBackground(paneClaro);
+        panederecha.add(crearcorrelativo());
 
         panecabecera.add(paneizquierda, BorderLayout.WEST);
+        panecabecera.add(panederecha, BorderLayout.EAST);
+
+        //pane datos de total:
+        JPanel paneDatospago = new JPanel(new FlowLayout());
+      paneDatospago.setBackground(paneClaro);
+        paneDatospago.add(crearDatosPagos());
+
         paneventa.add(panecabecera, BorderLayout.NORTH);
+        paneventa.add(venta_tabla(), BorderLayout.CENTER);
+        paneventa.add(paneDatospago, BorderLayout.SOUTH);
 
     }
 
@@ -264,32 +299,122 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
 
     public JPanel crear_paneinformacionproducto() {
         JPanel paneExtra = new JPanel(new FlowLayout());
-        paneExtra.setBackground(paneOscuro);
+        paneExtra.setBackground(paneClaro);
 
         JPanel panecantidad = new JPanel(new BorderLayout());
-        jlcantidad=new JLabel("Cantidad: " );
-        txtcantidad=new JTextField(5);
-        panecantidad.add(jlcantidad,BorderLayout.WEST);
-        panecantidad.add(txtcantidad,BorderLayout.EAST);
-        panecantidad.setBackground(paneOscuro);
-        
+        jlcantidad = new JLabel("Cantidad: ");
+        txtcantidad = new JTextField(5);
+        panecantidad.add(jlcantidad, BorderLayout.WEST);
+        panecantidad.add(txtcantidad, BorderLayout.EAST);
+        panecantidad.setBackground(paneClaro);
+
         JPanel paneltotal = new JPanel(new BorderLayout());
-        jltotal=new JLabel("Total: ");
-        txttotal=new JTextField(5);
-        paneltotal.add(jltotal,BorderLayout.WEST);
-        paneltotal.add(txttotal,BorderLayout.EAST);
-        paneltotal.setBackground(paneOscuro);
-        
+        jltotal = new JLabel("Total: ");
+        txttotal = new JTextField(5);
+        paneltotal.add(jltotal, BorderLayout.WEST);
+        paneltotal.add(txttotal, BorderLayout.EAST);
+        paneltotal.setBackground(paneClaro);
+
         JPanel panebotonesconfig = new JPanel(new BorderLayout());
-        bnagregar=new JButton("",configImage.obtenerIcono("agregar.png",30));
-        bnquitar=new JButton("",configImage.obtenerIcono("eliminar.png",30));
-        panebotonesconfig.setBackground(paneOscuro);
-        panebotonesconfig.add(bnagregar,BorderLayout.WEST);
-        panebotonesconfig.add(bnquitar,BorderLayout.EAST);
+        bnagregar = new JButton("", configImage.obtenerIcono("agregar.png", 30));
+        bnquitar = new JButton("", configImage.obtenerIcono("eliminar.png", 30));
+        panebotonesconfig.setBackground(paneClaro);
+        panebotonesconfig.add(bnagregar, BorderLayout.WEST);
+        panebotonesconfig.add(bnquitar, BorderLayout.EAST);
         paneExtra.add(panecantidad);
-         paneExtra.add(paneltotal);
-          paneExtra.add(panebotonesconfig);
+        paneExtra.add(paneltotal);
+        paneExtra.add(panebotonesconfig);
         return paneExtra;
+    }
+
+    public JPanel crearcorrelativo() {
+        JPanel panederecha = new JPanel(new BorderLayout());
+        panederecha.setBackground(paneClaro);
+        JPanel paneimagen = new JPanel(new BorderLayout());
+        jlimagen = new JLabel("");
+        jlimagen.setIcon(configImage.obtenerIcono("farmacia.png",180));
+        paneimagen.add(jlimagen, BorderLayout.CENTER);
+        paneimagen.setBackground(paneClaro);
+
+        JPanel panecorrelativo = new JPanel(new BorderLayout());
+        jlcorrelativo = new JLabel("Numero de Correlativo:");
+        txtcorrelativo = new JTextField(15);
+        panecorrelativo.setBackground(paneClaro);
+        panecorrelativo.add(jlcorrelativo, BorderLayout.NORTH);
+        panecorrelativo.add(txtcorrelativo, BorderLayout.SOUTH);
+        panederecha.add(paneimagen, BorderLayout.CENTER);
+        panederecha.add(panecorrelativo, BorderLayout.SOUTH);
+        return panederecha;
+    }
+
+    public JScrollPane venta_tabla() {
+        tabla = new JTable();
+        Object[][] data = new Object[0][0];
+        String[] lista = {"Codigo", "Producto", "Descripcion", "Cant.", "Precio", "Total"};
+        modelo = new DefaultTableModel(data, lista) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tabla.setModel(modelo);
+        JScrollPane pane = new JScrollPane(tabla);
+        tabla.getTableHeader().setReorderingAllowed(false);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tabla.getTableHeader().setReorderingAllowed(false);
+        pane.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        //aciones al seleccionar una fila de la tabla
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+//            if (control) {
+            bnquitar.setEnabled(true);
+//            }
+        }
+        
+        );
+        pane.setBackground(colorButton);
+        int[] tamaño = {100, 200, 200, 80, 90, 90};
+        configtabla.fijarTamaño(tabla, tamaño);
+        pane.setPreferredSize(new Dimension(760,200));
+        return pane;
+    }
+
+    public JPanel crearDatosPagos() {
+        JPanel paneDatospago = new JPanel(new FlowLayout());
+          paneDatospago.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(5, 5, 5, 5),
+                BorderFactory.createTitledBorder("")));
+        paneDatospago.setBackground(paneClaro);
+        JPanel panesubtotal = new JPanel(new BorderLayout());
+        panesubtotal.setBackground(paneClaro);
+        jlsubtotal = new JLabel("SUB TOTAL");
+        txtsubtotal = new JTextField("0.00",10);
+        panesubtotal.add(jlsubtotal, BorderLayout.NORTH);
+        panesubtotal.add(txtsubtotal, BorderLayout.SOUTH);
+
+        JPanel paneigv = new JPanel(new BorderLayout());
+        paneigv.setBackground(paneClaro);
+        jligv = new JLabel("IGV ");
+        txtigv = new JTextField("0.00",10);
+        paneigv.add(jligv, BorderLayout.NORTH);
+        paneigv.add(txtigv, BorderLayout.SOUTH);
+
+        JPanel panedescuentos = new JPanel(new BorderLayout());
+        panedescuentos.setBackground(paneClaro);
+        jldescuento = new JLabel("DESUENTO");
+        txtdescuento = new JTextField("0.00",10);
+        panedescuentos.add(jldescuento, BorderLayout.NORTH);
+        panedescuentos.add(txtdescuento, BorderLayout.SOUTH);
+
+        JPanel panetotalPago = new JPanel(new BorderLayout());
+        panetotalPago.setBackground(paneClaro);
+        jltotalPago = new JLabel("TOTAL");
+        txttotalPago = new JTextField("0.00",10);
+        panetotalPago.add(jltotalPago, BorderLayout.NORTH);
+        panetotalPago.add(txttotalPago, BorderLayout.SOUTH);
+        paneDatospago.add(panesubtotal);
+        paneDatospago.add(paneigv);
+        paneDatospago.add(panedescuentos);
+        paneDatospago.add(panetotalPago);
+        return paneDatospago;
     }
 
     public void changeColor() {
@@ -299,6 +424,12 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
         bncancelar.setBackground(colorButton);
         bnsalir.setBackground(colorButton);
         bnagregarCliente.setBackground(colorButton);
+        txttotal.setBackground(azulclaro);
+         txttotalPago.setBackground(Color.black);
+        txtsubtotal.setBackground(amarilloclaro);
+        txtdescuento.setBackground(azulclaro);
+        txtigv.setBackground(amarilloclaro);
+        txttotalPago.setForeground(Color.green);
 
     }
 
@@ -316,6 +447,46 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
         fechaventa.setFont(fonttexto);
         jbdtipocomprobante.setFont(fonttexto);
         cbxtipocomprobante.setFont(fonttexto);
+        jlnombreproducto.setFont(fonttexto);
+        txtnombreProducto.setFont(fonttexto);
+        jlstock.setFont(fonttexto);
+        txtstock.setFont(fonttexto);
+        jlprecio.setFont(fonttexto);
+        txtprecio.setFont(fonttexto);
+        jlidproducto.setFont(fonttexto);
+        txtcodigo.setFont(fonttexto);
+        jlcantidad.setFont(fonttexto);
+        txtcantidad.setFont(fonttexto);
+        jltotal.setFont(fonttexto);
+        txttotal.setFont(fonttexto);
+        jlcorrelativo.setFont(fonttexto);
+        txtcorrelativo.setFont(fonttexto);
+        tabla.getTableHeader().setFont(fontbutton);
+        jltotalPago.setFont(fonttexto);
+        jlsubtotal.setFont(fonttexto);
+        jldescuento.setFont(fonttexto);
+        jligv.setFont(fonttexto);
+        txttotalPago.setFont(fonttexto);
+        txtsubtotal.setFont(fonttexto);
+        txtdescuento.setFont(fonttexto);
+        txtigv.setFont(fonttexto);
+
+    }
+    public void inicializacionVariables()
+    {
+        txtsubtotal.setEditable(false);
+        txttotal.setEditable(false);
+        txtigv.setEditable(false);
+        txtdescuento.setEditable(false);
+        txttotalPago.setEditable(false);
+        txtcorrelativo.setEnabled(false);
+        bnrecibo.setEnabled(false);
+        bncancelar.setEnabled(false);
+        bnguardar.setEnabled(false);
+        bnagregar.setEnabled(false);
+        bnquitar.setEnabled(false);
+        Date fecha=new Date();
+        fechaventa.setDate(fecha);
     }
 
     public void personalizarboton() {
@@ -357,7 +528,7 @@ public class frmventas extends JFrame implements ActionListener, KeyListener {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        new frmventas().setVisible(true);
+        new frmVentas().setVisible(true);
 
     }
 }

@@ -36,6 +36,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     frmProducto frmproducto;
     frmTipousuario frmtipousuario;
     frmEmpleados frmempleados;
+    frmVentas frmventas;
     configuracionImagenes imageconfig = new configuracionImagenes();
 
     public frmprincipal() {
@@ -51,7 +52,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         iclientes.addActionListener(this);
         icerrarsesion.addActionListener(this);
         itipousuario.addActionListener(this);
-        
+        iventas.addActionListener(this);
         setVisible(true);
         perzonalizartipoletra();
     }
@@ -233,6 +234,17 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmempleados.pane1.txtBuscar.requestFocus();
 
         } 
+        else if(source == iventas)
+        {
+             if (frmventas == null) {
+                frmventas = new frmVentas();
+                desktopPane.add(frmventas);
+            }
+
+            frmventas.toFront();
+            frmventas.setVisible(true);
+            frmventas.txtnombrecliente.requestFocus();
+        }
     }
 
     @Override
