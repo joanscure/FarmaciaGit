@@ -159,6 +159,16 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
                 ke.consume();
             }
+             if (source == txtdocumento) {
+                if (txtdocumento.getText().length() >= 8) {
+                    ke.consume();
+                }
+            }
+            if (source == txttelefono) {
+                if (txttelefono.getText().length() >= 9) {
+                    ke.consume();
+                }
+            }
         }
        
     }
