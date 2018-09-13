@@ -28,7 +28,7 @@ public class tipotrabajador {
     private boolean accedereliminartipoempleado;
     private boolean status;
 
-    public tipotrabajador(int idtipotrabajador, String nombretipotrabajador, boolean accederventas, boolean accederproductos, boolean accederclientes, boolean accederconsultas, boolean accederempleados, boolean accedertipousuario, boolean accedercambioclave, boolean accederanulaciones, boolean accedereliminarproducto, boolean accedereliminarcliente, boolean accedereliminarempleado, boolean accedereliminartipoempleado, boolean status) {
+    public tipotrabajador(int idtipotrabajador, String nombretipotrabajador, boolean accederventas, boolean accederproductos, boolean accederclientes, boolean accederconsultas, boolean accederempleados, boolean accedertipousuario, boolean accedercambioclave, boolean accederanulaciones, boolean accedereliminarproducto, boolean accedereliminarcliente, boolean accedereliminarempleado, boolean accedereliminartipoempleado) {
         this.idtipotrabajador = idtipotrabajador;
         this.nombretipotrabajador = nombretipotrabajador;
         this.accederventas = accederventas;
@@ -43,7 +43,7 @@ public class tipotrabajador {
         this.accedereliminarcliente = accedereliminarcliente;
         this.accedereliminarempleado = accedereliminarempleado;
         this.accedereliminartipoempleado = accedereliminartipoempleado;
-        this.status = status;
+        status =true;
     }
 
     public boolean isStatus() {

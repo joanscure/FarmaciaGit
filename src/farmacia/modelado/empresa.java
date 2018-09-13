@@ -16,13 +16,13 @@ public class empresa {
         return "Empresa{" + "rucempresa=" + rucempresa + ", razonsocial=" + razonsocial + ", telefono=" + telefono + ", direccion=" + direccion + '}';
     }
 
-    public empresa(int idempresa, char[] rucempresa, String razonsocial, String telefono, String direccion, boolean status) {
+    public empresa(int idempresa, char[] rucempresa, String razonsocial, String telefono, String direccion) {
         this.idempresa = idempresa;
         this.rucempresa = rucempresa;
         this.razonsocial = razonsocial;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.status = status;
+        status = true;
     }
 
     public boolean isStatus() {
