@@ -11,15 +11,14 @@ package farmacia.modelado;
  */
 public class descuento {
     
-    private int iddescuento;
+    private Long iddescuento = null;//PK
     private String nombredescuento; //32
     private String condicion;//32
     private double porcentaje; //2,2
     private String descripciondescuento; // 64 NULO
     private boolean status;
 
-    public descuento(int iddescuento, String nombredescuento, String condicion, double porcentaje, String descripciondescuento) {
-        this.iddescuento = iddescuento;
+    public descuento(String nombredescuento, String condicion, double porcentaje, String descripciondescuento) {
         this.nombredescuento = nombredescuento;
         this.condicion = condicion;
         this.porcentaje = porcentaje;
@@ -27,11 +26,11 @@ public class descuento {
         status = true;
     }
 
-    public int getIddescuento() {
+    public Long getIddescuento() {
         return iddescuento;
     }
 
-    public void setIddescuento(int iddescuento) {
+    public void setIddescuento(Long iddescuento) {
         this.iddescuento = iddescuento;
     }
 
@@ -76,5 +75,7 @@ public class descuento {
     }
     
     
+
+   
     
 }

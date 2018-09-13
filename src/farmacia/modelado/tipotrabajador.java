@@ -12,7 +12,7 @@ package farmacia.modelado;
  * @author Cliente
  */
 public class tipotrabajador {
-    private int idtipotrabajador;
+    private Long idtipotrabajador = null;
     private String nombretipotrabajador;//32 NULO
     private boolean accederventas;
     private boolean accederproductos;
@@ -28,8 +28,7 @@ public class tipotrabajador {
     private boolean accedereliminartipoempleado;
     private boolean status;
 
-    public tipotrabajador(int idtipotrabajador, String nombretipotrabajador, boolean accederventas, boolean accederproductos, boolean accederclientes, boolean accederconsultas, boolean accederempleados, boolean accedertipousuario, boolean accedercambioclave, boolean accederanulaciones, boolean accedereliminarproducto, boolean accedereliminarcliente, boolean accedereliminarempleado, boolean accedereliminartipoempleado) {
-        this.idtipotrabajador = idtipotrabajador;
+    public tipotrabajador(String nombretipotrabajador, boolean accederventas, boolean accederproductos, boolean accederclientes, boolean accederconsultas, boolean accederempleados, boolean accedertipousuario, boolean accedercambioclave, boolean accederanulaciones, boolean accedereliminarproducto, boolean accedereliminarcliente, boolean accedereliminarempleado, boolean accedereliminartipoempleado) {
         this.nombretipotrabajador = nombretipotrabajador;
         this.accederventas = accederventas;
         this.accederproductos = accederproductos;
@@ -43,22 +42,14 @@ public class tipotrabajador {
         this.accedereliminarcliente = accedereliminarcliente;
         this.accedereliminarempleado = accedereliminarempleado;
         this.accedereliminartipoempleado = accedereliminartipoempleado;
-        status =true;
+        status = true;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public int getIdtipotrabajador() {
+    public Long getIdtipotrabajador() {
         return idtipotrabajador;
     }
 
-    public void setIdtipotrabajador(int idtipotrabajador) {
+    public void setIdtipotrabajador(Long idtipotrabajador) {
         this.idtipotrabajador = idtipotrabajador;
     }
 
@@ -165,6 +156,18 @@ public class tipotrabajador {
     public void setAccedereliminartipoempleado(boolean accedereliminartipoempleado) {
         this.accedereliminartipoempleado = accedereliminartipoempleado;
     }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+    
+
+    
 }
 
 

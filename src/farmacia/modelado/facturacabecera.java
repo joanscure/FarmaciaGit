@@ -6,30 +6,45 @@ import java.util.Date;
 
 public class facturacabecera {
     
-    private int idfacturacabecera;
+    private Long idfacturacabecera = null;//PK
+    private Long idempresacliente;//indice
+    private Long idempleado;//indice
     private int correlativofactura;//int 4
     private int numerofactura; //int 8
     private Date fechaemisionfactura;
-    private int idempresacliente;//indice
-    private int idempleado;//indice
     private boolean status;
 
-    public facturacabecera(int idfacturacabecera, int correlativofactura, int numerofactura, Date fechaemisionfactura, int idempresacliente, int idempleado) {
-        this.idfacturacabecera = idfacturacabecera;
+    public facturacabecera(Long idempresacliente, Long idempleado, int correlativofactura, int numerofactura, Date fechaemisionfactura) {
+        this.idempresacliente = idempresacliente;
+        this.idempleado = idempleado;
         this.correlativofactura = correlativofactura;
         this.numerofactura = numerofactura;
         this.fechaemisionfactura = fechaemisionfactura;
-        this.idempresacliente = idempresacliente;
-        this.idempleado = idempleado;
         status = true;
     }
 
-    public int getIdfacturacabecera() {
+    public Long getIdfacturacabecera() {
         return idfacturacabecera;
     }
 
-    public void setIdfacturacabecera(int idfacturacabecera) {
+    public void setIdfacturacabecera(Long idfacturacabecera) {
         this.idfacturacabecera = idfacturacabecera;
+    }
+
+    public Long getIdempresacliente() {
+        return idempresacliente;
+    }
+
+    public void setIdempresacliente(Long idempresacliente) {
+        this.idempresacliente = idempresacliente;
+    }
+
+    public Long getIdempleado() {
+        return idempleado;
+    }
+
+    public void setIdempleado(Long idempleado) {
+        this.idempleado = idempleado;
     }
 
     public int getCorrelativofactura() {
@@ -56,22 +71,6 @@ public class facturacabecera {
         this.fechaemisionfactura = fechaemisionfactura;
     }
 
-    public int getIdempresacliente() {
-        return idempresacliente;
-    }
-
-    public void setIdempresacliente(int idempresacliente) {
-        this.idempresacliente = idempresacliente;
-    }
-
-    public int getIdempleado() {
-        return idempleado;
-    }
-
-    public void setIdempleado(int idempleado) {
-        this.idempleado = idempleado;
-    }
-
     public boolean isStatus() {
         return status;
     }
@@ -81,7 +80,6 @@ public class facturacabecera {
     }
     
     
-    
-    
 
+    
 }

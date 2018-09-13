@@ -3,7 +3,7 @@ package farmacia.modelado;
 
 public class producto {
     
-    private int idproducto;
+    private Long idproducto = null;//PK
     private String nombreproducto;//32
     private String descripcionproducto;//128
     private String dosisproducto; // 32
@@ -13,13 +13,7 @@ public class producto {
     private int stock;
     private boolean status;
 
-    @Override
-    public String toString() {
-        return "Producto{" + "nombreproducto=" + nombreproducto + ", descripcionproducto=" + descripcionproducto + ", dosisproducto=" + dosisproducto + ", preciofinal=" + preciofinal + ", stock=" + stock + '}';
-    }
-
-    public producto(int idproducto, String nombreproducto, String descripcionproducto, String dosisproducto, double precioventa, double igv, double preciofinal, int stock) {
-        this.idproducto = idproducto;
+    public producto(String nombreproducto, String descripcionproducto, String dosisproducto, double precioventa, double igv, double preciofinal, int stock) {
         this.nombreproducto = nombreproducto;
         this.descripcionproducto = descripcionproducto;
         this.dosisproducto = dosisproducto;
@@ -30,21 +24,11 @@ public class producto {
         status = true;
     }
 
-  
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public int getIdproducto() {
+    public Long getIdproducto() {
         return idproducto;
     }
 
-    public void setIdproducto(int idproducto) {
+    public void setIdproducto(Long idproducto) {
         this.idproducto = idproducto;
     }
 
@@ -103,6 +87,23 @@ public class producto {
     public void setStock(int stock) {
         this.stock = stock;
     }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "producto{" + "nombreproducto=" + nombreproducto + ", descripcionproducto=" + descripcionproducto + ", dosisproducto=" + dosisproducto + ", preciofinal=" + preciofinal + '}';
+    }
+    
+    
+
+    
 }
 
 

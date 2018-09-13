@@ -3,7 +3,8 @@ package farmacia.modelado;
 
 
 public class persona {
-    private int idPersona;
+    
+    private Long idPersona = null;//PK
     private String nombre;//32
     private String appaterno;//32
     private String apmaterno;//32
@@ -13,8 +14,7 @@ public class persona {
     private String telefono;//16 NULO
     private boolean status;
 
-    public persona(int idPersona, String nombre, String appaterno, String apmaterno, char[] numerodni, int personaedad, String direccion, String telefono) {
-        this.idPersona = idPersona;
+    public persona(String nombre, String appaterno, String apmaterno, char[] numerodni, int personaedad, String direccion, String telefono) {
         this.nombre = nombre;
         this.appaterno = appaterno;
         this.apmaterno = apmaterno;
@@ -25,53 +25,11 @@ public class persona {
         status = true;
     }
 
-  
-    public persona() {
-    }
-
-    @Override
-    public String toString() {
-        return "Persona{" + "nombre=" + nombre + ", appaterno=" + appaterno + ", apmaterno=" + apmaterno + ", numerodni=" + numerodni + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 13 * hash + this.idPersona;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final persona other = (persona) obj;
-        if (this.idPersona != other.idPersona) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public int getIdPersona() {
+    public Long getIdPersona() {
         return idPersona;
     }
 
-    public void setIdPersona(int idPersona) {
+    public void setIdPersona(Long idPersona) {
         this.idPersona = idPersona;
     }
 
@@ -130,6 +88,17 @@ public class persona {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+    
+
     
 }
    

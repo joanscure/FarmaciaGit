@@ -1,39 +1,31 @@
-
 package farmacia.modelado;
 
 import java.util.Date;
 
-
 public class boletacabecera {
-    
-    private int idboletacabecera;
+
+    private Long idboletacabecera = null;//PK
     private int correlativoboleta;//int 4
     private int numeroboleta; //int 8
     private Date fechaemisionboleta;
-    private int idpersonacliente;//indice
-    private int idempleado;//indice
+    private Long idpersonacliente;//indice
+    private Long idempleado;//indice
     private boolean status;
 
-    @Override
-    public String toString() {
-        return "boletacabecera{" + "correlativoboleta=" + correlativoboleta + ", numeroboleta=" + numeroboleta + ", fechaemision=" + fechaemisionboleta + ", idpersonacliente=" + idpersonacliente + ", idempleado=" + idempleado + '}';
-    }
-
-    public boletacabecera(int idboletacabecera, int correlativoboleta, int numeroboleta, Date fechaemision, int idpersonacliente, int idempleado) {
-        this.idboletacabecera = idboletacabecera;
+    public boletacabecera(int correlativoboleta, int numeroboleta, Date fechaemisionboleta, Long idpersonacliente, Long idempleado) {
         this.correlativoboleta = correlativoboleta;
         this.numeroboleta = numeroboleta;
-        this.fechaemisionboleta = fechaemision;
+        this.fechaemisionboleta = fechaemisionboleta;
         this.idpersonacliente = idpersonacliente;
         this.idempleado = idempleado;
         status = true;
     }
 
-    public int getIdboletacabecera() {
+    public Long getIdboletacabecera() {
         return idboletacabecera;
     }
 
-    public void setIdboletacabecera(int idboletacabecera) {
+    public void setIdboletacabecera(Long idboletacabecera) {
         this.idboletacabecera = idboletacabecera;
     }
 
@@ -53,27 +45,27 @@ public class boletacabecera {
         this.numeroboleta = numeroboleta;
     }
 
-    public Date getFechaemision() {
+    public Date getFechaemisionboleta() {
         return fechaemisionboleta;
     }
 
-    public void setFechaemision(Date fechaemision) {
-        this.fechaemisionboleta = fechaemision;
+    public void setFechaemisionboleta(Date fechaemisionboleta) {
+        this.fechaemisionboleta = fechaemisionboleta;
     }
 
-    public int getIdpersonacliente() {
+    public Long getIdpersonacliente() {
         return idpersonacliente;
     }
 
-    public void setIdpersonacliente(int idpersonacliente) {
+    public void setIdpersonacliente(Long idpersonacliente) {
         this.idpersonacliente = idpersonacliente;
     }
 
-    public int getIdempleado() {
+    public Long getIdempleado() {
         return idempleado;
     }
 
-    public void setIdempleado(int idempleado) {
+    public void setIdempleado(Long idempleado) {
         this.idempleado = idempleado;
     }
 
@@ -84,5 +76,12 @@ public class boletacabecera {
     public void setStatus(boolean status) {
         this.status = status;
     }
+    
+    
+
+    
+    
+    
+
     
 }

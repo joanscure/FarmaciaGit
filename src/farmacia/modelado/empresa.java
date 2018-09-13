@@ -4,20 +4,14 @@ package farmacia.modelado;
 
 public class empresa {
     
-    private int idempresa;  
+    private Long idempresa = null;//PK
     private char[] rucempresa;//11
     private String razonsocial; //64
     private String telefono;//16
     private String direccion;//32
     private boolean status;
 
-    @Override
-    public String toString() {
-        return "Empresa{" + "rucempresa=" + rucempresa + ", razonsocial=" + razonsocial + ", telefono=" + telefono + ", direccion=" + direccion + '}';
-    }
-
-    public empresa(int idempresa, char[] rucempresa, String razonsocial, String telefono, String direccion) {
-        this.idempresa = idempresa;
+    public empresa(char[] rucempresa, String razonsocial, String telefono, String direccion) {
         this.rucempresa = rucempresa;
         this.razonsocial = razonsocial;
         this.telefono = telefono;
@@ -25,19 +19,11 @@ public class empresa {
         status = true;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public int getIdempresa() {
+    public Long getIdempresa() {
         return idempresa;
     }
 
-    public void setIdempresa(int idempresa) {
+    public void setIdempresa(Long idempresa) {
         this.idempresa = idempresa;
     }
 
@@ -73,6 +59,15 @@ public class empresa {
         this.direccion = direccion;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+    
+    
 
+    
 }

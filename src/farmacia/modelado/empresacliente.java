@@ -3,33 +3,32 @@ package farmacia.modelado;
 
 import java.util.Date;
 
-public class empresaclietne {
+public class empresacliente {
     
-    private int idempresacliente;
-    private int idempresa;//indice
+    private Long idempresacliente = null;//PK
+    private Long idempresa;//indice
     private Date fecharegistro;//NULO
     private boolean status;
 
-    public empresaclietne(int idempresacliente, int idempresa, Date fecharegistro) {
-        this.idempresacliente = idempresacliente;
+    public empresacliente(Long idempresa, Date fecharegistro) {
         this.idempresa = idempresa;
         this.fecharegistro = fecharegistro;
         status = true;
     }
 
-    public int getIdempresacliente() {
+    public Long getIdempresacliente() {
         return idempresacliente;
     }
 
-    public void setIdempresacliente(int idempresacliente) {
+    public void setIdempresacliente(Long idempresacliente) {
         this.idempresacliente = idempresacliente;
     }
 
-    public int getIdempresa() {
+    public Long getIdempresa() {
         return idempresa;
     }
 
-    public void setIdempresa(int idempresa) {
+    public void setIdempresa(Long idempresa) {
         this.idempresa = idempresa;
     }
 
@@ -48,4 +47,10 @@ public class empresaclietne {
     public void setStatus(boolean status) {
         this.status = status;
     }
+    
+    
+    
+    
+
+    
 }

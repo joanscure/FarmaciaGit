@@ -11,13 +11,14 @@ package farmacia.modelado;
  */
 public class boletadetalle {
     
-    private int idboletacabecera; //indice
-    private int idproducto; //indice
+    private Long idboletadetalle = null;//PK
+    private Long idboletacabecera; //indice
+    private Long idproducto; //indice
     private double cantidad; //5,2
     private double subtotal; //5,2
     private boolean status; 
 
-    public boletadetalle(int idboletacabecera, int idproducto, double cantidad, double subtotal) {
+    public boletadetalle(Long idboletacabecera, Long idproducto, double cantidad, double subtotal) {
         this.idboletacabecera = idboletacabecera;
         this.idproducto = idproducto;
         this.cantidad = cantidad;
@@ -25,19 +26,27 @@ public class boletadetalle {
         status = true;
     }
 
-    public int getIdboletacabecera() {
+    public Long getIdboletadetalle() {
+        return idboletadetalle;
+    }
+
+    public void setIdboletadetalle(Long idboletadetalle) {
+        this.idboletadetalle = idboletadetalle;
+    }
+
+    public Long getIdboletacabecera() {
         return idboletacabecera;
     }
 
-    public void setIdboletacabecera(int idboletacabecera) {
+    public void setIdboletacabecera(Long idboletacabecera) {
         this.idboletacabecera = idboletacabecera;
     }
 
-    public int getIdproducto() {
+    public Long getIdproducto() {
         return idproducto;
     }
 
-    public void setIdproducto(int idproducto) {
+    public void setIdproducto(Long idproducto) {
         this.idproducto = idproducto;
     }
 
@@ -64,4 +73,16 @@ public class boletadetalle {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "boletadetalle{" + "idproducto=" + idproducto + ", cantidad=" + cantidad + ", subtotal=" + subtotal + '}';
+    }
+    
+    
+
+    
+    
+
+    
 }

@@ -3,29 +3,28 @@ package farmacia.modelado;
 
 public class personacliente {
     
-    private int idpersonacliente;
-    private int idpersona;//indice
+    private Long idpersonacliente = null;//PK
+    private Long idpersona;//indice
     private boolean status;
 
-    public personacliente(int idpersonacliente, int idpersona) {
-        this.idpersonacliente = idpersonacliente;
+    public personacliente(Long idpersona) {
         this.idpersona = idpersona;
         status = true;
     }
 
-    public int getIdpersonacliente() {
+    public Long getIdpersonacliente() {
         return idpersonacliente;
     }
 
-    public void setIdpersonacliente(int idpersonacliente) {
+    public void setIdpersonacliente(Long idpersonacliente) {
         this.idpersonacliente = idpersonacliente;
     }
 
-    public int getIdpersona() {
+    public Long getIdpersona() {
         return idpersona;
     }
 
-    public void setIdpersona(int idpersona) {
+    public void setIdpersona(Long idpersona) {
         this.idpersona = idpersona;
     }
 
@@ -38,7 +37,6 @@ public class personacliente {
     }
     
     
-    
-    
+
     
 }
