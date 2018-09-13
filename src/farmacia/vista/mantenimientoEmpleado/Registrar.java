@@ -38,11 +38,13 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     frmEmpleados regis;
 
     JPanel pane;
-    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, tipodocumento, idempleado, jlfecha,jlusr,jlpass,jlocupacion;
+    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha,jlusr,jlpass,jlocupacion;
     public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento,txtuser,txtidtipodepersona;
     JTextField txtdireccion;
     JPasswordField txtpassw;
-    JComboBox cbxtipodocumento,cbxtipodeempleado;
+//    JComboBox cbxtipodocumento;
+//    JLabel tipodocumento;
+    JComboBox cbxtipodeempleado;
     JDateChooser fecharegistro;
     configuracionImagenes iamgeConfig = new configuracionImagenes();
     Color c = new java.awt.Color(255, 255, 153);
@@ -70,7 +72,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         txtdocumento.addKeyListener(this);
         txttelefono.addKeyListener(this);
         txtdireccion.addKeyListener(this);
-        cbxtipodocumento.addKeyListener(this);
+//        cbxtipodocumento.addKeyListener(this);
         cbxtipodeempleado.addKeyListener(this);
         txtuser.addActionListener(this);
         txtpassw.addActionListener(this);
@@ -87,7 +89,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             txtapellidop.transferFocus();
 
         } else if (source == txtapellidom) {
-            cbxtipodocumento.setPopupVisible(true);
+//            cbxtipodocumento.setPopupVisible(true);
             txtapellidom.transferFocus();
         } else if (source == txtdocumento) {
             txtdocumento.transferFocus();
@@ -115,7 +117,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         telefono.setFont(fontboton);
         documento.setFont(fontboton);
         direccion.setFont(fontboton);
-        tipodocumento.setFont(fontboton);
+//        tipodocumento.setFont(fontboton);
         idempleado.setFont(fontboton);
         jlfecha.setFont(fontboton);
         jlusr.setFont(fontboton);
@@ -133,7 +135,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         txttelefono.setFont(fontboton);
         txtdocumento.setFont(fontboton);
         txtdireccion.setFont(fontboton);
-        cbxtipodocumento.setFont(fontboton);
+//        cbxtipodocumento.setFont(fontboton);
         fecharegistro.setFont(fontboton);
          cbxtipodeempleado.setFont(fontboton);
         
@@ -142,7 +144,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyTyped(KeyEvent ke) {
         Object source = ke.getSource();
-        if(source!= cbxtipodocumento && source!=cbxtipodeempleado)
+        if(source!=cbxtipodeempleado)
             ke.getComponent().setBackground(Color.white);
         
         if ((source == txtapellidom || source == txtapellidop || source == txtnombre || source == txtdireccion)&&source!=txtpassw&& source!=txtuser&&source!=fecharegistro) {
@@ -176,13 +178,13 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent ke) {
         Object source = ke.getSource();
-        if (source == cbxtipodocumento) {
-            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-                cbxtipodocumento.setPopupVisible(false);
-                cbxtipodocumento.transferFocus();
-            }
-        }
-        else if (source == cbxtipodeempleado) {
+//        if (source == cbxtipodocumento) {
+//            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+//                cbxtipodocumento.setPopupVisible(false);
+//                cbxtipodocumento.transferFocus();
+//            }
+//        }
+         if (source == cbxtipodeempleado) {
             if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
                 cbxtipodeempleado.setPopupVisible(false);
                  frmEmpleados.jbGuardar.doClick();
@@ -251,17 +253,17 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         paneapellidom.add(txtapellidom, BorderLayout.EAST);
         paneapellidom.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         //tercero
-        JPanel tipodoc = new JPanel(new GridLayout(1, 2));;
-        tipodocumento = new JLabel("Tipo de Documento");
-        String[] tipos = {"DNI"};
-        cbxtipodocumento = new JComboBox(tipos);
-        cbxtipodocumento.setPreferredSize(new Dimension(100, 5));
-        tipodoc.add(tipodocumento, BorderLayout.WEST);
-        tipodoc.add(cbxtipodocumento, BorderLayout.EAST);
-        tipodoc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+//        JPanel tipodoc = new JPanel(new GridLayout(1, 2));;
+//        tipodocumento = new JLabel("Tipo de Documento");
+//        String[] tipos = {"DNI"};
+//        cbxtipodocumento = new JComboBox(tipos);
+//        cbxtipodocumento.setPreferredSize(new Dimension(100, 5));
+//        tipodoc.add(tipodocumento, BorderLayout.WEST);
+//        tipodoc.add(cbxtipodocumento, BorderLayout.EAST);
+//        tipodoc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         JPanel panedoc = new JPanel(new GridLayout(1, 2));
-        documento = new JLabel("Numero Documento :");
+        documento = new JLabel("Numero de Dni :");
         txtdocumento = new JTextField(10);
         panedoc.add(documento, BorderLayout.WEST);
         panedoc.add(txtdocumento, BorderLayout.EAST);
@@ -332,9 +334,9 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         segundo.setBackground(c);
 
         JPanel tercero = new JPanel(new BorderLayout());
-        tercero.add(tipodoc, BorderLayout.WEST);
-        tipodoc.setBackground(c);
-        tercero.add(panedoc, BorderLayout.EAST);
+//        tercero.add(tipodoc, BorderLayout.WEST);
+//        tipodoc.setBackground(c);
+        tercero.add(panedoc, BorderLayout.WEST);
         panedoc.setBackground(c);
         tercero.setBackground(c);
 
