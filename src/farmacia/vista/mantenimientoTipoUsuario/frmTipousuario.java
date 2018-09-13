@@ -32,6 +32,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
@@ -61,6 +62,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         perzonalizacionfondocolor();
         deshabilitar();
         perzonalizartipoletra();
+        personalizarboton();
         pack();
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
@@ -280,7 +282,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
 
         pane2.txtdescripcion.setText("");
         pane2.txtidtipouser.setText("");
-         pane2.aventas.setSelected(false);
+        pane2.aventas.setSelected(false);
         pane2.aproductos.setSelected(false);
         pane2.aclientes.setSelected(false);
         pane2.aconsultas.setSelected(false);
@@ -296,7 +298,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
     }
 
     public void deshabilitar() {
-       pane2.txtdescripcion.setEnabled(false);
+        pane2.txtdescripcion.setEnabled(false);
         pane2.aventas.setEnabled(false);
         pane2.aproductos.setEnabled(false);
         pane2.aclientes.setEnabled(false);
@@ -314,10 +316,10 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         jbGuardar.setEnabled(false);
         jbSalir.setEnabled(true);
         jbCancelar.setEnabled(false);
-        
-         pane2.txtdescripcion.setText("");
+
+        pane2.txtdescripcion.setText("");
         pane2.txtidtipouser.setText("");
-         pane2.aventas.setSelected(false);
+        pane2.aventas.setSelected(false);
         pane2.aproductos.setSelected(false);
         pane2.aclientes.setSelected(false);
         pane2.aconsultas.setSelected(false);
@@ -330,6 +332,26 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         pane2.aeliminarusuario.setSelected(false);
         pane2.aeliminarclientes.setSelected(false);
 
+    }
+
+    public void personalizarboton() {
+
+        jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbEliminar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbEliminar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbGuardar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbGuardar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbModificar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbModificar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbSalir.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbCancelar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
     @Override
