@@ -83,7 +83,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         buscarPor = new JComboBox();
         buscarPor.addItem("Por Nombre");
         buscarPor.addItem("Por Apellido");
-        buscarPor.addItem("Por Documento");
+        buscarPor.addItem("Por DNI");
         txtBuscar = new JTextField(10);
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
@@ -118,19 +118,13 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Tipo de Documento", "Numero de Documento", "Direccion", "Telefono", "estado"};
+        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI", "Direccion", "Telefono","Fecha de Registro", "estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        Object[] a2 = {1, 2, "joan".toString().toUpperCase(), "leyton".toString().toUpperCase(), "carrillo".toString().toUpperCase(), "ruc".toString().toUpperCase(), "159753", "calle piura".toString().toUpperCase(), "1282833", "1"};
-        Object[] a1 = {1, 2, "mario".toString().toUpperCase(), "lopez".toString().toUpperCase(), "nieto".toString().toUpperCase(), "dni".toString().toUpperCase(), "12340", "calle piura".toString().toUpperCase(), "1282833", "1"};
-        Object[] a3 = {1, 2, "pedrito".toString().toUpperCase(), "gaga".toString().toUpperCase(), "carl".toString().toUpperCase(), "pasaporte".toString().toUpperCase(), "56789", "calle piura".toString().toUpperCase(), "1282833", "1"};
 
-        modelo.addRow(a2);
-        modelo.addRow(a1);
-        modelo.addRow(a3);
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);
@@ -146,7 +140,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         }
         );
         pane.setBackground(c);
-        int[] tamaño = {0, 0, 80, 120, 120, 140, 180, 200, 80, 0};
+        int[] tamaño = {0, 0, 80, 120, 120, 180, 200, 80,80, 0};
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {0, 1, 9};
         config.ocultarColumnas(tabla, columnas);
@@ -162,11 +156,12 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 2));
             } else if (buscarPor.getSelectedItem().toString().equals("Por Apellido")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3, 4));
-            } else if (buscarPor.getSelectedItem().toString().equals("Por Documento")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
+            } else if (buscarPor.getSelectedItem().toString().equals("Por DNI")) {
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 5));
             }
 
             if (tabla.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron Clientes!","Informacion",JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();

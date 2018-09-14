@@ -169,6 +169,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
             }
 
             if (tabla.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron Tipos de Usuario!","Informacion",JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();

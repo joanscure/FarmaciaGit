@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package farmacia.vista.mantenimientoCliente;
+package farmacia.vista.mantenimientoEmpresa;
 
+import farmacia.vista.mantenimientoCliente.*;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import farmacia.calculos.configuracionImagenes;
@@ -33,11 +34,11 @@ import javax.swing.JTextField;
  */
 public class Registrar extends JPanel implements ActionListener, KeyListener {
 
-    frmClientes regis;
+    frmEmpresa regis;
 
     JPanel pane;
-    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idcliente, jlfecha;
-    public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidcliente, txttelefono, txtdocumento;
+    JLabel nombre, telefono, documento, direccion, idcliente, jlfecha;
+    public JTextField txtnombre, txtidclienteempresa, txtidempresa, txttelefono, txtdocumento;
     JTextField txtdireccion;
 //    JComboBox cbxtipodocumento;
 //    JLabel tipodocumento;
@@ -47,21 +48,17 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     Font fontboton = new Font("Geneva", 1, 13);
     boolean teclaunida = false;
 
-    public Registrar(frmClientes regis) {
+    public Registrar(frmEmpresa regis) {
         this.regis = regis;
         iniciar_componentes();
         setBackground(c);
         personalizartipoletra();
 
-        txtapellidop.addActionListener(this);
         txtnombre.addActionListener(this);
         txtdocumento.addActionListener(this);
         txttelefono.addActionListener(this);
-        txtapellidom.addActionListener(this);
         txtdireccion.addActionListener(this);
 
-        txtapellidop.addKeyListener(this);
-        txtapellidom.addKeyListener(this);
         txtnombre.addKeyListener(this);
         txtdocumento.addKeyListener(this);
         txttelefono.addKeyListener(this);
@@ -76,25 +73,18 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         if (source == txtnombre) {
             txtnombre.transferFocus();
 
-        } else if (source == txtapellidop) {
-            txtapellidop.transferFocus();
-
-        } else if (source == txtapellidom) {
-//            cbxtipodocumento.setPopupVisible(true);
-            txtapellidom.transferFocus();
         } else if (source == txtdocumento) {
             txtdocumento.transferFocus();
         } else if (source == txtdireccion) {
             txttelefono.requestFocus();
         } else if (source == txttelefono) {
-            frmClientes.jbGuardar.doClick();
+            frmEmpresa.jbGuardar.doClick();
         }
     }
 
     public void personalizartipoletra() {
         nombre.setFont(fontboton);
-        apellidop.setFont(fontboton);
-        apellidom.setFont(fontboton);
+
         telefono.setFont(fontboton);
         documento.setFont(fontboton);
         direccion.setFont(fontboton);
@@ -103,10 +93,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         jlfecha.setFont(fontboton);
 
         txtnombre.setFont(fontboton);
-        txtapellidop.setFont(fontboton);
-        txtapellidom.setFont(fontboton);
-        txtidpersona.setFont(fontboton);
-        txtidcliente.setFont(fontboton);
+
         txttelefono.setFont(fontboton);
         txtdocumento.setFont(fontboton);
         txtdireccion.setFont(fontboton);
@@ -121,7 +108,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         ke.getComponent().setBackground(Color.white);
 //        }
 
-        if (source == txtapellidom || source == txtapellidop || source == txtnombre || source == txtdireccion) {
+        if (source == txtnombre || source == txtdireccion) {
             char c = ke.getKeyChar();
             if (Character.isLowerCase(c)) {
                 String cad = ("" + c).toUpperCase();
@@ -136,7 +123,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
                 ke.consume();
             }
             if (source == txtdocumento) {
-                if (txtdocumento.getText().length() >= 8) {
+                if (txtdocumento.getText().length() >= 11) {
                     ke.consume();
                 }
             }
@@ -158,26 +145,26 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 //                cbxtipodocumento.transferFocus();
 //            }
 //        }
-         if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-              if (source == txttelefono) {
+       if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+                 if (source == txttelefono) {
                     txtdireccion.requestFocus();
                     return;
                 }
                 ke.getComponent().transferFocusBackward();
             }
             if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-                  if (source == txttelefono) {
+                if (source == txttelefono) {
                     txtnombre.requestFocus();
                     return;
                 }
-                   if (source == txtdireccion) {
+                 if (source == txtdireccion) {
                     txttelefono.requestFocus();
                     return;
                 }
                 ke.getComponent().transferFocus();
             }
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmClientes.jbCancelar.doClick();
+            frmEmpresa.jbCancelar.doClick();
 
         }
         if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
@@ -188,50 +175,38 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-            frmClientes.jbGuardar.doClick();
+            frmEmpresa.jbGuardar.doClick();
             teclaunida = false;
         }
     }
 
     private void iniciar_componentes() {
 
-        GridLayout g = new GridLayout(6, 1);
+        GridLayout g = new GridLayout(5, 1);
         g.setHgap(10);
         g.setVgap(10);
         pane = new JPanel(g);
         JPanel idpane = new JPanel(new GridLayout(1, 2));
-        txtidpersona = new JTextField(10);
-        idpane.add(txtidpersona);
-        txtidpersona.setVisible(false);
+        txtidclienteempresa = new JTextField(10);
+        idpane.add(txtidclienteempresa);
+        txtidclienteempresa.setVisible(false);
         //primero
         JPanel panecliente = new JPanel(new GridLayout(1, 2));
-        idcliente = new JLabel("ID Cliente");
-        txtidcliente = new JTextField(10);
-        txtidcliente.setEnabled(false);
+        idcliente = new JLabel("ID Empresa");
+        txtidempresa = new JTextField(10);
+        txtidempresa.setEnabled(false);
         panecliente.add(idcliente, BorderLayout.WEST);
-        panecliente.add(txtidcliente, BorderLayout.EAST);
+        panecliente.add(txtidempresa, BorderLayout.EAST);
         panecliente.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         JPanel panenombre = new JPanel(new GridLayout(1, 2));
-        nombre = new JLabel("Nombre: ");
+        nombre = new JLabel("Razon Social: ");
         txtnombre = new JTextField(10);
         panenombre.add(nombre, BorderLayout.WEST);
         panenombre.add(txtnombre, BorderLayout.EAST);
         panenombre.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         //segundo
-        JPanel paneapellidop = new JPanel(new GridLayout(1, 2));
-        apellidop = new JLabel("Apellido Paterno:");
-        txtapellidop = new JTextField(10);
-        paneapellidop.add(apellidop, BorderLayout.WEST);
-        paneapellidop.add(txtapellidop, BorderLayout.EAST);
-        paneapellidop.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        JPanel paneapellidom = new JPanel(new GridLayout(1, 2));
-        apellidom = new JLabel("Apellido Materno:");
-        txtapellidom = new JTextField(10);
-        paneapellidom.add(apellidom, BorderLayout.WEST);
-        paneapellidom.add(txtapellidom, BorderLayout.EAST);
-        paneapellidom.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         //tercero
 //        JPanel tipodoc = new JPanel(new GridLayout(1, 2));;
 //        tipodocumento = new JLabel("Tipo de Documento");
@@ -241,9 +216,8 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 //        tipodoc.add(tipodocumento, BorderLayout.WEST);
 //        tipodoc.add(cbxtipodocumento, BorderLayout.EAST);
 //        tipodoc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
         JPanel panedoc = new JPanel(new GridLayout(1, 2));
-        documento = new JLabel("Numero de DNI :");
+        documento = new JLabel("Numero de RUC :");
         txtdocumento = new JTextField(10);
         panedoc.add(documento, BorderLayout.WEST);
         panedoc.add(txtdocumento, BorderLayout.EAST);
@@ -281,13 +255,6 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         panenombre.setBackground(c);
         primero.setBackground(c);
 
-        JPanel segundo = new JPanel(new BorderLayout());
-        segundo.add(paneapellidop, BorderLayout.WEST);
-        paneapellidom.setBackground(c);
-        segundo.add(paneapellidom, BorderLayout.EAST);
-        paneapellidop.setBackground(c);
-        segundo.setBackground(c);
-
         JPanel tercero = new JPanel(new BorderLayout());
 //        tercero.add(tipodoc, BorderLayout.WEST);
 //        tipodoc.setBackground(c);
@@ -310,13 +277,12 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         pane.add(idpane);
         idpane.setBackground(c);
         pane.add(primero);
-        pane.add(segundo);
         pane.add(tercero);
         pane.add(cuarto);
         pane.add(quinto);
         pane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createTitledBorder("Datos del Cliente")));
+                BorderFactory.createTitledBorder("Datos del Empresa")));
         pane.setBackground(c);
 //        setLayout(new GridLayout(1,1));
         add(pane);

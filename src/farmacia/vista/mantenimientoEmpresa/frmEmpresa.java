@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package farmacia.vista.mantenimientoTipoUsuario;
+package farmacia.vista.mantenimientoEmpresa;
 
-import farmacia.vista.mantenimientoProductos.*;
 import farmacia.vista.mantenimientoCliente.*;
+import farmacia.calculos.Permisos;
 import farmacia.calculos.configuracionImagenes;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbNuevo;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
+import farmacia.vista.frmpermiso;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -40,10 +39,10 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmTipousuario extends JInternalFrame implements ActionListener, KeyListener {
+public class frmEmpresa extends JInternalFrame implements ActionListener, KeyListener {
 
     public JTabbedPane pestañas;
-    public ListadoTipousuario pane1;
+    public ListadoEmpresa pane1;
     public Registrar pane2;
     public static JButton jbNuevo, jbEliminar, jbGuardar, jbModificar, jbSalir, jbCancelar;
     JToolBar toolBar;
@@ -53,9 +52,10 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
     Font fontboton = new Font("Geneva", 1, 14);
     configuracionImagenes config = new configuracionImagenes();
     public static String action = "nothing";
+    Permisos acceso=new Permisos();
 
-    public frmTipousuario() {
-        super("Formulario Tipo de Usuario", false, true, false, true);
+    public frmEmpresa() {
+        super("Formulario Empresas", false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Iniciar_componentes();
         pestañas.setSelectedIndex(0);
@@ -140,7 +140,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         if (source == jbModificar) {
             action = "modificar";
             pestañas.setSelectedIndex(1);
-            pane2.txtdescripcion.requestFocus();
+            pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
             habilitar();
             jbEliminar.setEnabled(false);
@@ -152,48 +152,61 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
-            pane1.control = true;
+            pane1.control=true;
             action = "nothing";
             pane1.txtBuscar.requestFocus();
 
         } else if (source == jbGuardar) {
             if (action.equals("nuevo")) {
-                if (pane2.txtdescripcion.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar una descripcion para el tipo de usuario", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtdescripcion.requestFocus();
-                    pane2.txtdescripcion.setBackground(Color.yellow);
+                if (pane2.txtnombre.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar una Razon Social para la Empresa", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                    pane2.txtnombre.requestFocus();
+                    pane2.txtnombre.setBackground(Color.yellow);
                     return;
                 }
-                if (!pane2.verificarselected()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar al menos un permiso para el tipo de trabajador", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.aventas.requestFocus();
-
+                
+                if (pane2.txtdocumento.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de RUC para la Empresa", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                    pane2.txtdocumento.requestFocus();
+                    pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
-
                 //verificar dni
+                if(pane2.txtdocumento.getText().length()!=11)
+                {
+                   JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de RUC Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                    pane2.txtdocumento.requestFocus();
+                    pane2.txtdocumento.setBackground(Color.yellow);
+                    return;
+                }
                 //mensaje de exito
-                JOptionPane.showMessageDialog(null, "Se Registro el Tipo de trabajador satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Se Registro el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
                 deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             } else if (action.equals("modificar")) {
-                JOptionPane.showMessageDialog(null, "Se Editó el Tipo de trabajador satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
                 deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             }
-            pane1.control = true;
-            pane1.txtBuscar.requestFocus();
-            action = "nothing";
+            pane1.control=true;
+             pane1.txtBuscar.requestFocus();
+             action = "nothing";
 
         } else if (source == jbEliminar) {
-
+//          if(!acceso.verificarClienteEliminar())
+//          {
+//              frmpermiso from=new frmpermiso();
+//              from.setVisible(true);
+//              from.toFront();
+//              
+//          }
             pane1.tabla.clearSelection();
             jbEliminar.setEnabled(false);
             jbModificar.setEnabled(false);
             action = "nothing";
-            pane1.txtBuscar.requestFocus();
+             pane1.txtBuscar.requestFocus();
 
         } else if (source == jbSalir) {
             deshabilitar();
@@ -204,24 +217,25 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
             jbCancelar.setEnabled(false);
             jbEliminar.setEnabled(false);
             jbGuardar.setEnabled(false);
-            pane1.control = true;
+            pane1.control=true;
 
             setVisible(false);
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
-            pane1.control = true;
+            pane1.control=true;
             pestañas.setSelectedIndex(1);
-            pane2.txtdescripcion.requestFocus();
+            pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-            jbSalir.setEnabled(false);
-            jbNuevo.setEnabled(false);
+           jbSalir.setEnabled(false);
+           jbNuevo.setEnabled(false);
+
         }
     }
 
     private void Iniciar_componentes() {
         pestañas = new JTabbedPane();
-        pane1 = new ListadoTipousuario(this);
+        pane1 = new ListadoEmpresa(this);
         pane2 = new Registrar(this);
         pestañas.add("Buscar", pane1);
 
@@ -260,19 +274,12 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
     }
 
     public void habilitar() {
-        pane2.txtdescripcion.setEnabled(true);
-        pane2.aventas.setEnabled(true);
-        pane2.aproductos.setEnabled(true);
-        pane2.aclientes.setEnabled(true);
-        pane2.aconsultas.setEnabled(true);
-        pane2.aempleados.setEnabled(true);
-        pane2.atiposusuario.setEnabled(true);
-        pane2.acambioclave.setEnabled(true);
-        pane2.aanularventas.setEnabled(true);
-        pane2.aeliminarproducto.setEnabled(true);
-        pane2.aelmininartipotrabajor.setEnabled(true);
-        pane2.aeliminarusuario.setEnabled(true);
-        pane2.aeliminarclientes.setEnabled(true);
+        pane2.txtnombre.setEnabled(true);
+        pane2.txtdocumento.setEnabled(true);
+        pane2.txtdireccion.setEnabled(true);
+        pane2.fecharegistro.setEnabled(true);
+        pane2.txttelefono.setEnabled(true);
+//        pane2.cbxtipodocumento.setEnabled(true);
 
         jbNuevo.setEnabled(true);
         jbEliminar.setEnabled(false);
@@ -281,61 +288,39 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         jbSalir.setEnabled(true);
         jbCancelar.setEnabled(true);
 
-        pane2.txtdescripcion.setText("");
-        pane2.txtidtipouser.setText("");
-        pane2.aventas.setSelected(false);
-        pane2.aproductos.setSelected(false);
-        pane2.aclientes.setSelected(false);
-        pane2.aconsultas.setSelected(false);
-        pane2.aempleados.setSelected(false);
-        pane2.atiposusuario.setSelected(false);
-        pane2.acambioclave.setSelected(false);
-        pane2.aanularventas.setSelected(false);
-        pane2.aeliminarproducto.setSelected(false);
-        pane2.aelmininartipotrabajor.setSelected(false);
-        pane2.aeliminarusuario.setSelected(false);
-        pane2.aeliminarclientes.setSelected(false);
+        pane2.txtidempresa.setText("");
+        pane2.txtidclienteempresa.setText("");
+        pane2.txtnombre.setText("");
+        pane2.txtdocumento.setText("");
+        pane2.txtdireccion.setText("");
+        pane2.txttelefono.setText("");
+//        pane2.cbxtipodocumento.setSelectedIndex(0);
 
     }
 
     public void deshabilitar() {
-        pane2.txtdescripcion.setEnabled(false);
-        pane2.aventas.setEnabled(false);
-        pane2.aproductos.setEnabled(false);
-        pane2.aclientes.setEnabled(false);
-        pane2.aconsultas.setEnabled(false);
-        pane2.aempleados.setEnabled(false);
-        pane2.atiposusuario.setEnabled(false);
-        pane2.acambioclave.setEnabled(false);
-        pane2.aanularventas.setEnabled(false);
-        pane2.aeliminarproducto.setEnabled(false);
-        pane2.aelmininartipotrabajor.setEnabled(false);
-        pane2.aeliminarusuario.setEnabled(false);
-        pane2.aeliminarclientes.setEnabled(false);
+        pane2.txtnombre.setEnabled(false);
+        pane2.txtdocumento.setEnabled(false);
+        pane2.txtdireccion.setEnabled(false);
+        pane2.fecharegistro.setEnabled(false);
+        pane2.txttelefono.setEnabled(false);
+//        pane2.cbxtipodocumento.setEnabled(false);
 
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);
         jbSalir.setEnabled(true);
         jbCancelar.setEnabled(false);
 
-        pane2.txtdescripcion.setText("");
-        pane2.txtidtipouser.setText("");
-        pane2.aventas.setSelected(false);
-        pane2.aproductos.setSelected(false);
-        pane2.aclientes.setSelected(false);
-        pane2.aconsultas.setSelected(false);
-        pane2.aempleados.setSelected(false);
-        pane2.atiposusuario.setSelected(false);
-        pane2.acambioclave.setSelected(false);
-        pane2.aanularventas.setSelected(false);
-        pane2.aeliminarproducto.setSelected(false);
-        pane2.aelmininartipotrabajor.setSelected(false);
-        pane2.aeliminarusuario.setSelected(false);
-        pane2.aeliminarclientes.setSelected(false);
+        pane2.txtidempresa.setText("");
+        pane2.txtidclienteempresa.setText("");
+        pane2.txtnombre.setText("");
+        pane2.txtdocumento.setText("");
+        pane2.txtdireccion.setText("");
+        pane2.txttelefono.setText("");
+//        pane2.cbxtipodocumento.setSelectedIndex(0);
 
     }
-
-    public void personalizarboton() {
+      public void personalizarboton() {
 
         jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
         jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -355,6 +340,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
+
     @Override
     public void keyTyped(KeyEvent ke) {
 
@@ -371,6 +357,6 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
     }
 
     public static void main(String[] args) {
-        new frmTipousuario().setVisible(true);
+        new frmEmpresa().setVisible(true);
     }
 }

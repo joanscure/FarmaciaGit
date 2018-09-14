@@ -8,6 +8,7 @@ package farmacia.vista;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.vista.mantenimientoCliente.frmClientes;
 import farmacia.vista.mantenimientoEmpleado.frmEmpleados;
+import farmacia.vista.mantenimientoEmpresa.frmEmpresa;
 import farmacia.vista.mantenimientoProductos.frmProducto;
 import farmacia.vista.mantenimientoTipoUsuario.frmTipousuario;
 import java.awt.Event;
@@ -26,10 +27,10 @@ import javax.swing.*;
 public class frmprincipal extends JFrame implements ActionListener, MouseListener {
 
     private JMenu malmacen, mconsultas, mherramientas, mayuda, marchivo, mventas, mmantenimiento, manulaciones;
-    private JMenuItem iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
+    private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
     public static JDesktopPane desktopPane;
     private JMenuBar barra;
-    public static String jlidpersona, jlnombre, jlapaterno, jlapmaterno, jlocupacion="vendedor";
+    public static String jlidpersona, jlnombre, jlapaterno, jlapmaterno, jlocupacion = "vendedor";
     Font fontgeneral = new Font("Geneva", 1, 15);
     Font fontitem = new Font("Geneva", 1, 13);
     frmClientes frmclientes;
@@ -37,10 +38,11 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     frmTipousuario frmtipousuario;
     frmEmpleados frmempleados;
     frmVentas frmventas;
+    frmEmpresa frmempresa;
     configuracionImagenes imageconfig = new configuracionImagenes();
 
     public frmprincipal() {
-        
+
         inciar_componentes();
         frmtipousuario = new frmTipousuario();
         desktopPane.add(frmtipousuario);
@@ -53,6 +55,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         icerrarsesion.addActionListener(this);
         itipousuario.addActionListener(this);
         iventas.addActionListener(this);
+        iempresa.addActionListener(this);
         setVisible(true);
         perzonalizartipoletra();
     }
@@ -78,6 +81,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         iclientes.setFont(fontitem);
         iacercade.setFont(fontitem);
         iayuda.setFont(fontitem);
+        iempresa.setFont(fontitem);
     }
 
     public void inciar_componentes() {
@@ -110,47 +114,51 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         mayuda = new JMenu("Ayuda");
         mayuda.setIcon(new ImageIcon(getClass().getResource("/Files/Ayuda.png")));
 
-        iventas = new JMenuItem("Ventas");
-        iventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
-        iventas.setIcon(new ImageIcon(getClass().getResource("/Files/ventas.png")));
-
-        iproductos = new JMenuItem("Productos");
-        iproductos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
-        iproductos.setIcon(new ImageIcon(getClass().getResource("/Files/productos.png")));
-
-        iusuarios_accesos = new JMenuItem("Usuarios y Accesos");
-        iusuarios_accesos.setIcon(new ImageIcon(getClass().getResource("/Files/trabajadores.png")));
-        iusuarios_accesos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
-
-        ianularventas = new JMenuItem("Anular Ventas");
-        ianularventas.setIcon(imageconfig.obtenerIcono("anularventas.png", 30));
-        ianularventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0));
-
         icerrarsesion = new JMenuItem("Cerrar Sesion");
         icerrarsesion.setIcon(imageconfig.obtenerIcono("desconectar.png", 30));
         icerrarsesion.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
-
-        iclientes = new JMenuItem("Clientes");
-        iclientes.setIcon(new ImageIcon(getClass().getResource("/Files/clientes.png")));
-        iclientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-
-        itipousuario = new JMenuItem("Tipo de Usuario");
-        itipousuario.setIcon(imageconfig.obtenerIcono("tipousuario.png", 30));
-        itipousuario.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
 
         isalir = new JMenuItem("Salir");
         isalir.setIcon(imageconfig.obtenerIcono("salir.png", 30));
         isalir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 
+        iproductos = new JMenuItem("Productos");
+        iproductos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+        iproductos.setIcon(new ImageIcon(getClass().getResource("/Files/productos.png")));
+
+        iventas = new JMenuItem("Ventas");
+        iventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+        iventas.setIcon(new ImageIcon(getClass().getResource("/Files/ventas.png")));
+
+        iclientes = new JMenuItem("Clientes");
+        iclientes.setIcon(new ImageIcon(getClass().getResource("/Files/clientes.png")));
+        iclientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+
+        iempresa = new JMenuItem("Empresas");
+        iempresa.setIcon(imageconfig.obtenerIcono("empresa.png", 30));
+        iempresa.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
+
+        iusuarios_accesos = new JMenuItem("Usuarios y Accesos");
+        iusuarios_accesos.setIcon(new ImageIcon(getClass().getResource("/Files/trabajadores.png")));
+        iusuarios_accesos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
+
+        itipousuario = new JMenuItem("Tipo de Usuario");
+        itipousuario.setIcon(imageconfig.obtenerIcono("tipousuario.png", 30));
+        itipousuario.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
+
         icambiarPass = new JMenuItem("Cambiar Contraseña");
         icambiarPass.setIcon(imageconfig.obtenerIcono("cambioclave.png", 30));
-        icambiarPass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F8, 0));
+        icambiarPass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F9, 0));
+
+        ianularventas = new JMenuItem("Anular Ventas");
+        ianularventas.setIcon(imageconfig.obtenerIcono("anularventas.png", 30));
+        ianularventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
 
         iacercade = new JMenuItem("Acerca De");
-        iacercade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
+        iacercade.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
 
         iayuda = new JMenuItem("Ayuda");
-        iayuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
+        iayuda.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
 
         marchivo.add(icerrarsesion);
         marchivo.add(isalir);
@@ -159,6 +167,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         mventas.add(iventas);
         mventas.add(iclientes);
+        mventas.add(iempresa);
 
         mmantenimiento.add(iusuarios_accesos);
         mmantenimiento.add(itipousuario);
@@ -223,7 +232,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmtipousuario.setVisible(true);
             frmtipousuario.pane1.txtBuscar.requestFocus();
 
-        }else if (source == iusuarios_accesos) {
+        } else if (source == iusuarios_accesos) {
             if (frmempleados == null) {
                 frmempleados = new frmEmpleados();
                 desktopPane.add(frmempleados);
@@ -233,10 +242,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmempleados.setVisible(true);
             frmempleados.pane1.txtBuscar.requestFocus();
 
-        } 
-        else if(source == iventas)
-        {
-             if (frmventas == null) {
+        } else if (source == iventas) {
+            if (frmventas == null) {
                 frmventas = new frmVentas();
                 desktopPane.add(frmventas);
             }
@@ -244,6 +251,16 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmventas.toFront();
             frmventas.setVisible(true);
             frmventas.txtnombrecliente.requestFocus();
+        } else if (source == iempresa) {
+
+            if (frmempresa == null) {
+                frmempresa = new frmEmpresa();
+                desktopPane.add(frmempresa);
+            }
+
+            frmempresa.toFront();
+            frmempresa.setVisible(true);
+            frmempresa.pane1.txtBuscar.requestFocus();
         }
     }
 

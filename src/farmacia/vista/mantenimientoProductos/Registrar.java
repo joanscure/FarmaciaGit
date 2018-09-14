@@ -86,6 +86,8 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         } else if (source == txtdosis) {
             txtdosis.transferFocus();
         } else if (source == txtprecioventa) {
+            if(txtprecioventa.getText().isEmpty())
+                return;
             
             double preciototal = Integer.parseInt(txtprecioventa.getText()) * 1.18;
             BigDecimal bd = new BigDecimal(preciototal);
@@ -138,7 +140,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != txtdosis && source != txtdescripcion) {
                 ke.consume();
             }
-        } else if (source == txtprecioventa) {
+        } else if (source == txtprecioventa|| source==txtstock) {
             if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57 && ke.getKeyChar()!=46) {
                 ke.consume();
             }
@@ -149,7 +151,25 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent ke) {
         Object source = ke.getSource();
-
+         if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+             if (source == txtdescripcion) {
+                txtprecioventa.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocusBackward();
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (source == txtstock) {
+                txtnombre.requestFocus();
+                return;
+            }
+             if (source == txtprecioventa) {
+                txtdescripcion.requestFocus();
+                return;
+            }
+            
+            ke.getComponent().transferFocus();
+        }
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
             frmProducto.jbCancelar.doClick();
 

@@ -65,7 +65,6 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         aelmininartipotrabajor.addKeyListener(this);
         aeliminarusuario.addKeyListener(this);
         aeliminarclientes.addKeyListener(this);
-        
 
     }
 
@@ -100,9 +99,9 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent ke) {
-        Object source=ke.getSource();
-    
-         if (source == txtdescripcion) {
+        Object source = ke.getSource();
+
+        if (source == txtdescripcion) {
             char c = ke.getKeyChar();
             if (Character.isLowerCase(c)) {
                 String cad = ("" + c).toUpperCase();
@@ -112,7 +111,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90)) {
                 ke.consume();
             }
-}
+        }
 
     }
 
@@ -121,18 +120,21 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         Object source = ke.getSource();
         if (source != txtdescripcion) {
             if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+                
                 ke.getComponent().transferFocusBackward();
             }
             if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+                if (source == aelmininartipotrabajor) {
+                    aventas.requestFocus();
+                    return;
+                }
                 ke.getComponent().transferFocus();
             }
             if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
                 JCheckBox cheaux = (JCheckBox) ke.getComponent();
                 cheaux.setSelected(!cheaux.isSelected());
             }
-        }
-        else
-        {
+        } else {
             txtdescripcion.setBackground(Color.white);
         }
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -143,7 +145,6 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
             teclaunida = true;
         }
-        System.out.println(ke.getExtendedKeyCode());
     }
 
     @Override
@@ -209,10 +210,9 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         segundo.add(acambioclave);
         segundo.add(aanularventas);
         segundo.add(aeliminarproducto);
-        segundo.add(aelmininartipotrabajor);
-        segundo.add(aeliminarusuario);
         segundo.add(aeliminarclientes);
-
+        segundo.add(aeliminarusuario);
+        segundo.add(aelmininartipotrabajor);
         segundo.setBackground(c);
 
         pane.add(primero, BorderLayout.NORTH);

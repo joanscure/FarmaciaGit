@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package farmacia.vista.mantenimientoProductos;
+package farmacia.vista.mantenimientoEmpresa;
 
+import farmacia.vista.mantenimientoCliente.*;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
@@ -34,7 +35,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoProductos extends JPanel implements ActionListener, KeyListener {
+public class ListadoEmpresa extends JPanel implements ActionListener, KeyListener {
 
     JTable tabla;
     DefaultTableModel modelo;
@@ -44,7 +45,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
     public JTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
-    frmProducto regis;
+    frmEmpresa regis;
     TextAutoCompleter autocompletar;
     TableRowSorter<TableModel> elQueOrdena;
     int indexSelecion = -1;
@@ -54,9 +55,9 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
     Font fontboton = new Font("Geneva", 1, 13);
     Color c = new java.awt.Color(255, 204, 102);
     public boolean control = true;
-    public boolean teclamas = false;
+    public boolean teclamas=false;
 
-    ListadoProductos(frmProducto regis) {
+    ListadoEmpresa(frmEmpresa regis) {
         this.regis = regis;
         iniciar_componentes();
         perzonalizartipoletra();
@@ -81,8 +82,8 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         JPanel pane_buscador = new JPanel();
         pane_buscador.setBackground(c);
         buscarPor = new JComboBox();
-        buscarPor.addItem("Por Codigo");
-        buscarPor.addItem("Por Nombre");
+        buscarPor.addItem("Por Razon social");
+        buscarPor.addItem("Por RUC");
         txtBuscar = new JTextField(10);
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
@@ -99,7 +100,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         setLayout(new FlowLayout());
         pane1.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                BorderFactory.createTitledBorder("Listado de Productos")));
+                BorderFactory.createTitledBorder("Listado de Empresas")));
 
         setLayout(new GridLayout(1, 1));
         add(pane1);
@@ -117,12 +118,13 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"iddescuento", "Codigo", "Nombre", "Descripcion", "Dosis", "Precio Venta", "IGV", "Precio Total", "Stock", "estado"};
+        String[] lista = {"idclienteEmpresa", "idEmpresa", "Razon Social", "Numero de RUC", "Direccion", "Telefono", "Fecha Registro","estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);
@@ -132,15 +134,15 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         tabla.getTableHeader().setReorderingAllowed(false);
         tabla.getSelectionModel().addListSelectionListener(e -> {
             if (control) {
-                frmProducto.jbEliminar.setEnabled(true);
-                frmProducto.jbModificar.setEnabled(true);
+                frmEmpresa.jbEliminar.setEnabled(true);
+                frmEmpresa.jbModificar.setEnabled(true);
             }
         }
         );
         pane.setBackground(c);
-        int[] tamaño = {0, 80, 180, 180, 120, 100, 80, 80, 80, 0};
+        int[] tamaño = {0, 0, 150, 150, 250, 150, 150, 0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 9};
+        int[] columnas = {0, 1, 7};
         config.ocultarColumnas(tabla, columnas);
 
         return pane;
@@ -150,34 +152,34 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == buscar || source == txtBuscar) {
-            if (buscarPor.getSelectedItem().toString().equals("Por Nombre")) {
+            if (buscarPor.getSelectedItem().toString().equals("Por Razon social")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 2));
-            } 
-            else if (buscarPor.getSelectedItem().toString().equals("Por Codigo")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
-            } 
+            }else if (buscarPor.getSelectedItem().toString().equals("Por RUC")) {
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
+            }
 
             if (tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "¡No Se encontraron Productos!","Informacion",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron  Empresas!","Informacion",JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();
             }
 
-        }
+        } 
 
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         Object source = e.getSource();
         if (source == tabla) {
-            if (tabla.getSelectedRow() == -1) {
+            if(tabla.getSelectedRow()==-1)
+            {
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -190,40 +192,43 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
                 tabla.changeSelection(index, 0, false, false);
                 //se pasa el index como parametro o se usa el selected
 //            control = true;
-                frmProducto.jbModificar.doClick();
+                frmEmpresa.jbModificar.doClick();
 
             } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                frmProducto.jbEliminar.doClick();
+                frmEmpresa.jbEliminar.doClick();
             }
-        } else if (source == txtBuscar) {
-            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                buscarPor.setPopupVisible(true);
-                buscarPor.requestFocus();
+        }
+        else if(source==txtBuscar)
+        {
+             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                  buscarPor.setPopupVisible(true);
+               buscarPor.requestFocus();
             }
-
-        } else if (source == buscarPor) {
+         
+        }else if (source == buscarPor) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 buscarPor.setPopupVisible(false);
                 buscarPor.transferFocus();
             }
         }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmProducto.jbSalir.doClick();
-        }
-
-        if (e.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclamas = true;
-        }
-
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                frmEmpresa.jbSalir.doClick();
+            }
+         
+        
+        if (e.getExtendedKeyCode()== KeyEvent.VK_CONTROL ) {
+                  teclamas=true;
+            }
+        
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
-        if (e.getKeyCode() == KeyEvent.VK_N && teclamas) {
-            frmProducto.jbNuevo.doClick();
-            teclamas = false;
-        }
+      
+       if (e.getKeyCode() == KeyEvent.VK_N &&teclamas) {
+                    frmEmpresa.jbNuevo.doClick();
+                    teclamas=false;
+                }
     }
 
 }

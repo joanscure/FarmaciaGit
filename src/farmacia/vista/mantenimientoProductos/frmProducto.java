@@ -175,6 +175,12 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
                     pane2.txtprecioventa.setBackground(Color.yellow);
                     return;
                 }
+                 if (pane2.txtstock.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar El Stock del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                    pane2.txtstock.requestFocus();
+                    pane2.txtstock.setBackground(Color.yellow);
+                    return;
+                }
 
                 //verificar dni
                 //mensaje de exito
@@ -190,6 +196,7 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
             }
             pane1.control = true;
             pane1.txtBuscar.requestFocus();
+            action = "nothing";
 
         } else if (source == jbEliminar) {
 

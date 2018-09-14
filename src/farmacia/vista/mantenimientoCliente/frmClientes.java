@@ -202,6 +202,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
             }
             pane1.control=true;
              pane1.txtBuscar.requestFocus();
+             action = "nothing";
 
         } else if (source == jbEliminar) {
 //          if(!acceso.verificarClienteEliminar())

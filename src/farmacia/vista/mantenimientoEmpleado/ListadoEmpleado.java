@@ -126,13 +126,6 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
                 return false;
             }
         };
-        Object[] a2 = {1, 2,3, "joan".toString().toUpperCase(), "leyton".toString().toUpperCase(), "carrillo".toString().toUpperCase(), "ruc".toString().toUpperCase(), "159753", "calle piura".toString().toUpperCase(), "1282833","asad", "clave","asda",true};
-        Object[] a1 = {1, 4,4, "mario".toString().toUpperCase(), "lopez".toString().toUpperCase(), "nieto".toString().toUpperCase(), "dni".toString().toUpperCase(), "12340", "calle piura".toString().toUpperCase(), "1282833","user","clave","poutr", true};
-        Object[] a3 = {1, 2,6, "pedrito".toString().toUpperCase(), "gaga".toString().toUpperCase(), "carl".toString().toUpperCase(), "pasaporte".toString().toUpperCase(), "56789", "calle piura".toString().toUpperCase(), "1282833","user2","clavwe2","dsdfsd", true};
-
-        modelo.addRow(a2);
-        modelo.addRow(a1);
-        modelo.addRow(a3);
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);
@@ -169,6 +162,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
             }
 
             if (tabla.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron Empleados!","Informacion",JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();

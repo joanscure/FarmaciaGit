@@ -218,6 +218,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
             }
             pane1.control=true;
              pane1.txtBuscar.requestFocus();
+             action = "nothing";
 
         } else if (source == jbEliminar) {
 //          if(!acceso.verificarClienteEliminar())
