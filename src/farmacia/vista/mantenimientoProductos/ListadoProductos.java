@@ -117,7 +117,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"iddescuento", "Codigo", "Nombre", "Descripcion", "Dosis", "Precio Venta", "IGV", "Precio Total", "Stock", "estado"};
+        String[] lista = {"Codigo", "Nombre", "Descripcion", "Dosis", "Precio Venta", "IGV", "Precio Total", "Stock", "estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -138,11 +138,11 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         }
         );
         pane.setBackground(c);
-        int[] tamaño = {0, 80, 180, 180, 120, 100, 80, 80, 80, 0};
+        int[] tamaño = { 80, 180, 180, 120, 100, 80, 80, 80, 0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 9};
+        int[] columnas = {9};
         config.ocultarColumnas(tabla, columnas);
-
+        tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return pane;
     }
 

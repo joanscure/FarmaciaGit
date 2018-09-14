@@ -18,6 +18,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JFrame;
@@ -32,13 +36,13 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class frmVentas extends JInternalFrame implements ActionListener, KeyListener {
+public class frmVentas extends JInternalFrame implements ActionListener, KeyListener, MouseListener {
 
     //paneles
     JPanel paneprincipal, paneventa, panebotones;
     //datos venta
     JLabel jlcliente, jbdtipocomprobante, jlfecha;
-    JTextField txtidcliente, txtnombrecliente;
+    public static JTextField txtidcliente, txtnombrecliente;
     JButton bnagregarCliente;
     JComboBox cbxtipocomprobante;
     JDateChooser fechaventa;
@@ -47,7 +51,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     JButton bnguardar, bnnuevo, bnrecibo, bncancelar, bnsalir;
     //datos producto
     JLabel jlidproducto, jlstock, jlprecio, jlnombreproducto;
-    JTextField txtnombreProducto, txtcodigo, txtstock, txtprecio;
+    public static JTextField txtnombreProducto, txtcodigo, txtstock, txtprecio;
     JButton bnagregproducto;
 
     //agrega
@@ -79,9 +83,10 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     JTable tabla;
     DefaultTableModel modelo;
     public static String action = "nothing";
+
     public frmVentas() {
         super("Formulario Ventas", false, true, false, true);
-        
+
         iniciar_componentes();
         changeFont();
         changeColor();
@@ -105,6 +110,9 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         bnagregar.addActionListener(this);
         bnnuevo.addActionListener(this);
         bncancelar.addActionListener(this);
+        bnagregarCliente.addActionListener(this);
+        bnagregproducto.addActionListener(this);
+
         bnagregarCliente.addKeyListener(this);
         cbxtipocomprobante.addKeyListener(this);
         txtcantidad.addKeyListener(this);
@@ -113,10 +121,396 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         bnagregproducto.addKeyListener(this);
         bnnuevo.addKeyListener(this);
         bnsalir.addKeyListener(this);
-        
-        
+        cbxtipocomprobante.addMouseListener(this);
+
     }
 
+    public void habilitar() {
+
+        bnagregarCliente.requestFocus();
+        bnagregarCliente.setEnabled(true);
+        cbxtipocomprobante.setEnabled(true);
+        fechaventa.setEnabled(true);
+        txtcodigo.setEnabled(true);
+        bnagregproducto.setEnabled(true);
+        txtnombreProducto.setEnabled(true);
+        txtcantidad.setEnabled(true);
+
+        bnnuevo.setEnabled(false);
+        bnguardar.setEnabled(true);
+        bncancelar.setEnabled(true);
+        bnsalir.setEnabled(false);
+
+        txtidcliente.setText("");
+        txtnombrecliente.setText("Cliente Genérico");
+        cbxtipocomprobante.setSelectedIndex(0);
+        Date date = new Date();
+        fechaventa.setDate(date);
+        txtcodigo.setText("");
+        txtnombreProducto.setText("");
+        txtstock.setText("");
+        txtprecio.setText("");
+        txtcantidad.setText("");
+        txttotal.setText("");
+        txtsubtotal.setText("0.00");
+        txttotalPago.setText("0.00");
+        txtdescuento.setText("0.00");
+        txtigv.setText("0.00");
+
+    }
+
+    public void deshabilitar() {
+
+        bnnuevo.requestFocus();
+        bnagregarCliente.setEnabled(false);
+        cbxtipocomprobante.setEnabled(false);
+        fechaventa.setEnabled(false);
+        txtcodigo.setEnabled(false);
+        bnagregproducto.setEnabled(false);
+        txtnombreProducto.setEnabled(false);
+        txtcantidad.setEnabled(false);
+
+        bnnuevo.setEnabled(true);
+        bnguardar.setEnabled(false);
+        bncancelar.setEnabled(false);
+        bnsalir.setEnabled(true);
+
+        txtidcliente.setText("");
+        txtnombrecliente.setText("");
+        cbxtipocomprobante.setSelectedIndex(0);
+        Date date = new Date();
+        fechaventa.setDate(date);
+        txtcodigo.setText("");
+        txtnombreProducto.setText("");
+        txtstock.setText("");
+        txtprecio.setText("");
+        txtcantidad.setText("");
+        txttotal.setText("");
+        txtsubtotal.setText("0.00");
+        txttotalPago.setText("0.00");
+        txtdescuento.setText("0.00");
+        txtigv.setText("0.00");
+
+    }
+
+    public void changeColor() {
+        bnguardar.setBackground(colorButton);
+        bnnuevo.setBackground(colorButton);
+        bnrecibo.setBackground(colorButton);
+        bncancelar.setBackground(colorButton);
+        bnsalir.setBackground(colorButton);
+        bnagregarCliente.setBackground(colorButton);
+        txttotal.setBackground(azulclaro);
+        txttotalPago.setBackground(Color.black);
+        txtsubtotal.setBackground(amarilloclaro);
+        txtdescuento.setBackground(azulclaro);
+        txtigv.setBackground(amarilloclaro);
+        txttotalPago.setForeground(Color.green);
+        bnagregproducto.setBackground(colorButton);
+
+    }
+
+    public void changeFont() {
+        bnguardar.setFont(fontbutton);
+        bnnuevo.setFont(fontbutton);
+        bnrecibo.setFont(fontbutton);
+        bncancelar.setFont(fontbutton);
+        bnsalir.setFont(fontbutton);
+
+        jlcliente.setFont(fonttexto);
+        txtidcliente.setFont(fonttexto);
+        txtnombrecliente.setFont(fonttexto);
+        jlfecha.setFont(fonttexto);
+        fechaventa.setFont(fonttexto);
+        jbdtipocomprobante.setFont(fonttexto);
+        cbxtipocomprobante.setFont(fonttexto);
+        jlnombreproducto.setFont(fonttexto);
+        txtnombreProducto.setFont(fonttexto);
+        jlstock.setFont(fonttexto);
+        txtstock.setFont(fonttexto);
+        jlprecio.setFont(fonttexto);
+        txtprecio.setFont(fonttexto);
+        jlidproducto.setFont(fonttexto);
+        txtcodigo.setFont(fonttexto);
+        jlcantidad.setFont(fonttexto);
+        txtcantidad.setFont(fonttexto);
+        jltotal.setFont(fonttexto);
+        txttotal.setFont(fonttexto);
+        jlcorrelativo.setFont(fonttexto);
+        txtcorrelativo.setFont(fonttexto);
+        tabla.getTableHeader().setFont(fontbutton);
+        jltotalPago.setFont(fonttexto);
+        jlsubtotal.setFont(fonttexto);
+        jldescuento.setFont(fonttexto);
+        jligv.setFont(fonttexto);
+        txttotalPago.setFont(fonttexto);
+        txtsubtotal.setFont(fonttexto);
+        txtdescuento.setFont(fonttexto);
+        txtigv.setFont(fonttexto);
+
+    }
+
+    public void inicializacionVariables() {
+        txtnombrecliente.setEnabled(false);
+        txtsubtotal.setEditable(false);
+        txttotal.setEditable(false);
+        txtigv.setEditable(false);
+        txtdescuento.setEditable(false);
+        txttotalPago.setEditable(false);
+        txtcorrelativo.setEnabled(false);
+        bnrecibo.setEnabled(false);
+        bncancelar.setEnabled(false);
+        bnguardar.setEnabled(false);
+        bnagregar.setEnabled(false);
+        bnquitar.setEnabled(false);
+        Date fecha = new Date();
+        fechaventa.setDate(fecha);
+    }
+
+    public void personalizarboton() {
+        bnnuevo.setHorizontalTextPosition(SwingConstants.CENTER);
+        bnnuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        bnguardar.setHorizontalTextPosition(SwingConstants.CENTER);
+        bnguardar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        bnrecibo.setHorizontalTextPosition(SwingConstants.CENTER);
+        bnrecibo.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        bncancelar.setHorizontalTextPosition(SwingConstants.CENTER);
+        bncancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        bnsalir.setHorizontalTextPosition(SwingConstants.CENTER);
+        bnsalir.setVerticalTextPosition(SwingConstants.BOTTOM);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (source == bnsalir) {
+            setVisible(false);
+        } else if (source == bnagregar) {
+            bnagregar.setEnabled(false);
+        } else if (source == bnnuevo) {
+            action = "nuevo";
+            habilitar();
+        } else if (source == bncancelar) {
+            deshabilitar();
+            action = "nothing";
+        } else if (source == bnguardar) {
+            deshabilitar();
+            action = "nothing";
+
+        } else if (source == bnrecibo) {
+            deshabilitar();
+            action = "nothing";
+        } else if (source == bnagregarCliente) {
+            txtcodigo.requestFocus();
+            if (cbxtipocomprobante.getSelectedIndex() == 0) {
+                frmvistalistadocliente frmvistacliente = new frmvistalistadocliente();
+                frmvistacliente.setVisible(true);
+                frmvistacliente.toFront();
+
+            } else {
+                frmvistalistadoEmpresa frmvistaempresa = new frmvistalistadoEmpresa();
+                frmvistaempresa.setVisible(true);
+                frmvistaempresa.toFront();
+            }
+
+        } else if (source == bnagregproducto) {
+            txtcantidad.requestFocus();
+            frmvistalistadoproductos frmvistaproducto = new frmvistalistadoproductos();
+            frmvistaproducto.setVisible(true);
+            frmvistaproducto.toFront();
+
+        }
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+        Object source = ke.getSource();
+        if (source == txtcantidad) {
+            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+                ke.consume();
+            }
+            if (txtcantidad.getText().isEmpty()) {
+                if (ke.getKeyChar() == 48) {
+                    ke.consume();
+                }
+            }
+            if (txtcantidad.getText().length() >= 3) {
+                ke.consume();
+            }
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        Object source = ke.getSource();
+        //izquierda
+        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (source == bnagregarCliente) {
+                txtcantidad.requestFocus();
+                return;
+            }
+            if (source == cbxtipocomprobante) {
+                cbxtipocomprobante.setPopupVisible(false);
+                bnagregarCliente.requestFocus();
+                return;
+            }
+            if (source == txtcodigo) {
+                cbxtipocomprobante.setPopupVisible(true);
+                cbxtipocomprobante.requestFocus();
+                return;
+            }
+            if (source == bnnuevo) {
+                bnsalir.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocusBackward();
+        }
+        //derecha
+        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (source == bnagregarCliente) {
+                cbxtipocomprobante.setPopupVisible(true);
+                cbxtipocomprobante.requestFocus();
+                return;
+            }
+            if (source == cbxtipocomprobante) {
+                cbxtipocomprobante.setPopupVisible(false);
+                txtcodigo.requestFocus();
+                return;
+            }
+            if (source == bnsalir) {
+                bnnuevo.requestFocus();
+                return;
+            }
+            if (source == txtcantidad) {
+                bnagregarCliente.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocus();
+        }
+        //si se hace enter en un combo box
+        if (source == cbxtipocomprobante) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                cbxtipocomprobante.setPopupVisible(false);
+                if (cbxtipocomprobante.getSelectedIndex() == 0) {
+                    jlcliente.setText("Cliente:");
+                    txtnombrecliente.setText("");
+                    txtidcliente.setText("");
+                } else {
+                    jlcliente.setText("Empresa:");
+                    txtnombrecliente.setText("");
+                    txtidcliente.setText("");
+                }
+            }
+        } else if (source == bnnuevo) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                bnnuevo.doClick();
+            }
+        } else if (source == bnsalir) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                bnsalir.doClick();
+            }
+        } else if (source == bnagregarCliente) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                bnagregarCliente.doClick();
+            }
+        } else if (source == bnagregproducto) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                bnagregproducto.doClick();
+            }
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (bncancelar.isEnabled()) {
+                bncancelar.doClick();
+            } else if (bnsalir.isEnabled()) {
+                bnsalir.doClick();
+            }
+
+        }
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            if (bnguardar.isEnabled()) {
+                teclaunida = true;
+            }
+        }
+        //
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
+        Object source = ke.getSource();
+        if (source == txtcantidad) {
+            if (txtprecio.getText().isEmpty()) {
+                return;
+
+            }
+            if (!txtcantidad.getText().isEmpty()) {
+                int cant = Integer.parseInt(txtcantidad.getText());
+                double total = cant * Double.parseDouble(txtprecio.getText());
+                BigDecimal bd = new BigDecimal(total);
+                bd = bd.setScale(2, RoundingMode.HALF_UP);
+                txttotal.setText(bd.doubleValue() + "");
+                bnagregar.setEnabled(true);
+            } else {
+                txttotal.setText("");
+                bnagregar.setEnabled(false);
+            }
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_S && teclaunida) {
+
+            bnguardar.doClick();
+            teclaunida = false;
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        new frmVentas().setVisible(true);
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent ke) {
+        Object source = ke.getSource();
+        if (source == cbxtipocomprobante) {
+
+            if (cbxtipocomprobante.getSelectedIndex() == 0) {
+                jlcliente.setText("Cliente:");
+                txtnombrecliente.setText("");
+                txtidcliente.setText("");
+            } else {
+                jlcliente.setText("Empresa:");
+                txtnombrecliente.setText("");
+                txtidcliente.setText("");
+            }
+        }
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    //crear ventana y componentes
     public void iniciar_componentes() {
         paneprincipal = new JPanel(new BorderLayout());
         crear_paneventa();
@@ -134,74 +528,6 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         //config ventana
         pack();
 
-    }
-    public void habilitar()
-    {
-        
-        bnagregarCliente.requestFocus();
-        bnagregarCliente.setEnabled(true);
-        cbxtipocomprobante.setEnabled(true);
-        fechaventa.setEnabled(true);
-        txtcodigo.setEnabled(true);
-        bnagregproducto.setEnabled(true);
-        txtnombreProducto.setEnabled(true);
-        txtcantidad.setEnabled(true);
-        
-        bnnuevo.setEnabled(false);
-        bnguardar.setEnabled(true);
-        bncancelar.setEnabled(true);
-        bnsalir.setEnabled(false);
-        
-        txtidcliente.setText("");
-        txtnombrecliente.setText("Cliente Genérico");
-        cbxtipocomprobante.setSelectedIndex(0);
-        Date date=new Date();
-        fechaventa.setDate(date);
-        txtcodigo.setText("");
-        txtnombreProducto.setText("");
-        txtstock.setText("");
-        txtprecio.setText("");
-        txtcantidad.setText("");
-        txttotal.setText("");
-        txtsubtotal.setText("0.00");
-        txttotalPago.setText("0.00");
-        txtdescuento.setText("0.00");
-        txtigv.setText("0.00");
-        
-    }
-     public void deshabilitar()
-    {
-        
-        bnnuevo.requestFocus();
-        bnagregarCliente.setEnabled(false);
-        cbxtipocomprobante.setEnabled(false);
-        fechaventa.setEnabled(false);
-        txtcodigo.setEnabled(false);
-        bnagregproducto.setEnabled(false);
-        txtnombreProducto.setEnabled(false);
-        txtcantidad.setEnabled(false);
-        
-        bnnuevo.setEnabled(true);
-        bnguardar.setEnabled(false);
-        bncancelar.setEnabled(false);
-        bnsalir.setEnabled(true);
-        
-        txtidcliente.setText("");
-        txtnombrecliente.setText("");
-        cbxtipocomprobante.setSelectedIndex(0);
-        Date date=new Date();
-        fechaventa.setDate(date);
-        txtcodigo.setText("");
-        txtnombreProducto.setText("");
-        txtstock.setText("");
-        txtprecio.setText("");
-        txtcantidad.setText("");
-        txttotal.setText("");
-        txtsubtotal.setText("0.00");
-        txttotalPago.setText("0.00");
-        txtdescuento.setText("0.00");
-        txtigv.setText("0.00");
-        
     }
 
     public void crear_paneventa() {
@@ -261,7 +587,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
         //pane datos de total:
         JPanel paneDatospago = new JPanel(new FlowLayout());
-      paneDatospago.setBackground(paneClaro);
+        paneDatospago.setBackground(paneClaro);
         paneDatospago.add(crearDatosPagos());
 
         paneventa.add(panecabecera, BorderLayout.NORTH);
@@ -430,7 +756,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         panederecha.setBackground(paneClaro);
         JPanel paneimagen = new JPanel(new BorderLayout());
         jlimagen = new JLabel("");
-        jlimagen.setIcon(configImage.obtenerIcono("farmacia.png",180));
+        jlimagen.setIcon(configImage.obtenerIcono("farmacia.png", 180));
         paneimagen.add(jlimagen, BorderLayout.CENTER);
         paneimagen.setBackground(paneClaro);
 
@@ -466,46 +792,46 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             bnquitar.setEnabled(true);
 //            }
         }
-        
         );
+        tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         pane.setBackground(colorButton);
         int[] tamaño = {100, 200, 200, 80, 90, 90};
         configtabla.fijarTamaño(tabla, tamaño);
-        pane.setPreferredSize(new Dimension(760,200));
+        pane.setPreferredSize(new Dimension(760, 200));
         return pane;
     }
 
     public JPanel crearDatosPagos() {
         JPanel paneDatospago = new JPanel(new FlowLayout());
-          paneDatospago.setBorder(BorderFactory.createCompoundBorder(
+        paneDatospago.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
                 BorderFactory.createTitledBorder("")));
         paneDatospago.setBackground(paneClaro);
         JPanel panesubtotal = new JPanel(new BorderLayout());
         panesubtotal.setBackground(paneClaro);
         jlsubtotal = new JLabel("SUB TOTAL");
-        txtsubtotal = new JTextField("0.00",10);
+        txtsubtotal = new JTextField("0.00", 10);
         panesubtotal.add(jlsubtotal, BorderLayout.NORTH);
         panesubtotal.add(txtsubtotal, BorderLayout.SOUTH);
 
         JPanel paneigv = new JPanel(new BorderLayout());
         paneigv.setBackground(paneClaro);
         jligv = new JLabel("IGV ");
-        txtigv = new JTextField("0.00",10);
+        txtigv = new JTextField("0.00", 10);
         paneigv.add(jligv, BorderLayout.NORTH);
         paneigv.add(txtigv, BorderLayout.SOUTH);
 
         JPanel panedescuentos = new JPanel(new BorderLayout());
         panedescuentos.setBackground(paneClaro);
         jldescuento = new JLabel("DESUENTO");
-        txtdescuento = new JTextField("0.00",10);
+        txtdescuento = new JTextField("0.00", 10);
         panedescuentos.add(jldescuento, BorderLayout.NORTH);
         panedescuentos.add(txtdescuento, BorderLayout.SOUTH);
 
         JPanel panetotalPago = new JPanel(new BorderLayout());
         panetotalPago.setBackground(paneClaro);
         jltotalPago = new JLabel("TOTAL");
-        txttotalPago = new JTextField("0.00",10);
+        txttotalPago = new JTextField("0.00", 10);
         panetotalPago.add(jltotalPago, BorderLayout.NORTH);
         panetotalPago.add(txttotalPago, BorderLayout.SOUTH);
         paneDatospago.add(panesubtotal);
@@ -515,268 +841,4 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         return paneDatospago;
     }
 
-    public void changeColor() {
-        bnguardar.setBackground(colorButton);
-        bnnuevo.setBackground(colorButton);
-        bnrecibo.setBackground(colorButton);
-        bncancelar.setBackground(colorButton);
-        bnsalir.setBackground(colorButton);
-        bnagregarCliente.setBackground(colorButton);
-        txttotal.setBackground(azulclaro);
-         txttotalPago.setBackground(Color.black);
-        txtsubtotal.setBackground(amarilloclaro);
-        txtdescuento.setBackground(azulclaro);
-        txtigv.setBackground(amarilloclaro);
-        txttotalPago.setForeground(Color.green);
-
-    }
-
-    public void changeFont() {
-        bnguardar.setFont(fontbutton);
-        bnnuevo.setFont(fontbutton);
-        bnrecibo.setFont(fontbutton);
-        bncancelar.setFont(fontbutton);
-        bnsalir.setFont(fontbutton);
-
-        jlcliente.setFont(fonttexto);
-        txtidcliente.setFont(fonttexto);
-        txtnombrecliente.setFont(fonttexto);
-        jlfecha.setFont(fonttexto);
-        fechaventa.setFont(fonttexto);
-        jbdtipocomprobante.setFont(fonttexto);
-        cbxtipocomprobante.setFont(fonttexto);
-        jlnombreproducto.setFont(fonttexto);
-        txtnombreProducto.setFont(fonttexto);
-        jlstock.setFont(fonttexto);
-        txtstock.setFont(fonttexto);
-        jlprecio.setFont(fonttexto);
-        txtprecio.setFont(fonttexto);
-        jlidproducto.setFont(fonttexto);
-        txtcodigo.setFont(fonttexto);
-        jlcantidad.setFont(fonttexto);
-        txtcantidad.setFont(fonttexto);
-        jltotal.setFont(fonttexto);
-        txttotal.setFont(fonttexto);
-        jlcorrelativo.setFont(fonttexto);
-        txtcorrelativo.setFont(fonttexto);
-        tabla.getTableHeader().setFont(fontbutton);
-        jltotalPago.setFont(fonttexto);
-        jlsubtotal.setFont(fonttexto);
-        jldescuento.setFont(fonttexto);
-        jligv.setFont(fonttexto);
-        txttotalPago.setFont(fonttexto);
-        txtsubtotal.setFont(fonttexto);
-        txtdescuento.setFont(fonttexto);
-        txtigv.setFont(fonttexto);
-
-    }
-    public void inicializacionVariables()
-    {
-        txtnombrecliente.setEnabled(false);
-        txtsubtotal.setEditable(false);
-        txttotal.setEditable(false);
-        txtigv.setEditable(false);
-        txtdescuento.setEditable(false);
-        txttotalPago.setEditable(false);
-        txtcorrelativo.setEnabled(false);
-        bnrecibo.setEnabled(false);
-        bncancelar.setEnabled(false);
-        bnguardar.setEnabled(false);
-        bnagregar.setEnabled(false);
-        bnquitar.setEnabled(false);
-        Date fecha=new Date();
-        fechaventa.setDate(fecha);
-    }
-
-    public void personalizarboton() {
-        bnnuevo.setHorizontalTextPosition(SwingConstants.CENTER);
-        bnnuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
-
-        bnguardar.setHorizontalTextPosition(SwingConstants.CENTER);
-        bnguardar.setVerticalTextPosition(SwingConstants.BOTTOM);
-
-        bnrecibo.setHorizontalTextPosition(SwingConstants.CENTER);
-        bnrecibo.setVerticalTextPosition(SwingConstants.BOTTOM);
-
-        bncancelar.setHorizontalTextPosition(SwingConstants.CENTER);
-        bncancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
-
-        bnsalir.setHorizontalTextPosition(SwingConstants.CENTER);
-        bnsalir.setVerticalTextPosition(SwingConstants.BOTTOM);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source=e.getSource();
-        if(source==bnsalir)
-        {
-            setVisible(false);
-        }
-        else if(source==bnagregar)
-        {
-            bnagregar.setEnabled(false);
-        }
-        else if(source==bnnuevo)
-        {
-            action = "nuevo";
-            habilitar();
-        }
-        else if(source==bncancelar)
-        {
-            deshabilitar();
-            action = "nothing";
-        }
-        else if(source==bnguardar)
-        {
-            deshabilitar();
-            action = "nothing";
-            
-        }
-                
-    }
-
-    @Override
-    public void keyTyped(KeyEvent ke) {
-         Object source=ke.getSource();
-        if (source == txtcantidad) {
-             if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
-                 ke.consume();
-            }
-              if(txtcantidad.getText().isEmpty()){
-                     if (ke.getKeyChar() ==48)
-                     {
-                         ke.consume();
-                     }
-                 }
-              if (txtcantidad.getText().length() >= 3) {
-                    ke.consume();
-                }
-        }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        Object source=ke.getSource();
-        //izquierda
-        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            if (source == bnagregarCliente) {
-                txtcantidad.requestFocus();
-                return;
-            }
-             if (source == cbxtipocomprobante) {
-                   cbxtipocomprobante.setPopupVisible(false);
-                    bnagregarCliente.requestFocus();
-                    return;
-                }
-              if (source == txtcodigo) {
-                cbxtipocomprobante.setPopupVisible(true);
-                cbxtipocomprobante.requestFocus();
-                return;
-            }
-               if (source == bnnuevo) {
-                bnsalir.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocusBackward();
-        }
-        //derecha
-        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (source == bnagregarCliente) {
-                cbxtipocomprobante.setPopupVisible(true);
-                cbxtipocomprobante.requestFocus();
-                return;
-            }
-             if (source == cbxtipocomprobante) {
-                cbxtipocomprobante.setPopupVisible(false);
-                txtcodigo.requestFocus();
-                return;
-            }
-             if (source == bnsalir) {
-                bnnuevo.requestFocus();
-                return;
-            }
-             if(source==txtcantidad)
-             {
-                  bnagregarCliente.requestFocus();
-                    return;
-             }
-            ke.getComponent().transferFocus();
-        }
-        //si se hace enter en un combo box
-        if (source == cbxtipocomprobante) {
-            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-                cbxtipocomprobante.setPopupVisible(false);
-            }
-        }
-        else if(source==bnnuevo)
-        {
-            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-            bnnuevo.doClick();
-            }
-        }
-        else if(source==bnsalir)
-        {
-            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-            bnsalir.doClick();
-            }
-        }
-         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-             if(bncancelar.isEnabled())
-            {
-           bncancelar.doClick();
-            }
-             else if(bnsalir.isEnabled()) 
-             {
-                 bnsalir.doClick();
-             }
-            
-
-        }
-        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            if(bnguardar.isEnabled())
-            {
-            teclaunida = true;
-            }
-        }
-        //
-    }
-
-    @Override
-    public void keyReleased(KeyEvent ke) {
-         Object source=ke.getSource();
-         if (source == txtcantidad) {
-             if(txtprecio.getText().isEmpty())
-             {
-                 return;
-             
-             }
-             if(!txtcantidad.getText().isEmpty())
-             {
-                 int cant=Integer.parseInt(txtcantidad.getText());
-                 double total=cant*Integer.parseInt(txtprecio.getText());
-                 txttotal.setText(total+"");
-                 bnagregar.setEnabled(true);
-             }
-             else
-             {
-                 txttotal.setText("");
-                 bnagregar.setEnabled(false);
-             }
-        }
-          if (ke.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-             
-            bnguardar.doClick();
-            teclaunida = false;
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        new frmVentas().setVisible(true);
-
-    }
 }

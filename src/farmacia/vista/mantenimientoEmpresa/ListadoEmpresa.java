@@ -144,7 +144,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {0, 1, 7};
         config.ocultarColumnas(tabla, columnas);
-
+        tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return pane;
     }
 

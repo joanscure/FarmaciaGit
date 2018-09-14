@@ -140,11 +140,11 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         }
         );
         pane.setBackground(c);
-        int[] tamaño = {0, 0, 80, 120, 120, 180, 200, 80,80, 0};
+        int[] tamaño = {0, 0, 150, 150, 150, 180, 200, 80,130, 0};
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {0, 1, 9};
         config.ocultarColumnas(tabla, columnas);
-
+        tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return pane;
     }
 

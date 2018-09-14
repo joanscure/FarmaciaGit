@@ -145,7 +145,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {0, 1,2,10,11,13};
         config.ocultarColumnas(tabla, columnas);
-
+        tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return pane;
     }
 
