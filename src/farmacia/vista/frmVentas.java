@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -72,17 +74,47 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     Color paneOscuro = new Color(255, 204, 102);
     Color azulclaro = new Color(191, 198, 251);
     Color amarilloclaro = new Color(253, 255, 189);
+    boolean teclaunida = false;
     //tabla
     JTable tabla;
     DefaultTableModel modelo;
-
+    public static String action = "nothing";
     public frmVentas() {
         super("Formulario Ventas", false, true, false, true);
+        
         iniciar_componentes();
         changeFont();
         changeColor();
         personalizarboton();
         inicializacionVariables();
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosing(InternalFrameEvent e) {
+                if (!action.equals("nothing")) {
+                    JOptionPane.showMessageDialog(null, "Se esta ejecutando una Accion\n para cerrar la ventana debe cancelar o terminar con dicha acción", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    bnsalir.doClick();
+                }
+            }
+
+        });
+        deshabilitar();
+        txtprecio.setText("10");
+        bnsalir.addActionListener(this);
+        bnagregar.addActionListener(this);
+        bnnuevo.addActionListener(this);
+        bncancelar.addActionListener(this);
+        bnagregarCliente.addKeyListener(this);
+        cbxtipocomprobante.addKeyListener(this);
+        txtcantidad.addKeyListener(this);
+        txtnombreProducto.addKeyListener(this);
+        txtcodigo.addKeyListener(this);
+        bnagregproducto.addKeyListener(this);
+        bnnuevo.addKeyListener(this);
+        bnsalir.addKeyListener(this);
+        
+        
     }
 
     public void iniciar_componentes() {
@@ -100,10 +132,76 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         paneprincipal.setBackground(colorButton);
         add(paneprincipal);
         //config ventana
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setVisible(true);
         pack();
 
+    }
+    public void habilitar()
+    {
+        
+        bnagregarCliente.requestFocus();
+        bnagregarCliente.setEnabled(true);
+        cbxtipocomprobante.setEnabled(true);
+        fechaventa.setEnabled(true);
+        txtcodigo.setEnabled(true);
+        bnagregproducto.setEnabled(true);
+        txtnombreProducto.setEnabled(true);
+        txtcantidad.setEnabled(true);
+        
+        bnnuevo.setEnabled(false);
+        bnguardar.setEnabled(true);
+        bncancelar.setEnabled(true);
+        bnsalir.setEnabled(false);
+        
+        txtidcliente.setText("");
+        txtnombrecliente.setText("Cliente Genérico");
+        cbxtipocomprobante.setSelectedIndex(0);
+        Date date=new Date();
+        fechaventa.setDate(date);
+        txtcodigo.setText("");
+        txtnombreProducto.setText("");
+        txtstock.setText("");
+        txtprecio.setText("");
+        txtcantidad.setText("");
+        txttotal.setText("");
+        txtsubtotal.setText("0.00");
+        txttotalPago.setText("0.00");
+        txtdescuento.setText("0.00");
+        txtigv.setText("0.00");
+        
+    }
+     public void deshabilitar()
+    {
+        
+        bnnuevo.requestFocus();
+        bnagregarCliente.setEnabled(false);
+        cbxtipocomprobante.setEnabled(false);
+        fechaventa.setEnabled(false);
+        txtcodigo.setEnabled(false);
+        bnagregproducto.setEnabled(false);
+        txtnombreProducto.setEnabled(false);
+        txtcantidad.setEnabled(false);
+        
+        bnnuevo.setEnabled(true);
+        bnguardar.setEnabled(false);
+        bncancelar.setEnabled(false);
+        bnsalir.setEnabled(true);
+        
+        txtidcliente.setText("");
+        txtnombrecliente.setText("");
+        cbxtipocomprobante.setSelectedIndex(0);
+        Date date=new Date();
+        fechaventa.setDate(date);
+        txtcodigo.setText("");
+        txtnombreProducto.setText("");
+        txtstock.setText("");
+        txtprecio.setText("");
+        txtcantidad.setText("");
+        txttotal.setText("");
+        txtsubtotal.setText("0.00");
+        txttotalPago.setText("0.00");
+        txtdescuento.setText("0.00");
+        txtigv.setText("0.00");
+        
     }
 
     public void crear_paneventa() {
@@ -474,6 +572,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     }
     public void inicializacionVariables()
     {
+        txtnombrecliente.setEnabled(false);
         txtsubtotal.setEditable(false);
         txttotal.setEditable(false);
         txtigv.setEditable(false);
@@ -508,18 +607,167 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Object source=e.getSource();
+        if(source==bnsalir)
+        {
+            setVisible(false);
+        }
+        else if(source==bnagregar)
+        {
+            bnagregar.setEnabled(false);
+        }
+        else if(source==bnnuevo)
+        {
+            action = "nuevo";
+            habilitar();
+        }
+        else if(source==bncancelar)
+        {
+            deshabilitar();
+            action = "nothing";
+        }
+        else if(source==bnguardar)
+        {
+            deshabilitar();
+            action = "nothing";
+            
+        }
+                
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent ke) {
+         Object source=ke.getSource();
+        if (source == txtcantidad) {
+             if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+                 ke.consume();
+            }
+              if(txtcantidad.getText().isEmpty()){
+                     if (ke.getKeyChar() ==48)
+                     {
+                         ke.consume();
+                     }
+                 }
+              if (txtcantidad.getText().length() >= 3) {
+                    ke.consume();
+                }
+        }
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent ke) {
+        Object source=ke.getSource();
+        //izquierda
+        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (source == bnagregarCliente) {
+                txtcantidad.requestFocus();
+                return;
+            }
+             if (source == cbxtipocomprobante) {
+                   cbxtipocomprobante.setPopupVisible(false);
+                    bnagregarCliente.requestFocus();
+                    return;
+                }
+              if (source == txtcodigo) {
+                cbxtipocomprobante.setPopupVisible(true);
+                cbxtipocomprobante.requestFocus();
+                return;
+            }
+               if (source == bnnuevo) {
+                bnsalir.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocusBackward();
+        }
+        //derecha
+        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (source == bnagregarCliente) {
+                cbxtipocomprobante.setPopupVisible(true);
+                cbxtipocomprobante.requestFocus();
+                return;
+            }
+             if (source == cbxtipocomprobante) {
+                cbxtipocomprobante.setPopupVisible(false);
+                txtcodigo.requestFocus();
+                return;
+            }
+             if (source == bnsalir) {
+                bnnuevo.requestFocus();
+                return;
+            }
+             if(source==txtcantidad)
+             {
+                  bnagregarCliente.requestFocus();
+                    return;
+             }
+            ke.getComponent().transferFocus();
+        }
+        //si se hace enter en un combo box
+        if (source == cbxtipocomprobante) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                cbxtipocomprobante.setPopupVisible(false);
+            }
+        }
+        else if(source==bnnuevo)
+        {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+            bnnuevo.doClick();
+            }
+        }
+        else if(source==bnsalir)
+        {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+            bnsalir.doClick();
+            }
+        }
+         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+             if(bncancelar.isEnabled())
+            {
+           bncancelar.doClick();
+            }
+             else if(bnsalir.isEnabled()) 
+             {
+                 bnsalir.doClick();
+             }
+            
+
+        }
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            if(bnguardar.isEnabled())
+            {
+            teclaunida = true;
+            }
+        }
+        //
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent ke) {
+         Object source=ke.getSource();
+         if (source == txtcantidad) {
+             if(txtprecio.getText().isEmpty())
+             {
+                 return;
+             
+             }
+             if(!txtcantidad.getText().isEmpty())
+             {
+                 int cant=Integer.parseInt(txtcantidad.getText());
+                 double total=cant*Integer.parseInt(txtprecio.getText());
+                 txttotal.setText(total+"");
+                 bnagregar.setEnabled(true);
+             }
+             else
+             {
+                 txttotal.setText("");
+                 bnagregar.setEnabled(false);
+             }
+        }
+          if (ke.getKeyCode() == KeyEvent.VK_S && teclaunida) {
+             
+            bnguardar.doClick();
+            teclaunida = false;
+        }
     }
 
     public static void main(String[] args) {

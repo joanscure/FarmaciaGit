@@ -250,7 +250,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
             frmventas.toFront();
             frmventas.setVisible(true);
-            frmventas.txtnombrecliente.requestFocus();
+            frmventas.bnnuevo.requestFocus();
         } else if (source == iempresa) {
 
             if (frmempresa == null) {
