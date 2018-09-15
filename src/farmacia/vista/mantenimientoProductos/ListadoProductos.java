@@ -140,7 +140,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         pane.setBackground(c);
         int[] tamaño = { 80, 180, 180, 120, 100, 80, 80, 80, 0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {9};
+        int[] columnas = {8};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return pane;

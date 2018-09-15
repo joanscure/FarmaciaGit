@@ -20,6 +20,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,13 +35,14 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class frmvistalistadoproductos extends JFrame implements ActionListener, KeyListener,MouseListener {
+public class frmvistalistadoproductos extends JFrame implements ActionListener, KeyListener, MouseListener {
 
-    JTable tabla;
+    public JTable tabla;
     DefaultTableModel modelo;
     JPanel principal;
     JPanel pane1;
-    JButton buscar, agregar, salir;;
+    JButton buscar, agregar, salir;
+    ;
     public JTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
@@ -56,8 +59,10 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
     frmvistalistadoproductos() {
         iniciar_componentes();
         perzonalizartipoletra();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(683, 553);
+        setResizable(false);
+        setLocationRelativeTo(null);
         agregar.setEnabled(false);
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
@@ -69,6 +74,14 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         agregar.addActionListener(this);
         tabla.addMouseListener(this);
         txtBuscar.requestFocus();
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                salir.doClick();
+            }
+
+        });
     }
 
     public void perzonalizartipoletra() {
@@ -100,7 +113,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);
         pane_buscador.add(buscar);
-         pane_buscador.add(buscar);
+        pane_buscador.add(buscar);
         pane_buscador.add(agregar);
         pane_buscador.add(salir);
         autocompletar = new TextAutoCompleter(txtBuscar);
@@ -137,7 +150,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
                 return false;
             }
         };
-         Object[] l1 = {"123", "caspirina","calma dolor de corazon", "2", "10", "1.8","11.8", "12",1};
+        Object[] l1 = {"123", "caspirina", "calma dolor de corazon", "2", "10", "1.8", "11.8", "12", 1};
         modelo.addRow(l1);
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
@@ -153,9 +166,9 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         }
         );
         pane.setBackground(c);
-        int[] tamaño = {0, 80, 180, 180, 120, 100, 80, 80, 80, 0};
+        int[] tamaño = {80, 180, 180, 120, 100, 80, 80, 80, 0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 9};
+        int[] columnas = {8};
         config.ocultarColumnas(tabla, columnas);
 
         return pane;
@@ -167,20 +180,21 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         if (source == buscar || source == txtBuscar) {
             if (buscarPor.getSelectedItem().toString().equals("Por Nombre")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 2));
-            } 
-            else if (buscarPor.getSelectedItem().toString().equals("Por Codigo")) {
+            } else if (buscarPor.getSelectedItem().toString().equals("Por Codigo")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
-            } 
+            }
 
             if (tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "¡No Se encontraron Productos!","Informacion",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron Productos!", "Informacion", JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();
             }
 
-        }else if (source == salir) {
-            dispose();
+        } else if (source == salir) {
+            setVisible(false);
+            txtBuscar.setText("");
+            elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
 
         } else if (source == agregar) {
             frmVentas.txtcodigo.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0));
@@ -213,10 +227,10 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
                 control = false;
                 tabla.changeSelection(index, 0, false, false);
                 //se pasa el index como parametro o se usa el selected
-            control = true;
+                control = true;
                 agregar.doClick();
 
-            } 
+            }
         } else if (source == txtBuscar) {
             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                 buscarPor.setPopupVisible(true);
@@ -233,14 +247,11 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
             salir.doClick();
         }
 
-       
-
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
 
-        
     }
 
     @Override
@@ -248,7 +259,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         Object source = e.getSource();
         if (source == tabla) {
             if (e.getClickCount() == 2) {
-               agregar.doClick();
+                agregar.doClick();
             }
         }
 

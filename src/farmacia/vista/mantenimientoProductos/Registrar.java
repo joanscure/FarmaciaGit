@@ -45,6 +45,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     Color c = new java.awt.Color(255, 255, 153);
     Font fontboton = new Font("Geneva", 1, 13);
     boolean teclaunida = false;
+    boolean controlpunto = false;
 
     public Registrar(frmProducto regis) {
         this.regis = regis;
@@ -86,18 +87,6 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         } else if (source == txtdosis) {
             txtdosis.transferFocus();
         } else if (source == txtprecioventa) {
-            if(txtprecioventa.getText().isEmpty())
-                return;
-            
-            double preciototal = Integer.parseInt(txtprecioventa.getText()) * 1.18;
-            BigDecimal bd = new BigDecimal(preciototal);
-            bd = bd.setScale(2, RoundingMode.HALF_UP);
-            
-            double igv = preciototal - Integer.parseInt(txtprecioventa.getText());
-            BigDecimal bd2 = new BigDecimal(igv);
-            bd2 = bd2.setScale(2, RoundingMode.HALF_UP);
-            txtigv.setText(bd2.doubleValue() + "");
-            txtpreciofinal.setText(bd.doubleValue() + "");
             txtstock.requestFocus();
         } else if (source == txtstock) {
             frmClientes.jbGuardar.doClick();
@@ -140,9 +129,18 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != txtdosis && source != txtdescripcion) {
                 ke.consume();
             }
-        } else if (source == txtprecioventa|| source==txtstock) {
-            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57 && ke.getKeyChar()!=46) {
-                ke.consume();
+        } else if (source == txtprecioventa) {
+            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57) && ((ke.getKeyChar() != 46) || controlpunto)) {
+                
+                    ke.consume();
+                
+            }
+        }
+        else if(source == txtstock) {
+            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57)) {
+                
+                    ke.consume();
+                
             }
         }
 
@@ -151,9 +149,13 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyPressed(KeyEvent ke) {
         Object source = ke.getSource();
-         if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-             if (source == txtdescripcion) {
+        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (source == txtstock) {
                 txtprecioventa.requestFocus();
+                return;
+            }
+            if (source == txtnombre) {
+                txtstock.requestFocus();
                 return;
             }
             ke.getComponent().transferFocusBackward();
@@ -163,11 +165,11 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
                 txtnombre.requestFocus();
                 return;
             }
-             if (source == txtprecioventa) {
-                txtdescripcion.requestFocus();
+            if (source == txtprecioventa) {
+                txtstock.requestFocus();
                 return;
             }
-            
+
             ke.getComponent().transferFocus();
         }
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -181,9 +183,46 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        Object source = e.getSource();
         if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
             frmProducto.jbGuardar.doClick();
             teclaunida = false;
+        }
+        if (source == txtprecioventa) {
+             int validacion = txtprecioventa.getText().indexOf(".");
+            if (validacion == -1) {
+                controlpunto = false;//deja poner el punto ya que dice que no encuentra punto
+            } else {
+                controlpunto = true;//no lo deja poner el punto ya que dice que ya se encuentra un punto
+                
+            }
+
+            if (txtprecioventa.getText().isEmpty()) {
+                txtpreciofinal.setText("");
+                txtigv.setText("");
+                return;
+            } else if (txtprecioventa.getText().charAt(txtprecioventa.getText().length() - 1) == '.') {
+                txtpreciofinal.setText("");
+                txtigv.setText("");
+                return;
+            }
+            //validamos que solo halla un punto
+           
+            //
+            if (txtprecioventa.getText().charAt(txtprecioventa.getText().length() - 1) == '.') {
+                if (txtprecioventa.getText().length() == 1) {
+                    return;
+                }
+            }
+            double preciototal = Double.parseDouble(txtprecioventa.getText()) * 1.18;
+            BigDecimal bd = new BigDecimal(preciototal);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+
+            double igv = preciototal - Double.parseDouble(txtprecioventa.getText());
+            BigDecimal bd2 = new BigDecimal(igv);
+            bd2 = bd2.setScale(2, RoundingMode.HALF_UP);
+            txtigv.setText(bd2.doubleValue() + "");
+            txtpreciofinal.setText(bd.doubleValue() + "");
         }
     }
 

@@ -20,6 +20,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -51,13 +53,15 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
     configuracionImagenes configIma = new configuracionImagenes();
     Font fontboton = new Font("Geneva", 1, 13);
     Color c = new java.awt.Color(255, 204, 102);
-   public boolean control=true;
+    public boolean control = true;
 
     frmvistalistadocliente() {
         iniciar_componentes();
         perzonalizartipoletra();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         agregar.setEnabled(false);
+        setResizable(false);
+        setLocationRelativeTo(null);
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
@@ -68,6 +72,14 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
         agregar.addActionListener(this);
         tabla.addMouseListener(this);
         txtBuscar.requestFocus();
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                salir.doClick();
+            }
+
+        });
     }
 
     public void perzonalizartipoletra() {
@@ -143,7 +155,7 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
         tabla.getTableHeader().setReorderingAllowed(false);
         tabla.getSelectionModel().addListSelectionListener(e -> {
             if (control) {
-              agregar.setEnabled(true);
+                agregar.setEnabled(true);
             }
         }
         );
@@ -179,6 +191,9 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
             }
 
         } else if (source == salir) {
+//            setVisible(false);
+//            txtBuscar.setText("");
+//             elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
             dispose();
 
         } else if (source == agregar) {
@@ -250,10 +265,9 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
         Object source = e.getSource();
         if (source == tabla) {
             if (e.getClickCount() == 2) {
-               agregar.doClick();
+                agregar.doClick();
             }
-           
-            
+
         }
 
     }

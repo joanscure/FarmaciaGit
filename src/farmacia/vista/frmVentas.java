@@ -84,6 +84,8 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     DefaultTableModel modelo;
     public static String action = "nothing";
 
+    frmvistalistadoproductos frmvistaproducto = new frmvistalistadoproductos();
+
     public frmVentas() {
         super("Formulario Ventas", false, true, false, true);
 
@@ -112,11 +114,11 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         bncancelar.addActionListener(this);
         bnagregarCliente.addActionListener(this);
         bnagregproducto.addActionListener(this);
+        txtcodigo.addActionListener(this);
 
         bnagregarCliente.addKeyListener(this);
         cbxtipocomprobante.addKeyListener(this);
         txtcantidad.addKeyListener(this);
-        txtnombreProducto.addKeyListener(this);
         txtcodigo.addKeyListener(this);
         bnagregproducto.addKeyListener(this);
         bnnuevo.addKeyListener(this);
@@ -133,7 +135,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         fechaventa.setEnabled(true);
         txtcodigo.setEnabled(true);
         bnagregproducto.setEnabled(true);
-        txtnombreProducto.setEnabled(true);
+        txtnombreProducto.setEnabled(false);
         txtcantidad.setEnabled(true);
 
         bnnuevo.setEnabled(false);
@@ -251,6 +253,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     }
 
     public void inicializacionVariables() {
+        txtnombreProducto.setEditable(false);
         txtnombrecliente.setEnabled(false);
         txtsubtotal.setEditable(false);
         txttotal.setEditable(false);
@@ -308,6 +311,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             txtcodigo.requestFocus();
             if (cbxtipocomprobante.getSelectedIndex() == 0) {
                 frmvistalistadocliente frmvistacliente = new frmvistalistadocliente();
+
                 frmvistacliente.setVisible(true);
                 frmvistacliente.toFront();
 
@@ -319,10 +323,20 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
         } else if (source == bnagregproducto) {
             txtcantidad.requestFocus();
-            frmvistalistadoproductos frmvistaproducto = new frmvistalistadoproductos();
+
             frmvistaproducto.setVisible(true);
             frmvistaproducto.toFront();
 
+        } else if (source == txtcodigo) {
+            if (txtnombreProducto.getText().isEmpty()) {
+                if (txtcodigo.getText().isEmpty()) {
+                    bnagregproducto.doClick();
+                } else {
+                    JOptionPane.showMessageDialog(null, "El Producto no se encuentra", "Error al buscar", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                txtcantidad.requestFocus();
+            }
         }
 
     }
@@ -342,7 +356,12 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             if (txtcantidad.getText().length() >= 3) {
                 ke.consume();
             }
+        } else if (source == txtcodigo) {
+            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+                ke.consume();
+            }
         }
+
     }
 
     @Override
@@ -447,7 +466,18 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 return;
 
             }
+
             if (!txtcantidad.getText().isEmpty()) {
+                int stockmax = Integer.parseInt(txtstock.getText());
+                int cantidadmax = Integer.parseInt(txtcantidad.getText());
+                if (cantidadmax > stockmax) {
+                    txtcantidad.setForeground(Color.RED);
+                    txttotal.setText("");
+                    bnagregar.setEnabled(false);
+                    return;
+                } else {
+                    txtcantidad.setForeground(Color.BLACK);
+                }
                 int cant = Integer.parseInt(txtcantidad.getText());
                 double total = cant * Double.parseDouble(txtprecio.getText());
                 BigDecimal bd = new BigDecimal(total);
@@ -457,6 +487,25 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             } else {
                 txttotal.setText("");
                 bnagregar.setEnabled(false);
+            }
+
+        } else if (source == txtcodigo) {
+            if (txtcodigo.getText().isEmpty()) {
+                txtnombreProducto.setText("");
+                txtprecio.setText("");
+                txtstock.setText("");
+
+            }
+            for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
+                if (txtcodigo.getText().equals(frmvistaproducto.tabla.getValueAt(i, 0))) {
+                    txtnombreProducto.setText((String) frmvistaproducto.tabla.getValueAt(i, 1));
+                    txtprecio.setText((String) frmvistaproducto.tabla.getValueAt(i, 6));
+                    txtstock.setText((String) frmvistaproducto.tabla.getValueAt(i, 7));
+                } else {
+                    txtnombreProducto.setText("");
+                    txtprecio.setText("");
+                    txtstock.setText("");
+                }
             }
         }
         if (ke.getKeyCode() == KeyEvent.VK_S && teclaunida) {

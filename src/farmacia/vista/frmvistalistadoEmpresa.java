@@ -20,6 +20,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -33,13 +35,14 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class frmvistalistadoEmpresa extends JFrame implements ActionListener, KeyListener ,MouseListener{
+public class frmvistalistadoEmpresa extends JFrame implements ActionListener, KeyListener, MouseListener {
 
     JTable tabla;
     DefaultTableModel modelo;
     JPanel principal;
     JPanel pane1;
-    JButton buscar, agregar, salir;;
+    JButton buscar, agregar, salir;
+    ;
     public JTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
@@ -52,12 +55,14 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
     Font fontboton = new Font("Geneva", 1, 13);
     Color c = new java.awt.Color(255, 204, 102);
     public boolean control = true;
-    public boolean teclamas=false;
+    public boolean teclamas = false;
 
     frmvistalistadoEmpresa() {
         iniciar_componentes();
         perzonalizartipoletra();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setResizable(false);
+        setLocationRelativeTo(null);
         setSize(683, 553);
         agregar.setEnabled(false);
         buscarPor.addActionListener(this);
@@ -70,6 +75,14 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
         agregar.addActionListener(this);
         tabla.addMouseListener(this);
         txtBuscar.requestFocus();
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                salir.doClick();
+            }
+
+        });
     }
 
     public void perzonalizartipoletra() {
@@ -101,7 +114,7 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);
         pane_buscador.add(buscar);
-         pane_buscador.add(buscar);
+        pane_buscador.add(buscar);
         pane_buscador.add(agregar);
         pane_buscador.add(salir);
         autocompletar = new TextAutoCompleter(txtBuscar);
@@ -120,20 +133,19 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
         add(pane1);
         setSize(500, 600);
         setBackground(c);
-       
 
     }
 
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"idclienteEmpresa", "idEmpresa", "Razon Social", "Numero de RUC", "Direccion", "Telefono", "Fecha Registro","estado"};
+        String[] lista = {"idclienteEmpresa", "idEmpresa", "Razon Social", "Numero de RUC", "Direccion", "Telefono", "Fecha Registro", "estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-         Object[] l1 = {"123", "123", "joan leyton", "32324234", "piura", "12312312", "09/13/2012",1};
+        Object[] l1 = {"123", "123", "joan leyton", "32324234", "piura", "12312312", "09/13/2012", 1};
         modelo.addRow(l1);
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
@@ -144,7 +156,7 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
         tabla.getTableHeader().setReorderingAllowed(false);
         tabla.getSelectionModel().addListSelectionListener(e -> {
             if (control) {
-               agregar.setEnabled(true);
+                agregar.setEnabled(true);
             }
         }
         );
@@ -163,39 +175,41 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
         if (source == buscar || source == txtBuscar) {
             if (buscarPor.getSelectedItem().toString().equals("Por Razon social")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 2));
-            }else if (buscarPor.getSelectedItem().toString().equals("Por RUC")) {
+            } else if (buscarPor.getSelectedItem().toString().equals("Por RUC")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
             }
 
             if (tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "¡No Se encontraron  Empresas!","Informacion",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron  Empresas!", "Informacion", JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();
             }
 
         } else if (source == salir) {
+//            setVisible(false);
+//            txtBuscar.setText("");
+//            elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
             dispose();
 
         } else if (source == agregar) {
             frmVentas.txtidcliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0));
             frmVentas.txtnombrecliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 2));
             tabla.clearSelection();
-        } 
+        }
 
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         Object source = e.getSource();
         if (source == tabla) {
-            if(tabla.getSelectedRow()==-1)
-            {
+            if (tabla.getSelectedRow() == -1) {
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -207,39 +221,35 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
                 control = false;
                 tabla.changeSelection(index, 0, false, false);
                 //se pasa el index como parametro o se usa el selected
-            control = true;
-               agregar.doClick();
+                control = true;
+                agregar.doClick();
 
-            } 
-        }
-        else if(source==txtBuscar)
-        {
-             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                  buscarPor.setPopupVisible(true);
-               buscarPor.requestFocus();
             }
-         
-        }else if (source == buscarPor) {
+        } else if (source == txtBuscar) {
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                buscarPor.setPopupVisible(true);
+                buscarPor.requestFocus();
+            }
+
+        } else if (source == buscarPor) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 buscarPor.setPopupVisible(false);
                 buscarPor.transferFocus();
             }
         }
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-               salir.doClick();
-            }
-         
-        
-        if (e.getExtendedKeyCode()== KeyEvent.VK_CONTROL ) {
-                  teclamas=true;
-            }
-        
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            salir.doClick();
+        }
+
+        if (e.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            teclamas = true;
+        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-      
-      
+
     }
 
     @Override
@@ -247,10 +257,9 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
         Object source = e.getSource();
         if (source == tabla) {
             if (e.getClickCount() == 2) {
-               agregar.doClick();
+                agregar.doClick();
             }
-           
-            
+
         }
     }
 
