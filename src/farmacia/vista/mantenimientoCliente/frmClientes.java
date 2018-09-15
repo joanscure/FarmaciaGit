@@ -181,6 +181,12 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
+                 if (pane2.txtedad.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar la Edad  del Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                    pane2.txtedad.requestFocus();
+                    pane2.txtedad.setBackground(Color.yellow);
+                    return;
+                }
                 //verificar dni
                 if(pane2.txtdocumento.getText().length()!=8)
                 {
@@ -291,6 +297,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtdireccion.setEnabled(true);
         pane2.fecharegistro.setEnabled(true);
         pane2.txttelefono.setEnabled(true);
+         pane2.txtedad.setEnabled(true);
 //        pane2.cbxtipodocumento.setEnabled(true);
 
         jbNuevo.setEnabled(true);
@@ -303,6 +310,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtidcliente.setText("");
         pane2.txtidpersona.setText("");
         pane2.txtnombre.setText("");
+          pane2.txtedad.setText("");
         pane2.txtapellidop.setText("");
         pane2.txtapellidom.setText("");
         pane2.txtdocumento.setText("");
@@ -317,6 +325,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtapellidop.setEnabled(false);
         pane2.txtapellidom.setEnabled(false);
         pane2.txtdocumento.setEnabled(false);
+         pane2.txtedad.setEnabled(false);
         pane2.txtdireccion.setEnabled(false);
         pane2.fecharegistro.setEnabled(false);
         pane2.txttelefono.setEnabled(false);
@@ -333,6 +342,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtapellidop.setText("");
         pane2.txtapellidom.setText("");
         pane2.txtdocumento.setText("");
+          pane2.txtedad.setText("");
         pane2.txtdireccion.setText("");
         pane2.txttelefono.setText("");
 //        pane2.cbxtipodocumento.setSelectedIndex(0);

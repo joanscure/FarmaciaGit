@@ -85,6 +85,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
         buscarPor.addItem("Por Nombre");
         buscarPor.addItem("Por Apellido");
         buscarPor.addItem("Por Documento");
+        buscarPor.addItem("Por Edad");
         txtBuscar = new JTextField(10);
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
@@ -120,7 +121,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
 
         Object[][] data = new Object[0][0];
         String[] lista = {"idempleado", "idpersona","idtipoempleado" ,"Nombre", "Apellido Paterno",
-            "Apellido Materno", "Tipo de Documento", "Numero de Documento", "Direccion", "Telefono","Nombre usuario","clave","ocupacion","estado"};
+            "Apellido Materno", "Tipo de Documento", "Numero de Documento","Edad", "Direccion", "Telefono","Nombre usuario","clave","ocupacion","estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -141,9 +142,9 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
         }
         );
         pane.setBackground(c);
-        int[] tamaño = {0, 0,0, 80, 120, 120, 140, 180, 200, 80, 0,0,100,0};
+        int[] tamaño = {0, 0,0, 80, 120, 120, 140, 180,100, 200, 80, 0,0,100,0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 1,2,10,11,13};
+        int[] columnas = {0, 1,2,11,12,14};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return pane;
@@ -159,6 +160,8 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 4, 5));
             } else if (buscarPor.getSelectedItem().toString().equals("Por Documento")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 7));
+            }else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 8));
             }
 
             if (tabla.getRowCount() == 0) {

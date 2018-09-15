@@ -106,6 +106,7 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
         buscarPor.addItem("Por Nombre");
         buscarPor.addItem("Por Apellido");
         buscarPor.addItem("Por DNI");
+        buscarPor.addItem("Por Edad");
         txtBuscar = new JTextField(10);
         agregar = new JButton("Agregar");
         salir = new JButton("salir");
@@ -139,7 +140,7 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI", "Direccion", "Telefono", "Fecha de Registro", "estado"};
+        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI","Edad", "Direccion", "Telefono", "Fecha de Registro", "estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -160,12 +161,12 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
         }
         );
 
-        Object[] l1 = {"123", "123", "joan", "leyton", "carrillo", "32324234", "piura", "12312312", "09/13/2012"};
+        Object[] l1 = {"123", "123", "joan", "leyton", "carrillo", "32324234",19 ,"piura", "12312312", "09/13/2012"};
         modelo.addRow(l1);
         pane.setBackground(c);
-        int[] tamaño = {0, 0, 150, 150, 150, 180, 200, 80, 130, 0};
+        int[] tamaño = {0, 0, 150, 150, 150, 180,100, 200, 80, 130, 0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 1, 9};
+        int[] columnas = {0, 1, 10};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         return pane;
@@ -181,6 +182,8 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3, 4));
             } else if (buscarPor.getSelectedItem().toString().equals("Por DNI")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 5));
+            }else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
             }
 
             if (tabla.getRowCount() == 0) {

@@ -145,8 +145,6 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
                 return false;
             }
         };
-        Object[] l1 = {"123", "123", "joan leyton", "32324234", "piura", "12312312", "09/13/2012", 1};
-        modelo.addRow(l1);
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);

@@ -38,8 +38,8 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     frmEmpleados regis;
 
     JPanel pane;
-    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion;
-    public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona;
+    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion,jledad;
+    public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona,txtedad;
     JTextField txtdireccion;
     JPasswordField txtpassw;
 //    JComboBox cbxtipodocumento;
@@ -65,6 +65,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         txtdireccion.addActionListener(this);
         txtuser.addActionListener(this);
         txtpassw.addActionListener(this);
+        txtedad.addActionListener(this);
 
         txtapellidop.addKeyListener(this);
         txtapellidom.addKeyListener(this);
@@ -75,6 +76,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 //        cbxtipodocumento.addKeyListener(this);
         cbxtipodeempleado.addKeyListener(this);
         txtuser.addKeyListener(this);
+        txtedad.addKeyListener(this);
         txtpassw.addKeyListener(this);
 
     }
@@ -104,6 +106,10 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             txtpassw.transferFocus();
             cbxtipodeempleado.setPopupVisible(true);
         }
+        else if(source==txtedad)
+        {
+            txtedad.transferFocus();
+        }
     }
 
     public void personalizartipoletra() {
@@ -121,6 +127,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         jlpass.setFont(fontboton);
         txtpassw.setFont(fontboton);
         jlocupacion.setFont(fontboton);
+        jledad.setFont(fontboton);
 
         txtnombre.setFont(fontboton);
         txtapellidop.setFont(fontboton);
@@ -133,6 +140,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 //        cbxtipodocumento.setFont(fontboton);
         fecharegistro.setFont(fontboton);
         cbxtipodeempleado.setFont(fontboton);
+        txtedad.setFont(fontboton);
 
     }
 
@@ -167,6 +175,13 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
                     ke.consume();
                 }
             }
+        }  else if (source == txtedad){
+            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+                if(txtedad.getText().length()>=2)
+                     ke.consume();
+            }
+             if(txtedad.getText().length()>=2)
+                     ke.consume();
         }
 
     }
@@ -287,7 +302,13 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         panedoc.add(documento, BorderLayout.WEST);
         panedoc.add(txtdocumento, BorderLayout.EAST);
         panedoc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
+        
+        JPanel paneedad=new JPanel(new GridLayout(1,2));
+        jledad=new JLabel("Edad: ");
+        txtedad=new JTextField(10);
+        paneedad.add(jledad, BorderLayout.WEST);
+        paneedad.add(txtedad, BorderLayout.EAST);
+        paneedad.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         //cuarto
         JPanel panelscroll = new JPanel(new BorderLayout());
 
@@ -356,6 +377,8 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 //        tercero.add(tipodoc, BorderLayout.WEST);
 //        tipodoc.setBackground(c);
         tercero.add(panedoc, BorderLayout.WEST);
+         tercero.add(paneedad,BorderLayout.EAST);
+        paneedad.setBackground(c);
         panedoc.setBackground(c);
         tercero.setBackground(c);
 

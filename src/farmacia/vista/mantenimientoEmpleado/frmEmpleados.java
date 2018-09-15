@@ -182,6 +182,12 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
+                 if (pane2.txtedad.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de Edad para el Empleado", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                    pane2.txtedad.requestFocus();
+                    pane2.txtedad.setBackground(Color.yellow);
+                    return;
+                }
                
                //verificar dni
                 if(pane2.txtdocumento.getText().length()!=8)
@@ -307,6 +313,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         pane2.txtdireccion.setEnabled(true);
         pane2.fecharegistro.setEnabled(true);
         pane2.txttelefono.setEnabled(true);
+        pane2.txtedad.setEnabled(true);
 //        pane2.cbxtipodocumento.setEnabled(true);
         pane2.txtuser.setEnabled(true);
         pane2.txtpassw.setEnabled(true);
@@ -324,6 +331,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         pane2.txtidtipodepersona.setText("");
         pane2.txtidpersona.setText("");
         pane2.txtnombre.setText("");
+         pane2.txtedad.setText("");
         pane2.txtapellidop.setText("");
         pane2.txtapellidom.setText("");
         pane2.txtdocumento.setText("");
@@ -343,6 +351,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         pane2.txtdocumento.setEnabled(false);
         pane2.txtdireccion.setEnabled(false);
         pane2.fecharegistro.setEnabled(false);
+         pane2.txtedad.setEnabled(false);
         pane2.txttelefono.setEnabled(false);
 //        pane2.cbxtipodocumento.setEnabled(false);
         pane2.txtuser.setEnabled(false);
@@ -359,6 +368,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         pane2.txtidpersona.setText("");
         pane2.txtnombre.setText("");
         pane2.txtapellidop.setText("");
+        pane2.txtedad.setText("");
         pane2.txtapellidom.setText("");
         pane2.txtdocumento.setText("");
         pane2.txtdireccion.setText("");
