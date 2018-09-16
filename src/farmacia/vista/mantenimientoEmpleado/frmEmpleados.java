@@ -182,12 +182,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
-                 if (pane2.txtedad.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de Edad para el Empleado", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtedad.requestFocus();
-                    pane2.txtedad.setBackground(Color.yellow);
-                    return;
-                }
+               
                
                //verificar dni
                 if(pane2.txtdocumento.getText().length()!=8)

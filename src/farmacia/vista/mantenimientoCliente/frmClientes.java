@@ -181,12 +181,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
-                 if (pane2.txtedad.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar la Edad  del Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtedad.requestFocus();
-                    pane2.txtedad.setBackground(Color.yellow);
-                    return;
-                }
+                
                 //verificar dni
                 if(pane2.txtdocumento.getText().length()!=8)
                 {
