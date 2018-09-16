@@ -6,6 +6,14 @@ import java.util.List;
 
 public class productodescuentoSQL implements productodescuentoDAO{
 
+
+    String INSERT = "INSERT INTO productodescuento(idproducto, iddescuento, status) "+
+    "VALUES (?, ?, ?) ";
+    String UPDATE = "UPDATE productodescuento SET idproducto = ?, iddescuento = ? , status = ?";
+    String DELETE = "UPDATE productodescuento SET status = 0 WHERE idproductodescuento = ?";
+    String GETALL = "SELECT * FROM productodescuento WHERE status = 1";
+    String GETONE = "SELECT * FROM productodescuento WHERE idproductodescuento = ?";
+
     @Override
     public void insertar(productodescuento obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

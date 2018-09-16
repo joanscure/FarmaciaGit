@@ -11,7 +11,7 @@ public class boletacabeceraSQL implements boletacabeceraDAO{
     final String UPDATE = "UPDATE boletacabecera SET correlativoboleta = ?, numeroboleta = ?, fechaemisionboleta = ?, idpersonacliente = ?, idempleado = ?, status = ?";
     final String DELETE = "UPDATE boletacabecera SET status = 0 WHERE idboletacabecera = ?";
     final String GETALL = "SELECT * FROM boletacabecera WHERE status = 1";//solo obtiene los activos 
-    final String GETONE = "SELECT * FROM empresa WHERE idempresa = ?";
+    final String GETONE = "SELECT * FROM boletacabecera WHERE idboletacabecera = ?";
 
     @Override
     public void insertar(boletacabecera obj) {

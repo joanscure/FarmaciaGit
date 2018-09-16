@@ -6,6 +6,14 @@ import java.util.List;
 
 public class personaSQL implements personaDAO{
 
+    String INSERT = "INSERT INTO persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono, status) "+
+    "VALUES (?, ?) ";
+    String UPDATE = "UPDATE persona SET nombre = ?, appaterno = ?, apmaterno = ?, numerodni = ?, personaedad = ?, direccion = ?, telefono = ?, status = ?";
+    String DELETE = "UPDATE persona SET status = 0 WHERE idpersona = ?";
+    String GETALL = "SELECT * FROM persona WHERE status = 1";
+    String GETONE = "SELECT * FROM persona WHERE idpersona = ?";
+
+
     @Override
     public void insertar(persona obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
