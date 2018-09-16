@@ -6,6 +6,13 @@ import java.util.List;
 
 public class empresaSQL implements empresaDAO{
 
+
+    final String INSERT = "INSERT INTO empresa(idempresa, rucempresa, razonsocial, telefono, direccion, status) VALUES (?, ?, ?, ?, ?, ?) ";
+    final String UPDATE = "UPDATE empresa SET rucempresa = ?, razonsocial = ?, telefono = ?. direccion = ?, status = ? WHERE idempresa = ?";
+    final String DELETE = "UPDATE empresa SET status = 0 WHERE idempresa = ?";
+    final String GETALL = "SELECT * FROM empresa WHERE status = 1";
+    final String GETONE = "SELECT * FROM empresa WHERE idempresa = ?";
+
     @Override
     public void insertar(empresa obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -6,8 +6,12 @@ import java.util.List;
 
 public class boletacabeceraSQL implements boletacabeceraDAO{
 
+    
+
+
     @Override
     public void insertar(boletacabecera obj) {
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
