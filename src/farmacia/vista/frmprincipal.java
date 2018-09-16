@@ -40,9 +40,11 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     frmVentas frmventas;
     frmEmpresa frmempresa;
     configuracionImagenes imageconfig = new configuracionImagenes();
+    frmusuariologin login;
 
-    public frmprincipal() {
+    public frmprincipal(frmusuariologin login) {
 
+        this.login = login;
         inciar_componentes();
         frmtipousuario = new frmTipousuario();
         desktopPane.add(frmtipousuario);
@@ -57,6 +59,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         iventas.addActionListener(this);
         iempresa.addActionListener(this);
         icambiarPass.addActionListener(this);
+        isalir.addActionListener(this);
+        
         setVisible(true);
         perzonalizartipoletra();
     }
@@ -194,15 +198,6 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
     }
 
-    public static void main(String[] args) {
-        try {
-            javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        new frmprincipal().setVisible(true);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -216,7 +211,37 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmclientes.setVisible(true);
             frmclientes.pane1.txtBuscar.requestFocus();
         } else if (source == icerrarsesion) {
-            System.out.println("cerrar sesion");
+// si esque cierra sesion, se cierran todas las ventanas si esque se han abierto
+// y se abre el login guardando el txtusuario
+            login.setVisible(true);
+            login.txtpassword.setText("");
+            login.requestFocus();
+            if (frmproducto != null) {
+                frmproducto.dispose();
+            }
+            if (frmclientes != null) {
+                frmclientes.dispose();
+            }
+            if (frmtipousuario != null) {
+                frmtipousuario.dispose();
+            }
+            if (frmempleados != null) {
+                frmempleados.dispose();
+            }
+            if (frmventas != null) {
+                if (frmventas.frmvistaproducto != null) {
+                    frmventas.frmvistaproducto.dispose();
+                }
+                frmventas.dispose();
+            }
+            if (frmempresa != null) {
+                frmempresa.dispose();
+            }
+            dispose();
+
+        } else if (source == isalir) {
+            System.exit(0);
+
         } else if (source == iproductos) {
             if (frmproducto == null) {
                 frmproducto = new frmProducto();
@@ -262,10 +287,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmempresa.toFront();
             frmempresa.setVisible(true);
             frmempresa.pane1.txtBuscar.requestFocus();
-        }
-        else if(source==icambiarPass)
-        {
-            frmCambioClave frm=new frmCambioClave(this);
+        } else if (source == icambiarPass) {
+            frmCambioClave frm = new frmCambioClave(this);
             frm.setVisible(true);
             frm.toFront();
         }

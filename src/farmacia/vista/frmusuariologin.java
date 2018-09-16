@@ -66,8 +66,8 @@ public class frmusuariologin extends JFrame implements ActionListener ,KeyListen
         Object source = e.getSource();
         if (source == bnentrar) {
             //permitir acceso
-            this.dispose();
-            frmprincipal sistem = new frmprincipal();
+            this.setVisible(false);
+            frmprincipal sistem = new frmprincipal(this);
             sistem.setVisible(true);
         } else if (source == bncancelar) {
             System.exit(0);
