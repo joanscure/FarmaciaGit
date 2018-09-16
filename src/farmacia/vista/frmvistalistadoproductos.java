@@ -33,6 +33,7 @@ import javax.swing.table.TableRowSorter;
 
 /**
  *
+ * // esta clase es para mostrarse cada vez que se presione el boton agregar productos
  * @author fecyp
  */
 public class frmvistalistadoproductos extends JFrame implements ActionListener, KeyListener, MouseListener {

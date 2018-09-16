@@ -17,34 +17,38 @@ import javax.swing.*;
  *
  * @author fecyp
  */
-public class frmpermiso extends JDialog implements ActionListener {
+public class frmCambioClave extends JDialog implements ActionListener {
 
     JPanel panelprincipal;
     JButton cancelar, acceder;
-    JLabel jluser, jlpass;
+    JLabel jluser, jlpassnueva, jlpassactual;
     JTextField user;
-    JPasswordField password;
+    JPasswordField txtpassnueva, txtpassactual;
     Font font = new Font("Geneva", 1, 13);
 //    Color c = new java.awt.Color(255, 255, 153);
     Color c = Color.WHITE;
 
-    public frmpermiso(frmprincipal frm) {
-        super(frm, "Conceder Permiso", true);
+    public frmCambioClave(frmprincipal frm) {
+        super(frm, "Cambio de Clave", true);
         iniciarComponentes();
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         cambiarletras();
         pack();
+//        setPreferredSize(300,200);
         acceder.addActionListener(this);
         cancelar.addActionListener(this);
+
     }
 
     public void cambiarletras() {
         jluser.setFont(font);
-        jlpass.setFont(font);
+        jlpassnueva.setFont(font);
+        jlpassactual.setFont(font);
         user.setFont(font);
-        password.setFont(font);
+        txtpassactual.setFont(font);
+        txtpassnueva.setFont(font);
         cancelar.setFont(font);
         acceder.setFont(font);
         acceder.setBackground(Color.GRAY);
@@ -56,6 +60,7 @@ public class frmpermiso extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         dispose();
+
     }
 
     private void iniciarComponentes() {
@@ -68,16 +73,24 @@ public class frmpermiso extends JDialog implements ActionListener {
         paneuser.add(user);
         paneuser.setBackground(c);
 
-        JPanel panelpass = new JPanel(new GridLayout(1, 2));
-        jlpass = new JLabel("Contraseña:");
-        password = new JPasswordField(10);
-        panelpass.add(jlpass);
-        panelpass.add(password);
-        panelpass.setBackground(c);
+        JPanel panelpassA = new JPanel(new GridLayout(1, 2));
+        jlpassactual = new JLabel("Contraseña Actual:");
+        txtpassactual = new JPasswordField(10);
+        panelpassA.add(jlpassactual);
+        panelpassA.add(txtpassactual);
+        panelpassA.setBackground(c);
+
+        JPanel panelpassN = new JPanel(new GridLayout(1, 2));
+        jlpassnueva = new JLabel("Contraseña Nueva:");
+        txtpassnueva = new JPasswordField(10);
+        panelpassN.add(jlpassnueva);
+        panelpassN.add(txtpassnueva);
+        panelpassN.setBackground(c);
 
         JPanel todo = new JPanel(new BorderLayout());
         todo.add(paneuser, BorderLayout.NORTH);
-        todo.add(panelpass, BorderLayout.SOUTH);
+        todo.add(panelpassA, BorderLayout.CENTER);
+        todo.add(panelpassN, BorderLayout.SOUTH);
         todo.setBackground(c);
         todo.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),

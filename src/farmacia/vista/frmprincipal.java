@@ -56,6 +56,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         itipousuario.addActionListener(this);
         iventas.addActionListener(this);
         iempresa.addActionListener(this);
+        icambiarPass.addActionListener(this);
         setVisible(true);
         perzonalizartipoletra();
     }
@@ -261,6 +262,12 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmempresa.toFront();
             frmempresa.setVisible(true);
             frmempresa.pane1.txtBuscar.requestFocus();
+        }
+        else if(source==icambiarPass)
+        {
+            frmCambioClave frm=new frmCambioClave(this);
+            frm.setVisible(true);
+            frm.toFront();
         }
     }
 
