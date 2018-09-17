@@ -14,7 +14,7 @@ import java.sql.SQLException;
  * @author fecyp
  */
 public class conexionSQL {
-
+    
     public String dv = "basereserva";
     public String url = "jdbc:mysql://127.0.0.1/" + dv;
     public String user = "root";
@@ -35,13 +35,21 @@ public class conexionSQL {
         return link;
     }
 
-    public void cerrarConexion(Connection conexion) throws SQLException {
-        if (conexion != null) {
-            try {
-                conexion.close();
-            } catch (Exception ex) {
-
-            }
-        }
+  
+    
+    public static void main(String[] args) {
+        
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

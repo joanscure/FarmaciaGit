@@ -2,9 +2,12 @@ package farmacia.dao.mysql;
 
 import farmacia.dao.personaDAO;
 import farmacia.modelado.persona;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class personaSQL implements personaDAO {
 
@@ -14,14 +17,11 @@ public class personaSQL implements personaDAO {
     String DELETE = "UPDATE persona SET status = 0 WHERE idpersona = ?";
     String GETALL = "SELECT * FROM persona WHERE status = 1";
     String GETONE = "SELECT * FROM persona WHERE idpersona = ? AND status = 1";
-
-    
+    conexionSQL mysql = new conexionSQL();
+    Connection conexion=mysql.conectar();
     @Override
     public void insertar(persona obj) {
         PreparedStatement persona = null;
-        conexionSQL conexion = new conexionSQL();
-        conexion.conectar();
-        
         try {
             persona = conexion.prepareStatement(INSERT);
             
@@ -35,15 +35,23 @@ public class personaSQL implements personaDAO {
             persona.setBoolean(8, (boolean)obj.isStatus());
             persona.executeUpdate();
 
-            conexion.commit();
         } catch (SQLException ex) {
             System.out.println("algo salio mal" + ex.getMessage());
-            conexion.rollback();
         } finally {
             if (persona != null) {
-                persona.close();
+                try {
+                    persona.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(personaSQL.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            conexion.cerrarConexion(conexion);
+            if (conexion != null) {
+                try {
+                    conexion.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(personaSQL.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
         }
     }
