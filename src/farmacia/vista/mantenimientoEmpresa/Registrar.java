@@ -5,7 +5,6 @@
  */
 package farmacia.vista.mantenimientoEmpresa;
 
-import farmacia.vista.mantenimientoCliente.*;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import farmacia.calculos.configuracionImagenes;

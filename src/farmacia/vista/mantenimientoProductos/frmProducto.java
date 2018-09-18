@@ -149,7 +149,6 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
             pane1.txtBuscar.requestFocus();
 
         } else if (source == jbGuardar) {
-            System.out.println("asdasd");
             if (action.equals("nuevo")) {
                 if (pane2.txtnombre.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Debe ingresar un Nombre Del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);

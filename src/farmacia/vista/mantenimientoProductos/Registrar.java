@@ -5,9 +5,6 @@
  */
 package farmacia.vista.mantenimientoProductos;
 
-import farmacia.vista.mantenimientoCliente.*;
-import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDateChooser;
 import farmacia.calculos.configuracionImagenes;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -46,6 +43,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     Font fontboton = new Font("Geneva", 1, 13);
     boolean teclaunida = false;
     boolean controlpunto = false;
+    boolean controlpuntoigv = false;
 
     public Registrar(frmProducto regis) {
         this.regis = regis;
@@ -75,9 +73,28 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 
     }
 
+    public boolean ExistenVacios() {
+        if (txtnombre.getText().isEmpty()
+                || txtdescripcion.getText().isEmpty()
+                || txtdosis.getText().isEmpty()
+                || txtprecioventa.getText().isEmpty()
+                || txtidproducto.getText().isEmpty()
+                || txtigv.getText().isEmpty()
+                || txtiddescuento.getText().isEmpty()
+                || txtpreciofinal.getText().isEmpty()
+                || txtstock.getText().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
+        if (!ExistenVacios()) {
+            frmProducto.jbGuardar.doClick();
+        }
         if (source == txtnombre) {
             txtnombre.transferFocus();
 
@@ -89,7 +106,9 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         } else if (source == txtprecioventa) {
             txtstock.requestFocus();
         } else if (source == txtstock) {
-            frmClientes.jbGuardar.doClick();
+            frmProducto.jbGuardar.doClick();
+        } else if (source == txtigv) {
+            txtigv.transferFocus();
         }
     }
 
@@ -131,16 +150,22 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             }
         } else if (source == txtprecioventa) {
             if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57) && ((ke.getKeyChar() != 46) || controlpunto)) {
-                
-                    ke.consume();
-                
+
+                ke.consume();
+
+            }
+        } else if (source == txtstock) {
+            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57)) {
+
+                ke.consume();
+
             }
         }
-        else if(source == txtstock) {
-            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57)) {
-                
-                    ke.consume();
-                
+        if (source == txtigv) {
+            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57) && ((ke.getKeyChar() != 46) || controlpuntoigv)) {
+
+                ke.consume();
+
             }
         }
 
@@ -188,42 +213,54 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             frmProducto.jbGuardar.doClick();
             teclaunida = false;
         }
-        if (source == txtprecioventa) {
-             int validacion = txtprecioventa.getText().indexOf(".");
+        if (source == txtprecioventa || source == txtigv) {
+            int validacion = txtigv.getText().indexOf(".");
+            if (validacion == -1) {
+                controlpuntoigv = false;//deja poner el punto ya que dice que no encuentra punto
+            } else {
+                controlpuntoigv = true;//no lo deja poner el punto ya que dice que ya se encuentra un punto
+
+            }
+            validacion = txtprecioventa.getText().indexOf(".");
             if (validacion == -1) {
                 controlpunto = false;//deja poner el punto ya que dice que no encuentra punto
             } else {
                 controlpunto = true;//no lo deja poner el punto ya que dice que ya se encuentra un punto
-                
+
+            }
+            //para que el igv no este vacio
+            if (txtigv.getText().isEmpty()) {
+                return;
+            } else if (txtigv.getText().charAt(txtigv.getText().length() - 1) == '.') //para que el igv no quede en un punto
+            {
+                return;
             }
 
             if (txtprecioventa.getText().isEmpty()) {
                 txtpreciofinal.setText("");
-                txtigv.setText("");
                 return;
             } else if (txtprecioventa.getText().charAt(txtprecioventa.getText().length() - 1) == '.') {
                 txtpreciofinal.setText("");
-                txtigv.setText("");
                 return;
             }
             //validamos que solo halla un punto
-           
+
             //
             if (txtprecioventa.getText().charAt(txtprecioventa.getText().length() - 1) == '.') {
                 if (txtprecioventa.getText().length() == 1) {
                     return;
                 }
             }
-            double preciototal = Double.parseDouble(txtprecioventa.getText()) * 1.18;
+
+            double igv = (Double.parseDouble(txtigv.getText()) / 100) + 1;
+
+            double preciototal = Double.parseDouble(txtprecioventa.getText()) * igv;
             BigDecimal bd = new BigDecimal(preciototal);
             bd = bd.setScale(2, RoundingMode.HALF_UP);
 
-            double igv = preciototal - Double.parseDouble(txtprecioventa.getText());
-            BigDecimal bd2 = new BigDecimal(igv);
-            bd2 = bd2.setScale(2, RoundingMode.HALF_UP);
-            txtigv.setText(bd2.doubleValue() + "");
             txtpreciofinal.setText(bd.doubleValue() + "");
         }
+
     }
 
     private void iniciar_componentes() {
@@ -267,9 +304,8 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         paneprecio.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         //tercero
         JPanel paneigv = new JPanel(new GridLayout(1, 2));
-        igv = new JLabel("IGV :");
+        igv = new JLabel("IGV %:");
         txtigv = new JTextField(10);
-        txtigv.setEditable(false);
         paneigv.add(igv, BorderLayout.WEST);
         paneigv.add(txtigv, BorderLayout.EAST);
         paneigv.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -315,13 +351,13 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         JPanel tercero = new JPanel(new BorderLayout());
         tercero.add(panedosis, BorderLayout.WEST);
         panedosis.setBackground(c);
-        tercero.add(paneprecio, BorderLayout.EAST);
-        paneprecio.setBackground(c);
+        tercero.add(paneigv, BorderLayout.EAST);
+        paneigv.setBackground(c);
         tercero.setBackground(c);
 
         JPanel cuarto = new JPanel(new BorderLayout());
-        cuarto.add(paneigv, BorderLayout.WEST);
-        paneigv.setBackground(c);
+        cuarto.add(paneprecio, BorderLayout.WEST);
+        paneprecio.setBackground(c);
         cuarto.add(panetotal, BorderLayout.EAST);
         panetotal.setBackground(c);
         cuarto.setBackground(c);

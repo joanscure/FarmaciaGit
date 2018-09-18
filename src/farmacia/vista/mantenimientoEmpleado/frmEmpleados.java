@@ -5,10 +5,8 @@
  */
 package farmacia.vista.mantenimientoEmpleado;
 
-import farmacia.vista.mantenimientoCliente.*;
 import farmacia.calculos.Permisos;
 import farmacia.calculos.configuracionImagenes;
-import farmacia.vista.frmpermiso;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;

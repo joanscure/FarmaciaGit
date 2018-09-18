@@ -5,7 +5,6 @@
  */
 package farmacia.vista.mantenimientoEmpleado;
 
-import farmacia.vista.mantenimientoCliente.*;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import farmacia.calculos.configuracionImagenes;
@@ -38,8 +37,8 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     frmEmpleados regis;
 
     JPanel pane;
-    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion,jledad;
-    public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona,txtedad;
+    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion, jledad;
+    public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona, txtedad;
     JTextField txtdireccion;
     JPasswordField txtpassw;
 //    JComboBox cbxtipodocumento;
@@ -73,17 +72,34 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         txtdocumento.addKeyListener(this);
         txttelefono.addKeyListener(this);
         txtdireccion.addKeyListener(this);
-//        cbxtipodocumento.addKeyListener(this);
         cbxtipodeempleado.addKeyListener(this);
         txtuser.addKeyListener(this);
         txtedad.addKeyListener(this);
         txtpassw.addKeyListener(this);
+    }
 
+    public boolean ExistenVacios() {
+        if (txtapellidop.getText().isEmpty()
+                || txtapellidom.getText().isEmpty()
+                || txtnombre.getText().isEmpty()
+                || txtdocumento.getText().isEmpty()
+                || txttelefono.getText().isEmpty()
+                || txtdireccion.getText().isEmpty()
+                || txtuser.getText().isEmpty()
+                || txtedad.getText().isEmpty()
+                || txtpassw.getText().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
+        if (!ExistenVacios()) {
+            frmEmpleados.jbGuardar.doClick();
+        }
         if (source == txtnombre) {
             txtnombre.transferFocus();
 
@@ -105,9 +121,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         } else if (source == txtpassw) {
             txtpassw.transferFocus();
             cbxtipodeempleado.setPopupVisible(true);
-        }
-        else if(source==txtedad)
-        {
+        } else if (source == txtedad) {
             txtedad.transferFocus();
         }
     }
@@ -175,13 +189,15 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
                     ke.consume();
                 }
             }
-        }  else if (source == txtedad){
+        } else if (source == txtedad) {
             if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
-                if(txtedad.getText().length()>=2)
-                     ke.consume();
+                if (txtedad.getText().length() >= 2) {
+                    ke.consume();
+                }
             }
-             if(txtedad.getText().length()>=2)
-                     ke.consume();
+            if (txtedad.getText().length() >= 2) {
+                ke.consume();
+            }
         }
 
     }
@@ -201,10 +217,10 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
                 txtnombre.requestFocus();
                 return;
             }
-             if (source == txttelefono) {
-                    txtdireccion.requestFocus();
-                    return;
-                }
+            if (source == txttelefono) {
+                txtdireccion.requestFocus();
+                return;
+            }
             ke.getComponent().transferFocusBackward();
         }
         if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -213,10 +229,10 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
                 txtnombre.requestFocus();
                 return;
             }
-              if (source == txtdireccion) {
-                    txttelefono.requestFocus();
-                    return;
-                }
+            if (source == txtdireccion) {
+                txttelefono.requestFocus();
+                return;
+            }
             ke.getComponent().transferFocus();
         }
         if (source == cbxtipodeempleado) {
@@ -302,10 +318,10 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         panedoc.add(documento, BorderLayout.WEST);
         panedoc.add(txtdocumento, BorderLayout.EAST);
         panedoc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        
-        JPanel paneedad=new JPanel(new GridLayout(1,2));
-        jledad=new JLabel("Edad: ");
-        txtedad=new JTextField(10);
+
+        JPanel paneedad = new JPanel(new GridLayout(1, 2));
+        jledad = new JLabel("Edad: ");
+        txtedad = new JTextField(10);
         paneedad.add(jledad, BorderLayout.WEST);
         paneedad.add(txtedad, BorderLayout.EAST);
         paneedad.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -377,7 +393,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 //        tercero.add(tipodoc, BorderLayout.WEST);
 //        tipodoc.setBackground(c);
         tercero.add(panedoc, BorderLayout.WEST);
-         tercero.add(paneedad,BorderLayout.EAST);
+        tercero.add(paneedad, BorderLayout.EAST);
         paneedad.setBackground(c);
         panedoc.setBackground(c);
         tercero.setBackground(c);
