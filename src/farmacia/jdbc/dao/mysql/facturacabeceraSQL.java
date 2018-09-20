@@ -3,6 +3,8 @@ package farmacia.jdbc.dao.mysql;
 import farmacia.jdbc.dao.facturacabeceraDAO;
 import farmacia.jdbc.modelado.facturacabecera;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +45,11 @@ public class facturacabeceraSQL implements facturacabeceraDAO{
 
     @Override
     public facturacabecera obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public facturacabecera convertir(ResultSet rs) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

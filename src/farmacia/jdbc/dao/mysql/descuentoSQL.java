@@ -1,50 +1,157 @@
 package farmacia.jdbc.dao.mysql;
 
+import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.descuentoDAO;
 import farmacia.jdbc.modelado.descuento;
+import farmacia.jdbc.modelado.persona;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class descuentoSQL implements descuentoDAO {
 
     private Connection conexion;
 
     private final String INSERT = "INSERT INTO descuento(nombredescuento, condicion, porcentaje, descripciondescuento, status) "
-            + "VALUES (?, ?, ?, ?, ?) ";
-    private final String UPDATE = "UPDATE descuento SET nombredescuento = ?, condicion = ?, porcentaje = ?, descripciondescuento = ?, status = ?";
+            + "VALUES (?, ?, ?, ?, ?)";
+    private final String UPDATE = "UPDATE descuento SET nombredescuento = ?, condicion = ?, porcentaje = ?, descripciondescuento = ?, status = ? "
+            + "WHERE iddescuento = ?";
     private final String DELETE = "UPDATE descuento SET status = 0 WHERE iddescuento = ?";
     private final String GETALL = "SELECT * FROM descuento WHERE status = 1";//solo obtiene los activos 
-    private final String GETONE = "SELECT * FROM descuento WHERE iddescuento = ?";
+    private final String GETONE = "SELECT * FROM descuento WHERE iddescuento = ? AND status = 1";
 
     public descuentoSQL(Connection conn) {
         this.conexion = conn;
     }
 
     @Override
-    public void insertar(descuento obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void insertar(descuento obj) throws DAOException {
+        PreparedStatement stat = null;
+        
+        try {
+            stat = conexion.prepareStatement(INSERT);
+        
+            stat.setString(1, (String) obj.getNombredescuento());
+            stat.setString(2, (String) obj.getCondicion());
+            stat.setDouble(3, Double.parseDouble(""+obj.getPorcentaje()));
+            stat.setString(4, (String) obj.getDescripciondescuento());
+            stat.setBoolean(5, (boolean) obj.isStatus());
+            
+            int resultado = stat.executeUpdate(); 
+            if (resultado == 0) {
+                throw new DAOException("Error al ingresar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
     @Override
-    public void modificar(descuento obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(descuento obj) throws DAOException {
+        PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(UPDATE);
+            stat.setString(1, obj.getNombredescuento());
+            stat.setString(2, obj.getCondicion());
+            stat.setDouble(3, obj.getPorcentaje());
+            stat.setString(4, obj.getDescripciondescuento());
+            stat.setBoolean(5, obj.isStatus());
+            stat.setLong(6, obj.getIddescuento());
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al modificar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
     @Override
-    public void eliminar(descuento obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminar(descuento obj) throws DAOException {
+        PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(DELETE);
+            stat.setLong(1, obj.getIddescuento());
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al eliminar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
-
 
     @Override
-    public List<descuento> obtenertodos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<descuento> obtenertodos() throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        List<descuento> lista = new ArrayList<>();
+        try {
+            stat = conexion.prepareStatement(GETONE);
+            rs = stat.executeQuery();
+            while (rs.next()) {
+                lista.add(convertir(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return lista;
     }
 
     @Override
-    public descuento obtener(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public descuento obtener(Long id) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        descuento des = null;
+        try {
+            stat = conexion.prepareStatement(GETONE);
+            stat.setLong(1, id);
+            rs = stat.executeQuery();
+            if (rs.next()) {
+                des = convertir(rs);
+            } else {
+                throw new DAOException("No se ha encontrado registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return des;
     }
 
+    @Override
+    public descuento convertir(ResultSet rs) throws SQLException {
+        descuento des = null;
+        String nombredescuento = rs.getString("nombredescuento");
+        String condicion = rs.getString("condicion");
+        double porecntaje = rs.getDouble("porcentaje");
+        String descripciondescuento = rs.getString("descripciondescuento");
+        boolean status = rs.getBoolean("status");
+        des = new descuento(nombredescuento, condicion, porecntaje, descripciondescuento);
+        des.setIddescuento(rs.getLong("iddescuento"));
+        des.setStatus(rs.getBoolean("status"));
+        return des;
+    }
 
+    public static void main(String[] args) throws SQLException, DAOException {
+        DAOManagerSQL man = null;
+        
+        man = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+        descuento des = null;
+        des = new descuento("nombre", "condicion", 123.4, "descripcion");
+        man.getDescuentoDAO().insertar(des);
+        
+    }
 }

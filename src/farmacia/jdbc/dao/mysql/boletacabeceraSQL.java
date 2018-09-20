@@ -39,7 +39,6 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
     @Override
     public List<boletacabecera> obtenertodos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -55,8 +54,4 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
-
-
-    
 }

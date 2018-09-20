@@ -3,6 +3,8 @@ package farmacia.jdbc.dao.mysql;
 import farmacia.jdbc.dao.personaclienteDAO;
 import farmacia.jdbc.modelado.personacliente;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class personaclienteSQL implements personaclienteDAO{
@@ -43,6 +45,11 @@ public class personaclienteSQL implements personaclienteDAO{
 
     @Override
     public personacliente obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public personacliente convertir(ResultSet rs) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

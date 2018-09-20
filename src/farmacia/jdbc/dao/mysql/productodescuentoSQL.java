@@ -5,6 +5,8 @@ import farmacia.jdbc.modelado.descuento;
 import farmacia.jdbc.modelado.producto;
 import farmacia.jdbc.modelado.productodescuento;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class productodescuentoSQL implements productodescuentoDAO {
@@ -45,6 +47,11 @@ public class productodescuentoSQL implements productodescuentoDAO {
 
     @Override
     public productodescuento obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public productodescuento convertir(ResultSet rs) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
