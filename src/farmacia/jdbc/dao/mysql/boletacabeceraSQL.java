@@ -3,6 +3,8 @@ package farmacia.jdbc.dao.mysql;
 import farmacia.jdbc.dao.boletacabeceraDAO;
 import farmacia.jdbc.modelado.boletacabecera;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -37,10 +39,6 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public boolean isActive(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public List<boletacabecera> obtenertodos() {
@@ -49,6 +47,11 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
 
     @Override
     public boletacabecera obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boletacabecera convertir(ResultSet rs) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

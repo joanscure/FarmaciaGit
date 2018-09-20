@@ -1,5 +1,7 @@
 package farmacia.jdbc.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface DAO<O, K> {
@@ -10,10 +12,9 @@ public interface DAO<O, K> {
 
     void eliminar(O obj) throws DAOException;//elmina (status false o 0) un registro. Eliminacion logica
 
-    boolean isActive(K id) throws DAOException;//delvuelve el estado del producto, si esta eliminado (status true o false)
-
     List<O> obtenertodos() throws DAOException;//todos los registros en un list
 
     O obtener(K id) throws DAOException;//obtiene un registro con su identidicador 
 
+    O convertir(ResultSet rs) throws SQLException;
 }

@@ -3,6 +3,8 @@ package farmacia.jdbc.dao.mysql;
 import farmacia.jdbc.dao.tipotrabajadorDAO;
 import farmacia.jdbc.modelado.tipotrabajador;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class tipotrabajadorSQL implements tipotrabajadorDAO{
@@ -37,10 +39,6 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public boolean isActive(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public List<tipotrabajador> obtenertodos() {
@@ -49,6 +47,11 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
 
     @Override
     public tipotrabajador obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public tipotrabajador convertir(ResultSet rs) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
