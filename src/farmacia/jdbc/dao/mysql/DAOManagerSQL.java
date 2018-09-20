@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class SQLManagerDAO implements DAOManager {
+public class DAOManagerSQL implements DAOManager {
 
     private Connection conexion;
 
@@ -37,7 +37,7 @@ public class SQLManagerDAO implements DAOManager {
     private productodescuentoDAO productodes = null;
     private tipotrabajadorDAO tipostrabajador = null;
     
-    public SQLManagerDAO(String host, String datebase, String user, String password) throws SQLException {
+    public DAOManagerSQL(String host, String datebase, String user, String password) throws SQLException {
         conexion = DriverManager.getConnection("jdbc:mysql://" + host + "/" + datebase, user, password);
     }
 

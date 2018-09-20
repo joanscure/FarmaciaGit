@@ -165,7 +165,7 @@ public class personaSQL implements personaDAO {
 
     
     public static void main(String[] args) throws SQLException, DAOException {
-        Connection conn = null;
+        conexio = 
         
         try{
             /*int i = 0;            
@@ -187,11 +187,12 @@ public class personaSQL implements personaDAO {
             dao.insertar(p);
             }while(i++<6);
             */
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/basefarmacia", "root", "");
+            /*conn = DriverManager.getConnection("jdbc:mysql://localhost/basefarmacia", "root", "");
             personaDAO dao = new personaSQL(conn);
             List personas = dao.obtenertodos();
             for (Object p : personas) {
-                System.out.println(p.toString());
+                System.out.println(p.toString());*/
+            
             }
             
         }finally{
