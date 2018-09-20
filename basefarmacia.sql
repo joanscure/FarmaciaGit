@@ -64,7 +64,7 @@ CREATE TABLE `descuento` (
   `nombredescuento` varchar(32) NOT NULL,
   `condicion` varchar(32) NOT NULL,
   `porcentaje` double(2,2) NOT NULL,
-  `descrpciondescuento` varchar(64) DEFAULT NULL,
+  `descripciondescuento` varchar(64) DEFAULT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
