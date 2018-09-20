@@ -50,4 +50,14 @@ public class facturadetalleSQL implements facturadetalleDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<facturadetalle> obtenerPorProducto(Long idproducto) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<facturadetalle> obtenerPorFactura(Long idfacturabecera) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

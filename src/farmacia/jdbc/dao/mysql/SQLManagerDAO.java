@@ -1,6 +1,6 @@
 package farmacia.jdbc.dao.mysql;
 
-import farmacia.jdbc.modelado.*;
+import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.DAOManager;
 import farmacia.jdbc.dao.boletacabeceraDAO;
 import farmacia.jdbc.dao.boletadetalleDAO;
@@ -21,7 +21,7 @@ import java.sql.SQLException;
 
 public class SQLManagerDAO implements DAOManager {
 
-    private Connection conn;
+    private Connection conexion;
 
     private boletacabeceraDAO boletacab = null;
     private boletadetalleDAO boletadet = null;
@@ -38,13 +38,23 @@ public class SQLManagerDAO implements DAOManager {
     private tipotrabajadorDAO tipostrabajador = null;
     
     public SQLManagerDAO(String host, String datebase, String user, String password) throws SQLException {
-        conn = DriverManager.getConnection("jdbc:mysql://" + host + "/" + datebase, user, password);
+        conexion = DriverManager.getConnection("jdbc:mysql://" + host + "/" + datebase, user, password);
     }
 
+    public void cerrarConexion() throws DAOException{
+        if (conexion != null){
+            try{
+                conexion.close();
+            }catch (SQLException ex){
+                throw new DAOException("Error al cerrar conexion.", ex);
+            }
+        }
+    }
+    
     @Override
     public boletacabeceraDAO getBoletaCabeceraDAO() {
         if(boletacab == null){
-            boletacab = new boletacabeceraSQL(conn);
+            boletacab = new boletacabeceraSQL(conexion);
         }
         return boletacab;
     }
@@ -52,7 +62,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public boletadetalleDAO getBoletaDetalleDAO() {
         if(boletadet == null){
-            boletadet = new boletadetalleSQL(conn);
+            boletadet = new boletadetalleSQL(conexion);
         }
         return boletadet;
     }
@@ -60,7 +70,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public descuentoDAO getDescuentoDAO() {
         if(descuentos== null){
-            descuentos = new descuentoSQL(conn);
+            descuentos = new descuentoSQL(conexion);
         }
         return descuentos;
     }
@@ -68,7 +78,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public empleadoDAO getEmpleadoDAO() {
         if (empleados == null){
-            empleados = new empleadoSQL(conn);
+            empleados = new empleadoSQL(conexion);
         }
         return empleados;
     }
@@ -76,7 +86,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public empresaDAO getEmpresaDAO() {
         if (empresas == null){
-            empresas = new empresaSQL(conn);
+            empresas = new empresaSQL(conexion);
         }
         return empresas;
     }
@@ -84,7 +94,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public empresaclienteDAO getEmpresaClienteDAO() {
         if (empresascliente == null){
-            empresascliente = new empresaclienteSQL(conn);
+            empresascliente = new empresaclienteSQL(conexion);
         }
         return empresascliente;
     }
@@ -92,7 +102,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public facturacabeceraDAO getFacturaCabeceraDAO() {
         if (facturacab == null){
-            facturacab = new facturacabeceraSQL(conn);
+            facturacab = new facturacabeceraSQL(conexion);
         }
         return facturacab;
     }
@@ -100,7 +110,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public facturadetalleDAO getFActuraDetalleDAO() {
         if (facturadet == null){
-            facturadet = new facturadetalleSQL(conn);
+            facturadet = new facturadetalleSQL(conexion);
         }
         return facturadet;
     }
@@ -108,7 +118,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public personaDAO getPersonaDAO() {
         if (personas == null){
-            personas = new personaSQL(conn);
+            personas = new personaSQL(conexion);
         }
         return personas;
     }
@@ -116,7 +126,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public personaclienteDAO getPersonaClienteDAO() {
         if (personascliente == null){
-            personascliente = new personaclienteSQL(conn);
+            personascliente = new personaclienteSQL(conexion);
         }
         return personascliente;
     }
@@ -124,7 +134,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public productoDAO getProductoDAO() {
         if (productos == null){
-            productos = new productoSQL(conn);
+            productos = new productoSQL(conexion);
         }
         return productos;
     }
@@ -132,7 +142,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public productodescuentoDAO getProductoDescuentoDAO() {
         if (productodes == null){
-            productodes = new productodescuentoSQL(conn);
+            productodes = new productodescuentoSQL(conexion);
         }
         return productodes;
     }
@@ -140,7 +150,7 @@ public class SQLManagerDAO implements DAOManager {
     @Override
     public tipotrabajadorDAO getTipoTrabajador() {
         if (tipostrabajador == null){
-            tipostrabajador = new tipotrabajadorSQL(conn);
+            tipostrabajador = new tipotrabajadorSQL(conexion);
         }
         return tipostrabajador;
     }

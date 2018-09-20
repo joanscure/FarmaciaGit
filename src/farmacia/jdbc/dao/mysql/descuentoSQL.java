@@ -7,7 +7,7 @@ import java.util.List;
 
 public class descuentoSQL implements descuentoDAO {
 
-    private Connection conn;
+    private Connection conexion;
 
     private final String INSERT = "INSERT INTO descuento(nombredescuento, condicion, porcentaje, descripciondescuento, status) "
             + "VALUES (?, ?, ?, ?, ?) ";
@@ -17,7 +17,7 @@ public class descuentoSQL implements descuentoDAO {
     private final String GETONE = "SELECT * FROM descuento WHERE iddescuento = ?";
 
     public descuentoSQL(Connection conn) {
-        this.conn = conn;
+        this.conexion = conn;
     }
 
     @Override
@@ -47,6 +47,11 @@ public class descuentoSQL implements descuentoDAO {
 
     @Override
     public descuento obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<descuento> buscarPorNombre(String nombredescuento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

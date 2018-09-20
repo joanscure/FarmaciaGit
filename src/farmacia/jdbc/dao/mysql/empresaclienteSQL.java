@@ -7,7 +7,7 @@ import java.util.List;
 
 public class empresaclienteSQL implements empresaclienteDAO {
 
-    private Connection conn;
+    private Connection conexion;
 
     private final String INSERT = "INSERT INTO empresacliente(idempresa, fecharegistro, status) "
             + "VALUES (?, ?, ?, ?, ?, ?) ";
@@ -17,7 +17,7 @@ public class empresaclienteSQL implements empresaclienteDAO {
     private final String GETONE = "SELECT * FROM empresacliente WHERE idempresacliente = ?";
 
     public empresaclienteSQL(Connection conn) {
-        this.conn = conn;
+        this.conexion = conn;
     }
     
     @Override
@@ -47,6 +47,11 @@ public class empresaclienteSQL implements empresaclienteDAO {
 
     @Override
     public empresacliente obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Long obtenerIdEmpresa(Long idempresacliente) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

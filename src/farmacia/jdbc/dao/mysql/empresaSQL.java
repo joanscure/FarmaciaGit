@@ -7,7 +7,7 @@ import java.util.List;
 
 public class empresaSQL implements empresaDAO {
 
-    private Connection conn;
+    private Connection conexion;
 
     private final String INSERT = "INSERT INTO empresa(idempresa, rucempresa, razonsocial, telefono, direccion, status) VALUES (?, ?, ?, ?, ?, ?) ";
     private final String UPDATE = "UPDATE empresa SET rucempresa = ?, razonsocial = ?, telefono = ?. direccion = ?, status = ? WHERE idempresa = ?";
@@ -16,7 +16,7 @@ public class empresaSQL implements empresaDAO {
     private final String GETONE = "SELECT * FROM empresa WHERE idempresa = ?";
 
     public empresaSQL(Connection conn) {
-        this.conn = conn;
+        this.conexion = conn;
     }
 
     @Override
@@ -46,6 +46,16 @@ public class empresaSQL implements empresaDAO {
 
     @Override
     public empresa obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<empresa> buscarPorRuc(String ruc) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<empresa> buscarPorRazonSocial(String razonsocial) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

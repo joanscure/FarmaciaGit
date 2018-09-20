@@ -52,5 +52,10 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<tipotrabajador> obtnerPorNombre(String nombretipotrabajador) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class empleadoSQL implements empleadoDAO {
 
-    private Connection con;
+    private Connection conexion;
 
     private final String INSERT = "INSERT INTO empleado(idpersona, login, password, fechaalta, idtipotrabajador, status) "
             + "VALUES (?, ?, ?, ?, ?, ?) ";
@@ -17,7 +17,7 @@ public class empleadoSQL implements empleadoDAO {
     private final String GETONE = "SELECT * FROM empleado WHERE idempleado = ?";
 
     public empleadoSQL(Connection con) {
-        this.con = con;
+        this.conexion = con;
     }
 
     @Override
@@ -47,6 +47,16 @@ public class empleadoSQL implements empleadoDAO {
 
     @Override
     public empleado obtener(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<empleado> obtenerPorTipoTrabajador(Long idtipotrabajador) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Long obtenerIdPersona(Long idempleado) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

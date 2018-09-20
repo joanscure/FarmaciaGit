@@ -1,16 +1,18 @@
 package farmacia.jdbc.dao.mysql;
 
 import farmacia.jdbc.dao.productodescuentoDAO;
+import farmacia.jdbc.modelado.descuento;
+import farmacia.jdbc.modelado.producto;
 import farmacia.jdbc.modelado.productodescuento;
 import java.sql.Connection;
 import java.util.List;
 
-public class productodescuentoSQL implements productodescuentoDAO{
+public class productodescuentoSQL implements productodescuentoDAO {
 
     private Connection conexion;
 
-    private final String INSERT = "INSERT INTO productodescuento(idproducto, iddescuento, status) "+
-    "VALUES (?, ?, ?) ";
+    private final String INSERT = "INSERT INTO productodescuento(idproducto, iddescuento, status) "
+            + "VALUES (?, ?, ?) ";
     private final String UPDATE = "UPDATE productodescuento SET idproducto = ?, iddescuento = ? , status = ?";
     private final String DELETE = "UPDATE productodescuento SET status = 0 WHERE idproductodescuento = ?";
     private final String GETALL = "SELECT * FROM productodescuento WHERE status = 1";
@@ -50,5 +52,14 @@ public class productodescuentoSQL implements productodescuentoDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    @Override
+    public List<descuento> obtenerDescuentosProducto(Long idproducto) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<producto> obtenerProductosDescuento(Long iddescuento) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
