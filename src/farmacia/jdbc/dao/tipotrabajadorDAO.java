@@ -5,6 +5,4 @@ import java.util.List;
 
 public interface tipotrabajadorDAO extends DAO<tipotrabajador, Long> {
 
-    List<tipotrabajador> obtnerPorNombre(String nombretipotrabajador);
-    //obtiene los tipos de trabajadores por su nombre. Se puede usar LIKE
 }

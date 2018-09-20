@@ -50,9 +50,5 @@ public class empresaclienteSQL implements empresaclienteDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Long obtenerIdEmpresa(Long idempresacliente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }
