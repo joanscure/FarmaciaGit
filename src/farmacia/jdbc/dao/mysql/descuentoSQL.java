@@ -38,7 +38,7 @@ public class descuentoSQL implements descuentoDAO {
         
             stat.setString(1, (String) obj.getNombredescuento());
             stat.setString(2, (String) obj.getCondicion());
-            stat.setDouble(3, Double.parseDouble(""+obj.getPorcentaje()));
+            stat.setDouble(3, (double) obj.getPorcentaje());
             stat.setString(4, (String) obj.getDescripciondescuento());
             stat.setBoolean(5, (boolean) obj.isStatus());
             
@@ -150,7 +150,7 @@ public class descuentoSQL implements descuentoDAO {
         
         man = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
         descuento des = null;
-        des = new descuento("nombre", "condicion", 123.4, "descripcion");
+        des = new descuento("nombre", "condicion", (double)23.49, "descripcion");
         man.getDescuentoDAO().insertar(des);
         
     }
