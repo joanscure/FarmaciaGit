@@ -2,12 +2,15 @@ package farmacia.jdbc.dao.mysql;
 
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.DAOManager;
+import farmacia.jdbc.dao.boletaDAO;
 import farmacia.jdbc.dao.boletacabeceraDAO;
 import farmacia.jdbc.dao.boletadetalleDAO;
 import farmacia.jdbc.dao.descuentoDAO;
 import farmacia.jdbc.dao.empleadoDAO;
 import farmacia.jdbc.dao.empresaDAO;
 import farmacia.jdbc.dao.empresaclienteDAO;
+import farmacia.jdbc.dao.facturaDAO;
+import farmacia.jdbc.dao.facturaSQL;
 import farmacia.jdbc.dao.facturacabeceraDAO;
 import farmacia.jdbc.dao.facturadetalleDAO;
 import farmacia.jdbc.dao.personaDAO;
@@ -36,6 +39,8 @@ public class DAOManagerSQL implements DAOManager {
     private productoDAO productos = null;
     private productodescuentoDAO productodes = null;
     private tipotrabajadorDAO tipostrabajador = null;
+    private boletaDAO boleta=null;
+    private facturaDAO factura = null;
     
     public DAOManagerSQL(String host, String datebase, String user, String password) throws SQLException {
         conexion = DriverManager.getConnection("jdbc:mysql://" + host + "/" + datebase, user, password);
@@ -153,6 +158,22 @@ public class DAOManagerSQL implements DAOManager {
             tipostrabajador = new tipotrabajadorSQL(conexion);
         }
         return tipostrabajador;
+    }
+
+    @Override
+    public boletaDAO getBoleta() {
+        if (boleta == null){
+            boleta = new boletaSQL(conexion);
+        }
+        return boleta;
+    }
+
+    @Override
+    public facturaDAO getFactura() {
+         if (factura == null){
+            factura = new facturaSQL(conexion);
+        }
+        return factura;
     }
 
 }

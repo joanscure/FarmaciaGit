@@ -1,11 +1,13 @@
 package farmacia.jdbc.dao.mysql;
 
+import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.boletacabeceraDAO;
 import farmacia.jdbc.modelado.boletacabecera;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 public class boletacabeceraSQL implements boletacabeceraDAO {
@@ -24,9 +26,27 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
     }
 
     @Override
-    public void insertar(boletacabecera obj) {
+    public void insertar(boletacabecera obj) throws DAOException {
 
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       PreparedStatement stat = null;
+        
+        try {
+            stat = conexion.prepareStatement(INSERT);
+        
+            stat.setInt(1,  obj.getCorrelativoboleta());
+            stat.setInt(2,  obj.getNumeroboleta());
+            stat.setDate(3,  new Date(obj.getFechaemisionboleta().getTime()));
+            stat.setLong(4, obj.getIdpersonacliente());
+            stat.setLong(5,  obj.getIdempleado());
+            stat.setBoolean(6, (boolean) obj.isStatus());
+            
+           stat.executeUpdate(); 
+       
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
     @Override

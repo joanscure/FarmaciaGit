@@ -14,14 +14,13 @@ import java.util.Objects;
 public class boletadetalle {
     
     private Long idboletadetalle = null;//PK
-    private Long idboletacabecera; //indice
+    private Long idboletacabecera=null; //indice
     private Long idproducto; //indice
     private double cantidad; //5,2
     private double subtotal; //5,2
     private boolean status; 
 
-    public boletadetalle(Long idboletacabecera, Long idproducto, double cantidad, double subtotal) {
-        this.idboletacabecera = idboletacabecera;
+    public boletadetalle( Long idproducto, double cantidad, double subtotal) {
         this.idproducto = idproducto;
         this.cantidad = cantidad;
         this.subtotal = subtotal;
