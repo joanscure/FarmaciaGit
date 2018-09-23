@@ -7,6 +7,8 @@ package farmacia.vista.mantenimientoTipoUsuario;
 
 import farmacia.vista.mantenimientoProductos.*;
 import com.mxrck.autocompleter.TextAutoCompleter;
+import farmacia.calculos.EstiloTablaHeader;
+import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
@@ -153,6 +155,8 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
         int[] columnas = {0, 14};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
 

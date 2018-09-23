@@ -7,6 +7,8 @@ package farmacia.vista.mantenimientoEmpresa;
 
 import farmacia.vista.mantenimientoCliente.*;
 import com.mxrck.autocompleter.TextAutoCompleter;
+import farmacia.calculos.EstiloTablaHeader;
+import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
@@ -145,6 +147,8 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
         int[] columnas = {0, 1, 7};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
 

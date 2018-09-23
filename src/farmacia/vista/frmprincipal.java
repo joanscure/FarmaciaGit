@@ -45,11 +45,12 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     public frmprincipal(frmusuariologin login) {
 
         this.login = login;
+         this.setResizable(false);
         inciar_componentes();
         frmtipousuario = new frmTipousuario();
         desktopPane.add(frmtipousuario);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(frmprincipal.MAXIMIZED_BOTH);
+        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.setTitle("SISTEMA DE VENTAS FARMACIA");
         iproductos.addActionListener(this);
         iusuarios_accesos.addActionListener(this);
@@ -60,7 +61,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         iempresa.addActionListener(this);
         icambiarPass.addActionListener(this);
         isalir.addActionListener(this);
-        
+
         setVisible(true);
         perzonalizartipoletra();
     }
@@ -195,7 +196,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         this.setJMenuBar(barra);
 
         add(desktopPane);
-
+        pack();
     }
 
     @Override

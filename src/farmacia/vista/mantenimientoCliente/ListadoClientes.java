@@ -6,6 +6,8 @@
 package farmacia.vista.mantenimientoCliente;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
+import farmacia.calculos.EstiloTablaHeader;
+import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
@@ -146,6 +148,8 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         int[] columnas = {0, 1, 10};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
 

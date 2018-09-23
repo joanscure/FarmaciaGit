@@ -6,6 +6,8 @@
 package farmacia.vista;
 
 import com.toedter.calendar.JDateChooser;
+import farmacia.calculos.EstiloTablaHeader;
+import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
 import java.awt.BorderLayout;
@@ -137,6 +139,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         bnagregproducto.setEnabled(true);
         txtnombreProducto.setEnabled(false);
         txtcantidad.setEnabled(true);
+        tabla.setEnabled(true);
 
         bnnuevo.setEnabled(false);
         bnguardar.setEnabled(true);
@@ -171,6 +174,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         bnagregproducto.setEnabled(false);
         txtnombreProducto.setEnabled(false);
         txtcantidad.setEnabled(false);
+             tabla.setEnabled(false);
 
         bnnuevo.setEnabled(true);
         bnguardar.setEnabled(false);
@@ -847,6 +851,8 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         int[] tamaño = {100, 200, 200, 80, 90, 90};
         configtabla.fijarTamaño(tabla, tamaño);
         pane.setPreferredSize(new Dimension(760, 200));
+        tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
 

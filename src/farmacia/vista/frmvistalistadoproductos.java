@@ -6,6 +6,8 @@
 package farmacia.vista;
 
 import com.mxrck.autocompleter.TextAutoCompleter;
+import farmacia.calculos.EstiloTablaHeader;
+import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
 import java.awt.BorderLayout;
@@ -55,6 +57,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
     configuracionImagenes configIma = new configuracionImagenes();
     Font fontboton = new Font("Geneva", 1, 13);
     Color c = new java.awt.Color(255, 204, 102);
+//    Color c=Color.white;
     public boolean control = true;
 
     frmvistalistadoproductos() {
@@ -153,6 +156,8 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         };
         Object[] l1 = {"123", "caspirina", "calma dolor de corazon", "2", "10", "1.8", "11.8", "12", 1};
         modelo.addRow(l1);
+         Object[] l2 = {"123", "caspirina", "calma dolor de corazon", "2", "10", "1.8", "11.8", "12", 1};
+        modelo.addRow(l2);
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);
@@ -171,7 +176,8 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {8};
         config.ocultarColumnas(tabla, columnas);
-
+        tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
 
