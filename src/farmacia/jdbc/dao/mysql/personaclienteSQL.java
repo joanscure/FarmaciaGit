@@ -23,7 +23,7 @@ public class personaclienteSQL implements personaclienteDAO{
     }
 
     @Override
-    public void insertar(personacliente obj) {
+    public Long insertar(personacliente obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

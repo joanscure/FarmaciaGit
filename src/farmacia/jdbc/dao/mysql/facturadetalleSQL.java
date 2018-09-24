@@ -23,7 +23,7 @@ public class facturadetalleSQL implements facturadetalleDAO {
     }
     
     @Override
-    public void insertar(facturadetalle obj) {
+    public Long insertar(facturadetalle obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

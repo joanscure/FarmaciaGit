@@ -23,7 +23,7 @@ public class empresaclienteSQL implements empresaclienteDAO {
     }
     
     @Override
-    public void insertar(empresacliente obj) {
+    public Long insertar(empresacliente obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

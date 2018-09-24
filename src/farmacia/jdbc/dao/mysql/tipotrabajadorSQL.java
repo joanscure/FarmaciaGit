@@ -25,7 +25,7 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
     }
 
     @Override
-    public void insertar(tipotrabajador obj) {
+    public Long insertar(tipotrabajador obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

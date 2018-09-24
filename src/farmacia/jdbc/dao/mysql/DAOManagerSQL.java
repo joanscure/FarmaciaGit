@@ -21,6 +21,8 @@ import farmacia.jdbc.dao.tipotrabajadorDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DAOManagerSQL implements DAOManager {
 
@@ -42,8 +44,12 @@ public class DAOManagerSQL implements DAOManager {
     private boletaDAO boleta=null;
     private facturaDAO factura = null;
     
-    public DAOManagerSQL(String host, String datebase, String user, String password) throws SQLException {
-        conexion = DriverManager.getConnection("jdbc:mysql://" + host + "/" + datebase, user, password);
+    public DAOManagerSQL(String host, String datebase, String user, String password) throws DAOException {
+        try {
+            conexion = DriverManager.getConnection("jdbc:mysql://" + host + "/" + datebase, user, password);
+        } catch (SQLException ex) {
+            throw new DAOException("Error al generar la conexion.", ex);
+        }
     }
 
     public void cerrarConexion() throws DAOException{

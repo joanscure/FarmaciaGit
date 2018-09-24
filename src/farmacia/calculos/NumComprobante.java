@@ -5,7 +5,7 @@
  */
 package farmacia.calculos;
 
-import farmacia.vista.GUI;
+//import farmacia.vista.GUI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

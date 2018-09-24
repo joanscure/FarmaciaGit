@@ -25,7 +25,7 @@ public class productodescuentoSQL implements productodescuentoDAO {
     }
 
     @Override
-    public void insertar(productodescuento obj) {
+    public Long insertar(productodescuento obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

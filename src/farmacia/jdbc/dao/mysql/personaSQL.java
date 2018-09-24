@@ -47,10 +47,11 @@ public class personaSQL implements personaDAO {
     }
 
     @Override
-    public void insertar(persona obj) throws DAOException {
+    public Long insertar(persona obj) throws DAOException {
 
         PreparedStatement stat = null;
-
+        ResultSet rs = null;
+        int id = 0;
         try {
             stat = conexion.prepareStatement(INSERT);
             stat.setString(1, (String) obj.getNombre());
@@ -61,18 +62,23 @@ public class personaSQL implements personaDAO {
             stat.setString(6, (String) obj.getDireccion());
             stat.setString(7, (String) obj.getTelefono());
             stat.setBoolean(8, obj.isStatus());
-
-            int resultado = stat.executeUpdate();
-
-            if (resultado == 0) {
+            if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
+             id = stat.RETURN_GENERATED_KEYS;
+//            if(rs.next()){
+//               // id = rs.getLong(1);
+//            }else{
+//                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
+//            }
 
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
             UtilSQL.cerrar(stat);
         }
+        System.out.println(id);
+        return new Long(id);
     }
 
     @Override
@@ -157,10 +163,9 @@ public class personaSQL implements personaDAO {
         return p;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DAOException {
         DAOManagerSQL man = null;
-        try {
-            man = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+        man = new DAOManagerSQL("localhost", "practica", "root", "");
             persona p;
             String nombre = "Manuel";
             String appaterno = "Perez";
@@ -172,18 +177,29 @@ public class personaSQL implements personaDAO {
             String telefono = "323231231";
             p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
             man.getPersonaDAO().insertar(p);
-
-        } catch (SQLException ex) {
-            System.out.println("Error en SQL." + ex.getMessage());
+        /*try {
+            man = new DAOManagerSQL("localhost", "practica", "root", "");
+            persona p;
+            String nombre = "Manuel";
+            String appaterno = "Perez";
+            String apmaterno = "Ramirez";
+            String dni = "12345678";
+            char[] numerodni = dni.toCharArray();
+            int personaedad = 13;
+            String direccion = "Calle los robles 123";
+            String telefono = "323231231";
+            p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
+            man.getPersonaDAO().insertar(p);
+        
         } catch (DAOException ex) {
-            System.out.println(ex.getMessage());
+            
         } finally {
             try {
                 man.cerrarConexion();
             } catch (DAOException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
 
     }
 

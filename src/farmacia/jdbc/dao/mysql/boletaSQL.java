@@ -34,7 +34,7 @@ public class boletaSQL implements boletaDAO{
    
 
     @Override
-    public void insertar(boleta obj) throws DAOException {
+    public Long insertar(boleta obj) throws DAOException {
         try {
             conexion.setAutoCommit(false);// para  poder controlar que parte se envia y si hay un error en todo ese segemento poder hacer el roolback
             boletacabeceraDAO cabeceradao=new boletacabeceraSQL(conexion);
@@ -58,7 +58,7 @@ public class boletaSQL implements boletaDAO{
             }
           System.err.println("algo salio mal1 :c " + ex.getMessage());
         }
-       
+       return 0L;
     }
 
     @Override

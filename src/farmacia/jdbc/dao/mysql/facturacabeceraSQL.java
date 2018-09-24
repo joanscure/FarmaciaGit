@@ -23,7 +23,7 @@ public class facturacabeceraSQL implements facturacabeceraDAO{
         this.conexion = conexion;
     }
     @Override
-    public void insertar(facturacabecera obj) {
+    public Long insertar(facturacabecera obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

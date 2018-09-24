@@ -13,15 +13,15 @@ public class empleado {
     
     private Long idempleado = null;//PK
     private Long idpersona; //indice
-    private Long tipotrabajador;//indice
+    private Long idtipotrabajador;//indice
     private String login;//32
     private String password;//32
     private Date fechaalta;//nulo
     private boolean status;
 
-    public empleado(Long idpersona, Long tipotrabajador, String login, String password, Date fechaalta) {
+    public empleado(Long idpersona, Long idtipotrabajador, String login, String password, Date fechaalta) {
         this.idpersona = idpersona;
-        this.tipotrabajador = tipotrabajador;
+        this.idtipotrabajador = idtipotrabajador;
         this.login = login;
         this.password = password;
         this.fechaalta = fechaalta;
@@ -44,12 +44,12 @@ public class empleado {
         this.idpersona = idpersona;
     }
 
-    public Long getTipotrabajador() {
-        return tipotrabajador;
+    public Long getIdtipotrabajador() {
+        return idtipotrabajador;
     }
 
-    public void setTipotrabajador(Long tipotrabajador) {
-        this.tipotrabajador = tipotrabajador;
+    public void setIdtipotrabajador(Long idtipotrabajador) {
+        this.idtipotrabajador = idtipotrabajador;
     }
 
     public String getLogin() {
@@ -86,7 +86,7 @@ public class empleado {
 
     @Override
     public String toString() {
-        return "empleado{" + "idempleado=" + idempleado + ", idpersona=" + idpersona + ", tipotrabajador=" + tipotrabajador + ", fechaalta=" + fechaalta + ", status=" + status + '}';
+        return "empleado{" + "idempleado=" + idempleado + ", idpersona=" + idpersona + ", tipotrabajador=" + idtipotrabajador + ", fechaalta=" + fechaalta + ", status=" + status + '}';
     }
 
     @Override
@@ -94,7 +94,7 @@ public class empleado {
         int hash = 7;
         hash = 79 * hash + Objects.hashCode(this.idempleado);
         hash = 79 * hash + Objects.hashCode(this.idpersona);
-        hash = 79 * hash + Objects.hashCode(this.tipotrabajador);
+        hash = 79 * hash + Objects.hashCode(this.idtipotrabajador);
         hash = 79 * hash + Objects.hashCode(this.login);
         hash = 79 * hash + Objects.hashCode(this.password);
         hash = 79 * hash + Objects.hashCode(this.fechaalta);
@@ -129,7 +129,7 @@ public class empleado {
         if (!Objects.equals(this.idpersona, other.idpersona)) {
             return false;
         }
-        if (!Objects.equals(this.tipotrabajador, other.tipotrabajador)) {
+        if (!Objects.equals(this.idtipotrabajador, other.idtipotrabajador)) {
             return false;
         }
         if (!Objects.equals(this.fechaalta, other.fechaalta)) {

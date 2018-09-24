@@ -23,7 +23,7 @@ public class facturaSQL implements facturaDAO{
     }
 
     @Override
-    public void insertar(factura obj) throws DAOException {
+    public Long insertar(factura obj) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

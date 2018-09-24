@@ -28,8 +28,9 @@ public class empresaSQL implements empresaDAO {
     }
 
     @Override
-    public void insertar(empresa obj) throws DAOException {
+    public Long insertar(empresa obj) throws DAOException {
         PreparedStatement stat = null;
+        ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(INSERT);
             stat.setString(1, String.valueOf(obj.getRucempresa()));
@@ -40,11 +41,18 @@ public class empresaSQL implements empresaDAO {
             if(stat.executeUpdate() == 0){
                 throw new DAOException("Error al ingresar un registro.");
             }
+            rs = stat.getGeneratedKeys();
+            if (rs.next()){
+                obj.setIdempresa(rs.getLong(1));
+            }else{
+                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
+            }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
-            UtilSQL.cerrar(stat);
+            UtilSQL.cerrar(stat,rs);
         }
+        return obj.getIdempresa();
     }
 
     @Override

@@ -26,25 +26,33 @@ public class boletadetalleSQL implements boletadetalleDAO {
     }
 
     @Override
-    public void insertar(boletadetalle obj) throws DAOException {
-       PreparedStatement stat = null;
-        
+    public Long insertar(boletadetalle obj) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(INSERT);
-        
-            stat.setLong(1,  obj.getIdproducto());
-            stat.setDouble(2,  obj.getCantidad());
-            stat.setDouble(3,  obj.getSubtotal());
+
+            stat.setLong(1, obj.getIdproducto());
+            stat.setDouble(2, obj.getCantidad());
+            stat.setDouble(3, obj.getSubtotal());
             stat.setBoolean(4, (boolean) obj.isStatus());
-            
-           stat.executeUpdate(); 
-       
+
+            if (stat.executeUpdate() == 0){
+                throw new DAOException("Error al ingresar un registro.");
+            }
+            rs = stat.getGeneratedKeys();
+            if (rs.next()){
+                obj.setIdboletadetalle(rs.getLong(1));
+            }else{
+                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
+            }
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
             UtilSQL.cerrar(stat);
         }
-
+        return obj.getIdboletadetalle();
     }
 
     @Override
@@ -56,7 +64,6 @@ public class boletadetalleSQL implements boletadetalleDAO {
     public void eliminar(boletadetalle obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 
     @Override
     public List<boletadetalle> obtenertodos() {
@@ -72,7 +79,5 @@ public class boletadetalleSQL implements boletadetalleDAO {
     public boletadetalle convertir(ResultSet rs) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-
 
 }

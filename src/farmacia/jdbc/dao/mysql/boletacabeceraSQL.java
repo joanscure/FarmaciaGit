@@ -26,27 +26,34 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
     }
 
     @Override
-    public void insertar(boletacabecera obj) throws DAOException {
+    public Long insertar(boletacabecera obj) throws DAOException {
 
-       PreparedStatement stat = null;
-        
+        PreparedStatement stat = null;
+        ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(INSERT);
-        
-            stat.setInt(1,  obj.getCorrelativoboleta());
-            stat.setInt(2,  obj.getNumeroboleta());
-            stat.setDate(3,  new Date(obj.getFechaemisionboleta().getTime()));
+
+            stat.setInt(1, obj.getCorrelativoboleta());
+            stat.setInt(2, obj.getNumeroboleta());
+            stat.setDate(3, new Date(obj.getFechaemisionboleta().getTime()));
             stat.setLong(4, obj.getIdpersonacliente());
-            stat.setLong(5,  obj.getIdempleado());
+            stat.setLong(5, obj.getIdempleado());
             stat.setBoolean(6, (boolean) obj.isStatus());
-            
-           stat.executeUpdate(); 
+
+            if (stat.executeUpdate() == 0){
+                throw new DAOException("Error al ingresar un registro.");
+            }
        
+            rs = stat.getGeneratedKeys();
+            if (rs.next()){
+                obj.setIdboletacabecera(rs.getLong(1));
+            }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
-            UtilSQL.cerrar(stat);
+            UtilSQL.cerrar(stat,rs);
         }
+        return obj.getIdboletacabecera();
     }
 
     @Override

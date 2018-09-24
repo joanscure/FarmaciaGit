@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DAO<O, K> {
 
-    void insertar(O obj) throws DAOException;//inserta un registro
+    Long insertar(O obj) throws DAOException;//inserta un registro
 
     void modificar(O obj) throws DAOException;//modifica un registro
 
