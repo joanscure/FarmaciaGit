@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package farmacia.jdbc.dao;
+package farmacia.jdbc.dao.mysql;
 
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.facturaDAO;
 import farmacia.jdbc.modelado.factura;
 import java.sql.Connection;
 import java.sql.ResultSet;
