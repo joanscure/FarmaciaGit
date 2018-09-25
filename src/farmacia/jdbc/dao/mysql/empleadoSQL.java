@@ -30,66 +30,71 @@ public class empleadoSQL implements empleadoDAO {
 
     @Override
     public Long insertar(empleado obj) throws DAOException {
-    //insertar suponuendo que el objeto recibido tiene un registro de persona valido
+        //insertar suponuendo que el objeto recibido tiene un registro de persona valido
         PreparedStatement stat = null;
         ResultSet rs = null;
         try {
-            personaSQL per = new personaSQL(conexion);
-            stat = conexion.prepareStatement(INSERT);
+            DAOManagerSQL man = new DAOManagerSQL(conexion);
+            stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
             stat.setLong(1, obj.getIdpersona());
             stat.setString(2, obj.getLogin());
             stat.setString(3, obj.getPassword());
             stat.setDate(4, (java.sql.Date) obj.getFechaalta());
             stat.setLong(5, obj.getIdtipotrabajador());
             stat.setBoolean(6, obj.isStatus());
-            
-            if (per.obtener(obj.getIdpersona()) == null){
+
+            if (man.getPersonaDAO().obtener(obj.getIdpersona()) == null 
+                    || man.getTipoTrabajadorDAO().obtener(obj.getIdtipotrabajador()) == null) {
                 throw new DAOException("Error al ingresar un registro. Clave foranea no existente.");
             }
-            
+
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
-            
+
             rs = stat.getGeneratedKeys();
-            if(rs.next()){
+            if (rs.next()) {
                 obj.setIdempleado(rs.getLong(1));
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
             UtilSQL.cerrar(stat);
-            
+
         }
-            return obj.getIdempleado();
+        return obj.getIdempleado();
     }
 
-    public void insertarNuevo(persona per, empleado emp) throws DAOException{
-        
+    @Override
+    public void insertarNuevo(persona per, empleado emp) throws DAOException {
+
         PreparedStatement stat = null;
         ResultSet rs = null;
-        try{
+        try {
             conexion.setAutoCommit(false);
-            
-            personaSQL obj = new personaSQL(conexion);
-            Long idpersonanueva = obj.insertar(per);//inserta la persona en primer lugar
-           
-            stat = conexion.prepareStatement(INSERT);
-            stat.setLong(1, emp.getIdpersona());
+            DAOManagerSQL man = new DAOManagerSQL(conexion);
+            per.setIdPersona(man.getPersonaDAO().insertar(per));//inserta la persona en primer lugar
+
+            stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
+            stat.setLong(1, per.getIdPersona());
             stat.setString(2, emp.getLogin());
             stat.setString(3, emp.getPassword());
-            stat.setDate(4, (java.sql.Date) emp.getFechaalta());
+            stat.setDate(4, new java.sql.Date(emp.getFechaalta().getTime()));
             stat.setLong(5, emp.getIdtipotrabajador());
             stat.setBoolean(6, emp.isStatus());
-            
-            if(stat.executeUpdate() == 0){
+
+            if (man.getTipoTrabajadorDAO().obtener(emp.getIdtipotrabajador()) == null) {
+                throw new DAOException("Error al ingresar un registro. Clave foranea no existente.");
+            }
+
+            if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
-            
+
             rs = stat.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 emp.setIdempleado(rs.getLong(1));
-            }else{
+            } else {
                 throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
             }
             conexion.commit();
@@ -100,9 +105,15 @@ public class empleadoSQL implements empleadoDAO {
                 throw new DAOException("Error en transaccion.", ex1);
             }
             throw new DAOException("Error en SQL.", ex);
-        }finally{
-            UtilSQL.cerrar(stat,rs);
-        }
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+            try {
+                conexion.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new DAOException("Error en SQL.", ex);
+            }
+       }
+        System.out.println(emp.getIdempleado() +", "+ per.getIdPersona());
     }
 
     @Override
@@ -139,36 +150,26 @@ public class empleadoSQL implements empleadoDAO {
         return emp;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DAOException {
         DAOManagerSQL man = null;
-        try {
-            man = new DAOManagerSQL("localhost", "practica", "root", "");
-            persona p;
-            String nombre = "Manuel";
-            String appaterno = "Perez";
-            String apmaterno = "Ramirez";
-            String dni = "12345678";
-            char[] numerodni = dni.toCharArray();
-            int personaedad = 13;
-            String direccion = "Calle los robles 123";
-            String telefono = "323231231";
-            p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
-            
-            empleado emp;
-            Long idpersona = 0L;
-            
-            
-            man.getPersonaDAO().insertar(p);
+        man = new DAOManagerSQL("localhost", "practica", "root", "");
+        persona p;
+        String nombre = "Manuel";
+        String appaterno = "Perez";
+        String apmaterno = "Ramirez";
+        String dni = "12345678";
+        char[] numerodni = dni.toCharArray();
+        int personaedad = 13;
+        String direccion = "Calle los robles 123";
+        String telefono = "323231231";
+        p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
 
-        } catch (DAOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        finally {
-            try {
-                man.cerrarConexion();
-            } catch (DAOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
+        
+        empleado emp;
+        long time = System.currentTimeMillis();
+        emp = new empleado(0L, 1L, "sds", "dasdsa", new Date(time));
+        
+        man.getEmpleadoDAO().insertarNuevo(p, emp);
+        man.cerrarConexion();
     }
 }
