@@ -35,5 +35,9 @@ public class factura {
     public void setDetalle(List<facturadetalle> detalle) {
         this.detalle = detalle;
     }
-    
+    public facturadetalle getOneDetalle(int index)
+    {
+        return detalle.get(index);
+        
+    }
 }

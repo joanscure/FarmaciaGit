@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class boletacabeceraSQL implements boletacabeceraDAO {
@@ -62,23 +63,74 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
     }
 
     @Override
-    public void eliminar(boletacabecera obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminar(boletacabecera obj) throws DAOException {
+          PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(DELETE);
+            stat.setLong(1, obj.getIdboletacabecera());
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al eliminar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
     @Override
-    public List<boletacabecera> obtenertodos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<boletacabecera> obtenertodos() throws DAOException {
+         PreparedStatement stat=null;
+        ResultSet rs=null;
+        List<boletacabecera> lista=new ArrayList<>();
+        try {
+            stat = conexion.prepareStatement(GETALL);
+            rs = stat.executeQuery();
+            while (rs.next()) {
+                lista.add(convertir(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return lista;
     }
 
     @Override
-    public boletacabecera obtener(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boletacabecera obtener(Long id) throws DAOException {
+        PreparedStatement stat=null;
+        ResultSet rs=null;
+        boletacabecera b;
+        try {
+            stat = conexion.prepareStatement(GETONE);
+            stat.setLong(1, id);
+            rs = stat.executeQuery();
+            if (rs.next()) {
+                b = convertir(rs);
+            } else {
+                throw new DAOException("No se ha encontrado registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return b;
     }
 
     @Override
     public boletacabecera convertir(ResultSet rs) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boletacabecera b=null;
+      int correlativoboleta=rs.getInt("correlativoboleta");
+      int numeroboleta=rs.getInt("numeroboleta");
+      Date fechaemisionboleta=rs.getDate("fechaemisionboleta");
+      Long idpersonacliente=rs.getLong("idpersonacliente");
+      Long idempleado=rs.getLong("idempleado");
+      b=new boletacabecera(correlativoboleta, numeroboleta, fechaemisionboleta, idpersonacliente, idempleado);
+      b.setIdboletacabecera(rs.getLong("idboletacabecera"));
+      b.setStatus(rs.getBoolean("status"));
+      return b;
     }
 
 }

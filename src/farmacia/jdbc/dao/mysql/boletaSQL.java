@@ -37,9 +37,10 @@ public class boletaSQL implements boletaDAO{
     public Long insertar(boleta obj) throws DAOException {
         try {
             conexion.setAutoCommit(false);// para  poder controlar que parte se envia y si hay un error en todo ese segemento poder hacer el roolback
+           // instaciamos cada dao para poder utilizar sus funciones insertar modificar etc
             boletacabeceraDAO cabeceradao=new boletacabeceraSQL(conexion);
             boletadetalleDAO detalledao=new boletadetalleSQL(conexion);
-            
+            //damos valores a la cabecera y detalle para que se puedan buscar mediante sus atributos
             boletacabecera cabecera=obj.getCabecera();
             List<boletadetalle> listadodetalle=obj.getDetalle();
             
@@ -54,7 +55,7 @@ public class boletaSQL implements boletaDAO{
             try {
                 conexion.rollback();
             } catch (SQLException ex1) {
-               System.err.println("algo salio mal1 :c " + ex.getMessage());
+               System.err.println("algo salio mal1 :c " + ex1.getMessage());
             }
           System.err.println("algo salio mal1 :c " + ex.getMessage());
         }
@@ -63,26 +64,46 @@ public class boletaSQL implements boletaDAO{
 
     @Override
     public void modificar(boleta obj) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //no se puede modificar esto
     }
 
     @Override
     public void eliminar(boleta obj) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+             conexion.setAutoCommit(false);
+             boletacabeceraDAO cabeceradao=new boletacabeceraSQL(conexion);
+            boletadetalleDAO detalledao=new boletadetalleSQL(conexion);
+             boletacabecera cabecera=obj.getCabecera();
+             boletadetalle  detalle=obj.getOneDetalle(0);
+             detalledao.eliminar(detalle);
+             cabeceradao.eliminar(cabecera);
+             conexion.commit();
+             
+        } catch (SQLException ex) {
+             try {
+                conexion.rollback();
+            } catch (SQLException ex1) {
+               System.err.println("algo salio mal1 :c " + ex1.getMessage());
+            }
+          System.err.println("algo salio mal1 :c " + ex.getMessage());
+        }
     }
 
     @Override
     public List<boleta> obtenertodos() throws DAOException {
+        //no se ejecuta este metodo
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boleta obtener(Long id) throws DAOException {
+        //no se ejecuta este metodo
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boleta convertir(ResultSet rs) throws SQLException {
+        //no se ejecuta este metodo
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 //     public static void main(String[] args) throws SQLException, DAOException {

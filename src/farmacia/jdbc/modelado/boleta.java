@@ -36,4 +36,9 @@ public class boleta {
         this.detalle = detalle;
     }
     
+    public boletadetalle getOneDetalle(int index)
+    {
+        return detalle.get(index);
+        
+    }
 }
