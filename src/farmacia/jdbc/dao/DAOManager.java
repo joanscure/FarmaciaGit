@@ -26,7 +26,7 @@ public interface DAOManager {
 
     productodescuentoDAO getProductoDescuentoDAO();
 
-    tipotrabajadorDAO getTipoTrabajador();
+    tipotrabajadorDAO getTipoTrabajadorDAO();
     
     boletaDAO getBoleta();
     

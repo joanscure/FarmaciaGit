@@ -10,7 +10,6 @@ import farmacia.jdbc.dao.empleadoDAO;
 import farmacia.jdbc.dao.empresaDAO;
 import farmacia.jdbc.dao.empresaclienteDAO;
 import farmacia.jdbc.dao.facturaDAO;
-import farmacia.jdbc.dao.facturaSQL;
 import farmacia.jdbc.dao.facturacabeceraDAO;
 import farmacia.jdbc.dao.facturadetalleDAO;
 import farmacia.jdbc.dao.personaDAO;
@@ -52,6 +51,10 @@ public class DAOManagerSQL implements DAOManager {
         }
     }
 
+    public DAOManagerSQL(Connection conexion) {
+        this.conexion = conexion;
+    }
+    
     public void cerrarConexion() throws DAOException{
         if (conexion != null){
             try{
@@ -159,7 +162,7 @@ public class DAOManagerSQL implements DAOManager {
     }
 
     @Override
-    public tipotrabajadorDAO getTipoTrabajador() {
+    public tipotrabajadorDAO getTipoTrabajadorDAO() {
         if (tipostrabajador == null){
             tipostrabajador = new tipotrabajadorSQL(conexion);
         }

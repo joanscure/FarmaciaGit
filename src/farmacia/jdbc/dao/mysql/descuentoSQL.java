@@ -127,8 +127,6 @@ public class descuentoSQL implements descuentoDAO {
             rs = stat.executeQuery();
             if (rs.next()) {
                 des = convertir(rs);
-            } else {
-                throw new DAOException("No se ha encontrado registro.");
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);

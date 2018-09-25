@@ -129,9 +129,7 @@ public class productoSQL implements productoDAO {
             rs = stat.executeQuery();
             if (rs.next()) {
                 pro = convertir(rs);
-            } else {
-                throw new DAOException("No se ha encontrado registo.");
-            }
+            } 
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
