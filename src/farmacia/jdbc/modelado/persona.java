@@ -28,6 +28,9 @@ public class persona {
         status = true;
     }
 
+    public persona() {
+    }
+
     public Long getIdPersona() {
         return idPersona;
     }

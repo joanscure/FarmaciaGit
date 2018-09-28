@@ -10,6 +10,9 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.producto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,7 +39,9 @@ import javax.swing.table.TableRowSorter;
 
 /**
  *
- * // esta clase es para mostrarse cada vez que se presione el boton agregar productos
+ * // esta clase es para mostrarse cada vez que se presione el boton agregar
+ * productos
+ *
  * @author fecyp
  */
 public class frmvistalistadoproductos extends JFrame implements ActionListener, KeyListener, MouseListener {
@@ -86,6 +92,27 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
             }
 
         });
+    }
+
+    public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
+            modelo.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            List<producto> lista = manager.getProductoDAO().obtenertodos();
+            for (int i = 0; i < lista.size(); i++) {
+                Object obj[] = {lista.get(i).getIdproducto(), lista.get(i).getNombreproducto(), lista.get(i).getDescripcionproducto(), lista.get(i).getDosisproducto(), lista.get(i).getPrecioventa(), lista.get(i).getIgv(), lista.get(i).getPreciofinal(), lista.get(i).getStock(), lista.get(i).isStatus()};
+
+                modelo.addRow(obj);
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
     }
 
     public void perzonalizartipoletra() {
@@ -161,6 +188,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         tabla.getSelectionModel().addListSelectionListener(e -> {
             if (control) {
                 agregar.setEnabled(true);
@@ -200,11 +228,12 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
             elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
 
         } else if (source == agregar) {
-            frmVentas.txtcodigo.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0));
+            frmVentas.txtcodigo.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0).toString());
             frmVentas.txtnombreProducto.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 1));
-            frmVentas.txtprecio.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 6));
-            frmVentas.txtstock.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 7));
+            frmVentas.txtprecio.setText((Double) modelo.getValueAt(tabla.getSelectedRow(), 6)+"");
+            frmVentas.txtstock.setText((int) modelo.getValueAt(tabla.getSelectedRow(), 7)+"");
             tabla.clearSelection();
+            txtBuscar.requestFocus();
         }
 
     }
@@ -222,15 +251,15 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-                control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+//                control = true;
                 agregar.doClick();
 
             }
@@ -254,7 +283,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        
     }
 
     @Override

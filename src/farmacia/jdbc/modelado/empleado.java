@@ -28,6 +28,9 @@ public class empleado {
         status = true;
     }
 
+    public empleado() {
+    }
+
     public Long getIdempleado() {
         return idempleado;
     }

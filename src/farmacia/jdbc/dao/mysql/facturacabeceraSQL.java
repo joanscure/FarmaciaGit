@@ -33,8 +33,8 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
         try {
             stat = conexion.prepareStatement(INSERT);
 
-            stat.setInt(1, obj.getCorrelativofactura());
-            stat.setInt(2, obj.getNumerofactura());
+            stat.setString(1, obj.getCorrelativofactura());
+            stat.setString(2, obj.getNumerofactura());
             stat.setDate(3, new Date(obj.getFechaemisionfactura().getTime()));
             stat.setLong(4, obj.getIdempresacliente());
             stat.setLong(5, obj.getIdempleado());
@@ -44,12 +44,12 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
                 throw new DAOException("Error al ingresar un registro.");
             }
 
-            rs = stat.getGeneratedKeys();
-            if (rs.next()) {
-                obj.setIdfacturacabecera(rs.getLong(1));
-            }
+//            rs = stat.getGeneratedKeys();
+//            if (rs.next()) {
+//                obj.setIdfacturacabecera(rs.getLong(1));
+//            }
         } catch (SQLException ex) {
-            throw new DAOException("Error de sql.", ex);
+            throw new DAOException("Error de sql."+ ex.getMessage());
         } finally {
             UtilSQL.cerrar(stat, rs);
         }
@@ -121,8 +121,8 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
     @Override
     public facturacabecera convertir(ResultSet rs) throws SQLException {
         facturacabecera f = null;
-        int correlativofactura = rs.getInt("correlativofactura");
-        int numerofactura = rs.getInt("numeroboleta");
+        String correlativofactura = rs.getString("correlativofactura");
+        String numerofactura = rs.getString("numeroboleta");
         Date fechaemisionfactura = rs.getDate("fechaemisionfactura");
         Long idempresacliente = rs.getLong("idempresacliente");
         Long idempleado = rs.getLong("idempleado");

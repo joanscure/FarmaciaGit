@@ -17,7 +17,7 @@ public class personaclienteSQL implements personaclienteDAO{
     
     private final String INSERT = "INSERT INTO personacliente(idpersona, status) "+
     "VALUES (?, ?) ";
-    private final String UPDATE = "UPDATE personacliente SET idpersona = ?, status = ? WHERE idpersonacliente = ?";
+    private final String UPDATE = "UPDATE personacliente SET idpersona = ? WHERE idpersonacliente = ?";
     private final String DELETE = "UPDATE personacliente SET status = 0 WHERE idpersonacliente = ?";
     private final String GETALL = "SELECT * FROM personacliente WHERE status = 1";
     private final String GETONE = "SELECT * FROM personacliente WHERE idpersonacliente = ?";
@@ -51,7 +51,6 @@ public class personaclienteSQL implements personaclienteDAO{
         } finally {
             UtilSQL.cerrar(stat, rs);
         }
-        System.out.println(obj.getIdpersonacliente());
         return obj.getIdpersonacliente();    
         
     }
@@ -64,8 +63,8 @@ public class personaclienteSQL implements personaclienteDAO{
             stat = conexion.prepareStatement(UPDATE);
            
             stat.setLong(1, obj.getIdpersona());
-            stat.setBoolean(2, obj.isStatus());
-            stat.setLong(3, obj.getIdpersonacliente());
+            
+            stat.setLong(2, obj.getIdpersonacliente());
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al modificar un registro.");
             }

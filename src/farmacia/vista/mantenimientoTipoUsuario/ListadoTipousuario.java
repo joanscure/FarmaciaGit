@@ -11,6 +11,10 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.producto;
+import farmacia.jdbc.modelado.tipotrabajador;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
@@ -24,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -75,6 +80,31 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
 
     }
 
+    public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
+            modelo.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            List<tipotrabajador> lista = manager.getTipoTrabajadorDAO().obtenertodos();
+            for (int i = 0; i < lista.size(); i++) {
+                Object obj[] = {lista.get(i).getIdtipotrabajador(), lista.get(i).getNombretipotrabajador(), lista.get(i).isAccederventas(),
+                    lista.get(i).isAccederproductos(), lista.get(i).isAccederclientes(), lista.get(i).isAccederconsultas(), lista.get(i).isAccederempleados(),
+                    lista.get(i).isAccedertipousuario(), lista.get(i).isAccedercambioclave(), lista.get(i).isAccederanulaciones(),
+                    lista.get(i).isAccedereliminarproducto(), lista.get(i).isAccedereliminarcliente(), lista.get(i).isAccedereliminarempleado(),
+                    lista.get(i).isAccedereliminartipoempleado(), lista.get(i).isStatus()};
+
+                modelo.addRow(obj);
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
+    }
+
     private void iniciar_componentes() {
         tabla = new JTable(20, 20);
 
@@ -122,14 +152,14 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
 
         Object[][] data = new Object[0][0];
         String[] lista = {"idtipo", "Descripcion", "Acc.ventas(2)", "Acc.produto(3)", "Acc.Clientes(4)", "Acc.Consultas(5)",
-            "Acc.Empleados(6)", "Acc.tipoUsuario(7)", "Acc.Cambio Clave(8)","Acc.Anular Ventas(9)","Acc. Eliminar Productos(10)","Acc. Eliminar Clientes(11)",
-            "Acc.Eliminar Empleados(12)","Acc. Eliminar Tipo Empleados(13)", "estado(14)"};
+            "Acc.Empleados(6)", "Acc.tipoUsuario(7)", "Acc.Cambio Clave(8)", "Acc.Anular Ventas(9)", "Acc. Eliminar Productos(10)", "Acc. Eliminar Clientes(11)",
+            "Acc.Eliminar Empleados(12)", "Acc. Eliminar Tipo Empleados(13)", "estado(14)"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-     
+tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);
@@ -145,12 +175,12 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
         }
         );
         pane.setBackground(c);
-        int[] tamaño = {0, 180, 100, 100, 100, 100, 100, 100, 100, 100,100,100,100,100,0};
+        int[] tamaño = {0, 180, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0};
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {0, 14};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
         tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
@@ -164,11 +194,11 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
             } else if (buscarPor.getSelectedItem().toString().equals("Por Desripcion")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3));
             } else if (buscarPor.getSelectedItem().toString().equals("Por Codigo")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(),1 ));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
             }
 
             if (tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "¡No Se encontraron Tipos de Usuario!","Informacion",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron Tipos de Usuario!", "Informacion", JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();
@@ -191,15 +221,15 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-//            control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+////            control = true;
                 frmTipousuario.jbModificar.doClick();
 
             } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {

@@ -10,12 +10,12 @@ public class facturacabecera {
     private Long idfacturacabecera = null;//PK
     private Long idempresacliente;//indice
     private Long idempleado;//indice
-    private int correlativofactura;//int 4
-    private int numerofactura; //int 8
+    private String correlativofactura;//int 4
+    private String numerofactura; //int 8
     private Date fechaemisionfactura;
     private boolean status;
 
-    public facturacabecera(Long idempresacliente, Long idempleado, int correlativofactura, int numerofactura, Date fechaemisionfactura) {
+    public facturacabecera(Long idempresacliente, Long idempleado, String correlativofactura, String numerofactura, Date fechaemisionfactura) {
         this.idempresacliente = idempresacliente;
         this.idempleado = idempleado;
         this.correlativofactura = correlativofactura;
@@ -48,19 +48,19 @@ public class facturacabecera {
         this.idempleado = idempleado;
     }
 
-    public int getCorrelativofactura() {
+    public String getCorrelativofactura() {
         return correlativofactura;
     }
 
-    public void setCorrelativofactura(int correlativofactura) {
+    public void setCorrelativofactura(String correlativofactura) {
         this.correlativofactura = correlativofactura;
     }
 
-    public int getNumerofactura() {
+    public String getNumerofactura() {
         return numerofactura;
     }
 
-    public void setNumerofactura(int numerofactura) {
+    public void setNumerofactura(String numerofactura) {
         this.numerofactura = numerofactura;
     }
 
@@ -85,19 +85,7 @@ public class facturacabecera {
         return "facturacabecera{" + "idfacturacabecera=" + idfacturacabecera + ", idempresacliente=" + idempresacliente + ", idempleado=" + idempleado + ", correlativofactura=" + correlativofactura + ", numerofactura=" + numerofactura + ", fechaemisionfactura=" + fechaemisionfactura + ", status=" + status + '}';
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 23 * hash + Objects.hashCode(this.idfacturacabecera);
-        hash = 23 * hash + Objects.hashCode(this.idempresacliente);
-        hash = 23 * hash + Objects.hashCode(this.idempleado);
-        hash = 23 * hash + this.correlativofactura;
-        hash = 23 * hash + this.numerofactura;
-        hash = 23 * hash + Objects.hashCode(this.fechaemisionfactura);
-        hash = 23 * hash + (this.status ? 1 : 0);
-        return hash;
-    }
-
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

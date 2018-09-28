@@ -10,6 +10,10 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.persona;
+import farmacia.jdbc.modelado.personacliente;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
@@ -23,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -56,7 +61,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
     Font fontboton = new Font("Geneva", 1, 13);
     Color c = new java.awt.Color(255, 204, 102);
     public boolean control = true;
-    public boolean teclamas=false;
+    public boolean teclamas = false;
 
     ListadoClientes(frmClientes regis) {
         this.regis = regis;
@@ -72,6 +77,35 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         tabla.setFont(new Font("Geneva", 0, 13));
         tabla.getTableHeader().setFont(fontboton);
 
+    }
+
+    public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
+            modelo.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+           
+            List<personacliente> lista = manager.getPersonaClienteDAO().obtenertodos();
+            List<persona> lista2 = manager.getPersonaDAO().obtenertodos();
+            
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = 0; j < lista2.size(); j++) {
+                    if (Long.compare(lista.get(i).getIdpersona() , lista2.get(j).getIdPersona())==0) {
+                        Object obj[] = {lista.get(i).getIdpersonacliente(), lista.get(i).getIdpersona(), lista2.get(j).getNombre(),
+                            lista2.get(j).getAppaterno(), lista2.get(j).getApmaterno(), String.valueOf(lista2.get(j).getNumerodni()), lista2.get(j).getPersonaedad(), lista2.get(j).getDireccion(), lista2.get(j).getTelefono(), lista.get(i).isStatus()};
+
+                        modelo.addRow(obj);
+                    }
+                }
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
     }
 
     private void iniciar_componentes() {
@@ -121,7 +155,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI","Edad", "Direccion", "Telefono","Fecha de Registro", "estado"};
+        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI", "Edad", "Direccion", "Telefono", "estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -142,13 +176,14 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
             }
         }
         );
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
-        int[] tamaño = {0, 0, 150, 150, 150, 180,100, 200, 80,130, 0};
+        int[] tamaño = {0, 0, 150, 150, 150, 180, 100, 200, 80, 0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 1, 10};
+        int[] columnas = {0, 1, 9};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
         tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
@@ -163,81 +198,77 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3, 4));
             } else if (buscarPor.getSelectedItem().toString().equals("Por DNI")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 5));
-            }else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
+            } else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
             }
 
             if (tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "¡No Se encontraron Clientes!","Informacion",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron Clientes!", "Informacion", JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();
             }
 
-        } 
+        }
 
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         Object source = e.getSource();
         if (source == tabla) {
-            if(tabla.getSelectedRow()==-1)
-            {
+            if (tabla.getSelectedRow() == -1) {
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-//            control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+////            control = true;
                 frmClientes.jbModificar.doClick();
 
             } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                 frmClientes.jbEliminar.doClick();
             }
-        }
-        else if(source==txtBuscar)
-        {
-             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                  buscarPor.setPopupVisible(true);
-               buscarPor.requestFocus();
+        } else if (source == txtBuscar) {
+            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                buscarPor.setPopupVisible(true);
+                buscarPor.requestFocus();
             }
-         
-        }else if (source == buscarPor) {
+
+        } else if (source == buscarPor) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 buscarPor.setPopupVisible(false);
                 buscarPor.transferFocus();
             }
         }
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                frmClientes.jbSalir.doClick();
-            }
-         
-        
-        if (e.getExtendedKeyCode()== KeyEvent.VK_CONTROL ) {
-                  teclamas=true;
-            }
-        
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            frmClientes.jbSalir.doClick();
+        }
+
+        if (e.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            teclamas = true;
+        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-      
-       if (e.getKeyCode() == KeyEvent.VK_N &&teclamas) {
-                    frmClientes.jbNuevo.doClick();
-                    teclamas=false;
-                }
+
+        if (e.getKeyCode() == KeyEvent.VK_N && teclamas) {
+            frmClientes.jbNuevo.doClick();
+            teclamas = false;
+        }
     }
 
 }

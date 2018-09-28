@@ -34,8 +34,8 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
         try {
             stat = conexion.prepareStatement(INSERT);
 
-            stat.setInt(1, obj.getCorrelativoboleta());
-            stat.setInt(2, obj.getNumeroboleta());
+            stat.setString(1, obj.getCorrelativoboleta());
+            stat.setString(2, obj.getNumeroboleta());
             stat.setDate(3, new Date(obj.getFechaemisionboleta().getTime()));
             stat.setLong(4, obj.getIdpersonacliente());
             stat.setLong(5, obj.getIdempleado());
@@ -122,8 +122,8 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
     @Override
     public boletacabecera convertir(ResultSet rs) throws SQLException {
         boletacabecera b = null;
-        int correlativoboleta = rs.getInt("correlativoboleta");
-        int numeroboleta = rs.getInt("numeroboleta");
+        String correlativoboleta = rs.getString("correlativoboleta");
+        String numeroboleta = rs.getString("numeroboleta");
         Date fechaemisionboleta = rs.getDate("fechaemisionboleta");
         Long idpersonacliente = rs.getLong("idpersonacliente");
         Long idempleado = rs.getLong("idempleado");

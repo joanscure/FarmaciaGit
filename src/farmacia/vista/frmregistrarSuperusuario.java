@@ -132,7 +132,7 @@ Color c = new java.awt.Color(255, 255, 153);
                     JOptionPane.showMessageDialog(null, "algo ocurrio mal");
 
                 }
-                emp = new empleado(0L, tipousuario, usuario, contraseña_encrip, time);
+                emp = new empleado(0L, tipousuario, usuario, contraseña_encrip,(java.sql.Date) time);
 
                 manager.getEmpleadoDAO().insertarNuevo(p, emp);
                 manager.cerrarConexion();

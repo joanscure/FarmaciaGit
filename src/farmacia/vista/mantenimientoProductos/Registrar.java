@@ -8,8 +8,7 @@ package farmacia.vista.mantenimientoProductos;
 import farmacia.calculos.configuracionImagenes;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,12 +18,9 @@ import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+
 import javax.swing.JTextField;
 
 /**
@@ -382,5 +378,6 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         add(pane);
 
     }
+    
 
 }

@@ -53,7 +53,6 @@ public class personaSQL implements personaDAO {
         ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
-
             stat.setString(1, (String) obj.getNombre());
             stat.setString(2, (String) obj.getAppaterno());
             stat.setString(3, (String) obj.getApmaterno());
@@ -65,20 +64,17 @@ public class personaSQL implements personaDAO {
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
-
             rs = stat.getGeneratedKeys();
             if (rs.next()) {
                 obj.setIdPersona(rs.getLong(1));
             } else {
                 throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
             }
-
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
             UtilSQL.cerrar(stat, rs);
         }
-        System.out.println(obj.getIdPersona());
         return obj.getIdPersona();
     }
 

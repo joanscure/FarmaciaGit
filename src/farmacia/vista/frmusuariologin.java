@@ -23,6 +23,8 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -88,13 +90,21 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
             }
 
             this.setVisible(false);
-            frmprincipal sistem = new frmprincipal(this);
-            sistem.setVisible(true);
+            frmprincipal sistem;
+            try {
+                sistem = new frmprincipal(this);
+                 sistem.setVisible(true);
+                 
+            sistem.jlidempleado = new Long((Long) tabla.getValueAt(index, 0)+"");
 
-            sistem.jlidempleado = ((Long) tabla.getValueAt(index, 0)) + "";
+            sistem.jlidpersona = new Long((Long) tabla.getValueAt(index, 1)+"") ;
+            sistem.jlocupacion = new Long((Long) tabla.getValueAt(index, 5)+"") ;
+            sistem.permisos();
+            } catch (DAOException ex) {
+                Logger.getLogger(frmusuariologin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
 
-            sistem.jlidpersona = ((Long) tabla.getValueAt(index, 1)) + "";
-            sistem.jlocupacion = ((Long) tabla.getValueAt(index, 5)) + "";
 
         } else if (source == bncancelar) {
             System.exit(0);
@@ -225,7 +235,7 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
             List<empleado> lista = manager.getEmpleadoDAO().obtenertodos();
             for (int i = 0; i < lista.size(); i++) {
-                Object obj[] = {lista.get(i).getIdempleado(), lista.get(i).getIdpersona(), lista.get(i).getLogin(), lista.get(i).getPassword(), lista.get(i).getFechaalta(), lista.get(i).getIdtipotrabajador(), lista.get(i).isStatus()};
+                Object obj[] = {lista.get(i).getIdempleado(), lista.get(i).getIdpersona(), lista.get(i).getLogin(), lista.get(i).getPassword(),lista.get(i).getFechaalta(), lista.get(i).getIdtipotrabajador(), lista.get(i).isStatus()};
 
                 modelo.addRow(obj);
 

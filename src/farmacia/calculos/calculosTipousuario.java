@@ -17,11 +17,9 @@ public class calculosTipousuario {
         Long id=null;
         for (int i = 0; i < ListadoTipousuario.tabla.getRowCount(); i++) {
            if(nombre.equals(ListadoTipousuario.tabla.getValueAt(i, 1)))
-            
            {
-               id=Long.parseLong((String) ListadoTipousuario.tabla.getValueAt(i, 0));
+               id=new Long((Long) ListadoTipousuario.tabla.getValueAt(i, 0)+"");
                
-               break;
            }
         }
         return id;

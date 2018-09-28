@@ -8,6 +8,11 @@ package farmacia.vista.mantenimientoEmpresa;
 import farmacia.vista.mantenimientoCliente.*;
 import farmacia.calculos.Permisos;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empresa;
+import farmacia.jdbc.modelado.empresacliente;
+import farmacia.jdbc.modelado.persona;
 import farmacia.vista.frmpermiso;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -52,9 +58,9 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
     Font fontboton = new Font("Geneva", 1, 14);
     configuracionImagenes config = new configuracionImagenes();
     public static String action = "nothing";
-    Permisos acceso=new Permisos();
+    Permisos acceso = new Permisos();
 
-    public frmEmpresa() {
+    public frmEmpresa() throws DAOException {
         super("Formulario Empresas", false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Iniciar_componentes();
@@ -64,6 +70,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
         perzonalizartipoletra();
         personalizarboton();
         pack();
+        pane1.actualizartabla();
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -138,11 +145,19 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == jbModificar) {
+            habilitar();
+            int fila = pane1.tabla.getSelectedRow();
+            pane2.txtidclienteempresa.setText((Long) pane1.tabla.getValueAt(fila, 0) + "");
+            pane2.txtidempresa.setText((Long) pane1.tabla.getValueAt(fila, 1) + "");
+            pane2.txtnombre.setText((String) pane1.tabla.getValueAt(fila, 2));
+            pane2.txtdocumento.setText((String) pane1.tabla.getValueAt(fila, 3));
+            pane2.txtdireccion.setText((String) pane1.tabla.getValueAt(fila, 4));
+            pane2.txttelefono.setText((String) pane1.tabla.getValueAt(fila, 5));
+
             action = "modificar";
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-            habilitar();
             jbEliminar.setEnabled(false);
             jbSalir.setEnabled(false);
             jbNuevo.setEnabled(false);
@@ -152,7 +167,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
-            pane1.control=true;
+            pane1.control = true;
             action = "nothing";
             pane1.txtBuscar.requestFocus();
 
@@ -164,7 +179,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
                     pane2.txtnombre.setBackground(Color.yellow);
                     return;
                 }
-                
+
                 if (pane2.txtdocumento.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de RUC para la Empresa", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtdocumento.requestFocus();
@@ -172,41 +187,111 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
                     return;
                 }
                 //verificar dni
-                if(pane2.txtdocumento.getText().length()!=11)
-                {
-                   JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de RUC Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                if (pane2.txtdocumento.getText().length() != 11) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de RUC Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtdocumento.requestFocus();
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    empresa emp;
+                    String nombre = pane2.txtnombre.getText();
+                    String documento = pane2.txtdocumento.getText();
+                    String direccion = pane2.txtdireccion.getText();
+                    String telefono = pane2.txttelefono.getText();
+                    char[] numeroruc = documento.toCharArray();
+                    Date time = pane2.fecharegistro.getDate();
+
+                    emp = new empresa(numeroruc, nombre, telefono, direccion);
+
+                    empresacliente cliente;
+
+                    cliente = new empresacliente(0L, time);
+
+                    manager.getEmpresaClienteDAO().insertarNuevo(cliente, emp);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                    JOptionPane.showMessageDialog(null, "Se Registro el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                    deshabilitar();
+                    pestañas.setEnabledAt(0, true);
+                    pestañas.setSelectedIndex(0);
+                } catch (DAOException ex) {
+                    System.out.println(" errorr"+ ex.getMessage());
+
+                }
                 //mensaje de exito
-                JOptionPane.showMessageDialog(null, "Se Registro el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
+
             } else if (action.equals("modificar")) {
-                JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    empresa emp;
+                    Long ide = new Long(pane2.txtidempresa.getText());
+                    Long idc = new Long(pane2.txtidclienteempresa.getText());
+                    String nombre = pane2.txtnombre.getText();
+                    String documento = pane2.txtdocumento.getText();
+                    String direccion = pane2.txtdireccion.getText();
+                    String telefono = pane2.txttelefono.getText();
+                    char[] numeroruc = documento.toCharArray();
+                    Date time = (Date) pane2.fecharegistro.getDate();
+
+                    emp = new empresa(numeroruc, nombre, telefono, direccion);
+                    emp.setIdempresa(ide);
+                    empresacliente cliente;
+
+                    cliente = new empresacliente(0L, time);
+                    cliente.setIdempresa(ide);
+                    cliente.setIdempresacliente(idc);
+                    manager.getEmpresaClienteDAO().modificar(cliente);
+                    manager.getEmpresaDAO().modificar(emp);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                    JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                    deshabilitar();
+                    pestañas.setEnabledAt(0, true);
+                    pestañas.setSelectedIndex(0);
+                } catch (DAOException ex) {
+                    System.out.println(" errorr");
+
+                }
+
             }
-            pane1.control=true;
-             pane1.txtBuscar.requestFocus();
-             action = "nothing";
+            pane1.control = true;
+            pane1.txtBuscar.requestFocus();
+            action = "nothing";
 
         } else if (source == jbEliminar) {
-//          if(!acceso.verificarClienteEliminar())
-//          {
-//              frmpermiso from=new frmpermiso();
-//              from.setVisible(true);
-//              from.toFront();
-//              
-//          }
+            DAOManagerSQL manager = null;
+            try {
+                manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                empresa emp;
+                int fila = pane1.tabla.getSelectedRow();
+                Long ide = new Long((long) pane1.tabla.getValueAt(fila, 1));
+                Long idc = new Long((long) pane1.tabla.getValueAt(fila, 0));
+
+                emp = new empresa();
+                emp.setIdempresa(ide);
+                empresacliente cliente;
+
+                cliente = new empresacliente();
+                cliente.setIdempresa(ide);
+                cliente.setIdempresacliente(idc);
+
+                manager.getEmpresaClienteDAO().eliminar(cliente);
+                manager.getEmpresaDAO().eliminar(emp);
+                manager.cerrarConexion();
+                pane1.actualizartabla();
+            } catch (DAOException ex) {
+                System.out.println(" errorr");
+
+            }
             pane1.tabla.clearSelection();
             jbEliminar.setEnabled(false);
             jbModificar.setEnabled(false);
             action = "nothing";
-             pane1.txtBuscar.requestFocus();
+            pane1.txtBuscar.requestFocus();
 
         } else if (source == jbSalir) {
             deshabilitar();
@@ -217,18 +302,18 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
             jbCancelar.setEnabled(false);
             jbEliminar.setEnabled(false);
             jbGuardar.setEnabled(false);
-            pane1.control=true;
+            pane1.control = true;
 
             setVisible(false);
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
-            pane1.control=true;
+            pane1.control = true;
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-           jbSalir.setEnabled(false);
-           jbNuevo.setEnabled(false);
+            jbSalir.setEnabled(false);
+            jbNuevo.setEnabled(false);
 
         }
     }
@@ -320,7 +405,8 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
 //        pane2.cbxtipodocumento.setSelectedIndex(0);
 
     }
-      public void personalizarboton() {
+
+    public void personalizarboton() {
 
         jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
         jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -340,7 +426,6 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
         jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
-
     @Override
     public void keyTyped(KeyEvent ke) {
 
@@ -356,7 +441,4 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
 
     }
 
-    public static void main(String[] args) {
-        new frmEmpresa().setVisible(true);
-    }
 }

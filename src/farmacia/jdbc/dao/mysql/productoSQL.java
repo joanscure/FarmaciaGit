@@ -33,6 +33,7 @@ public class productoSQL implements productoDAO {
         PreparedStatement stat = null;
         ResultSet rs = null;
         try {
+            
             stat = conexion.prepareStatement(INSERT);
             stat.setString(1, obj.getNombreproducto());
             stat.setString(2, obj.getDescripcionproducto());
@@ -45,14 +46,14 @@ public class productoSQL implements productoDAO {
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
-            rs = stat.getGeneratedKeys();
-            if (rs.next()) {
-                obj.setIdproducto(rs.getLong(1));
-            } else {
-                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
-            }
+//            rs = stat.getGeneratedKeys();
+//            if (rs.next()) {
+//                obj.setIdproducto(rs.getLong(1));
+//            } else {
+//                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
+//            }
         } catch (SQLException ex) {
-            throw new DAOException("Error en SQL.", ex);
+            throw new DAOException("Error en SQL."+ex.getMessage());
         } finally {
             UtilSQL.cerrar(stat, rs);
         }

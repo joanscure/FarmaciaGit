@@ -6,11 +6,12 @@
 package farmacia.calculos;
 
 //import farmacia.vista.GUI;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import javax.swing.JOptionPane;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.DAOManager;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.boletacabecera;
+import farmacia.jdbc.modelado.facturacabecera;
+import java.util.List;
 
 /**
  *
@@ -87,73 +88,44 @@ public class NumComprobante {
         //ESTE STRING ES SOLO PARA MOSTRAR, NO VA EN LA BASE DE DATOS
     }
 
-    public String buscarBoleta() {
-        Connection conexion;
-        String id = "empty";
+    public String buscarBoleta() throws DAOException {
+        String num ;
+        DAOManagerSQL manager = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost/farmaciav2", "root", "");
-
-            Statement st = conexion.createStatement();
-
-            String sql = "SELECT * FROM boletacabecera";
-
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                id = rs.getString("idboleta");
-            }
-            if (id.equals("empty")) {
-                id = nuevoCodigo("B00100000000");
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            List<boletacabecera> lista = manager.getBoletaCabeceraDAO().obtenertodos();
+            System.out.println(lista.size() - 1);
+            if (lista.isEmpty()) {
+                num = "B00100000000";
             } else {
-                id = nuevoCodigo(id);
-
+                num = lista.get(lista.size() - 1).getCorrelativoboleta() +lista.get(lista.size() - 1).getNumeroboleta();
             }
-
-            id = toStringCod(id);
-            conexion.close();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "ERROR DE FORMATO");
-        } catch (Exception ex) {
-            System.err.println("Imposible realizar conexion con la BD " + ex.getMessage());
+           manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
         }
-
-        return id;
+        return num;
 
     }
 
-   public String buscarFactura() {
-        Connection conexion;
-        String id = "empty";
+    public String buscarFactura() throws DAOException {
+         String num ;
+        DAOManagerSQL manager = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conexion = DriverManager.getConnection("jdbc:mysql://localhost/farmaciav2", "root", "");
-
-            Statement st = conexion.createStatement();
-
-            String sql = "SELECT * FROM facturacabecera";
-
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                id = rs.getString("idfactura");
-            }
-            if (id.equals("empty")) {
-                id = nuevoCodigo("F00100000000");
-
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            List<facturacabecera> lista = manager.getFacturaCabeceraDAO().obtenertodos();
+            
+            if (lista.isEmpty()) {
+                num = "F00100000000";
             } else {
-
-                id = nuevoCodigo(id);
-
+                num= lista.get(lista.size() - 1).getCorrelativofactura()+ lista.get(lista.size() - 1).getNumerofactura()+ "";
             }
-           
-            id = toStringCod(id);
-            conexion.close();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "ERROR DE FORMATO");
-        } catch (Exception ex) {
-            System.err.println("Imposible realizar conexion con la BD " + ex.getMessage());
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
         }
+        return num;
 
-        return id;
     }
 
 }

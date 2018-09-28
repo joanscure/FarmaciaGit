@@ -11,6 +11,11 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empleado;
+import farmacia.jdbc.modelado.persona;
+import farmacia.jdbc.modelado.personacliente;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
@@ -24,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -71,6 +77,36 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
         tabla.setFont(new Font("Geneva", 0, 13));
         tabla.getTableHeader().setFont(fontboton);
 
+    }
+     public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
+            modelo.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+           
+            List<empleado> lista = manager.getEmpleadoDAO().obtenertodos();
+            List<persona> lista2 = manager.getPersonaDAO().obtenertodos();
+            
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = 0; j < lista2.size(); j++) {
+                    if (Long.compare(lista.get(i).getIdpersona() , lista2.get(j).getIdPersona())==0) {
+                        Object obj[] = {lista.get(i).getIdempleado(), lista.get(i).getIdpersona(), lista2.get(j).getNombre(),
+                            lista2.get(j).getAppaterno(), lista2.get(j).getApmaterno(), String.valueOf(lista2.get(j).getNumerodni()), 
+                            lista2.get(j).getPersonaedad(), lista2.get(j).getDireccion(), lista2.get(j).getTelefono(),
+                                lista.get(i).getLogin(),lista.get(i).getPassword(),lista.get(i).getIdtipotrabajador(), lista.get(i).isStatus()};
+
+                        modelo.addRow(obj);
+                    }
+                }
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
     }
 
     private void iniciar_componentes() {
@@ -120,8 +156,8 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"idempleado", "idpersona","idtipoempleado" ,"Nombre", "Apellido Paterno",
-            "Apellido Materno", "Tipo de Documento", "Numero de Documento","Edad", "Direccion", "Telefono","Nombre usuario","clave","ocupacion","estado"};
+        String[] lista = {"idempleado", "idpersona" ,"Nombre", "Apellido Paterno",
+            "Apellido Materno", "Numero de Documento","Edad", "Direccion", "Telefono","Nombre usuario","clave","ocupacion","estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -141,10 +177,11 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
             }
         }
         );
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
-        int[] tamaño = {0, 0,0, 80, 120, 120, 140, 180,100, 200, 80, 0,0,100,0};
+        int[] tamaño = {0, 0, 80, 150, 150, 180,100, 200, 80, 0,0,0,0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 1,2,11,12,14};
+        int[] columnas = {0, 1,9,10,11,12};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
          tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
@@ -161,9 +198,9 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
             } else if (buscarPor.getSelectedItem().toString().equals("Por Apellido")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 4, 5));
             } else if (buscarPor.getSelectedItem().toString().equals("Por Documento")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 7));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
             }else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 8));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 7));
             }
 
             if (tabla.getRowCount() == 0) {
@@ -191,15 +228,15 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-//            control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+////            control = true;
                 frmEmpleados.jbModificar.doClick();
 
             } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {

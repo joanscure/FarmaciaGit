@@ -47,6 +47,10 @@ public class tipotrabajador {
         status = true;
     }
 
+    public tipotrabajador() {
+        
+    }
+
     public Long getIdtipotrabajador() {
         return idtipotrabajador;
     }

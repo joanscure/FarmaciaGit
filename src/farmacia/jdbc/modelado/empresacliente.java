@@ -17,6 +17,9 @@ public class empresacliente {
         status = true;
     }
 
+    public empresacliente() {
+    }
+
     public Long getIdempresacliente() {
         return idempresacliente;
     }

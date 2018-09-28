@@ -21,7 +21,7 @@ public class empleadoSQL implements empleadoDAO {
 
     private final String INSERT = "INSERT INTO empleado(idpersona, login, password, fechaalta, idtipotrabajador, status) "
             + "VALUES (?, ?, ?, ?, ?, ?)";
-    private final String UPDATE = "UPDATE empleado SET idpersona = ?, login = ?, password = ?, fechaalta = ?, idtipotrabajador = ?, status = ? "
+    private final String UPDATE = "UPDATE empleado SET idpersona = ?, fechaalta = ?, status = ? "
             + "WHERE idempleado = ?";
     private final String DELETE = "UPDATE empleado SET status = 0 WHERE idempleado = ?";
     private final String GETALL = "SELECT * FROM empleado WHERE status = 1";//solo obtiene los activos 
@@ -98,19 +98,17 @@ public class empleadoSQL implements empleadoDAO {
         PreparedStatement stat = null;
         try {
             stat = conexion.prepareStatement(UPDATE);
-            stat.setString(2, obj.getLogin());
-            stat.setString(3, obj.getPassword());
-            stat.setDate(4, new java.sql.Date (obj.getFechaalta().getTime()));
-            stat.setLong(5, obj.getIdtipotrabajador());
-            stat.setBoolean(6, obj.isStatus());
-            stat.setLong(7, obj.getIdempleado());
+            stat.setLong(1, obj.getIdpersona());
+            stat.setDate(2, new java.sql.Date(obj.getFechaalta().getTime()));
+            stat.setBoolean(3, obj.isStatus());
+            stat.setLong(4, obj.getIdempleado());
            
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al modificar un registro.");
             }
 
         } catch (SQLException ex) {
-            throw new DAOException("Error en SQL.", ex);
+            throw new DAOException("Error en SQL."+ ex.getMessage());
         } finally {
             UtilSQL.cerrar(stat);
         }
@@ -183,6 +181,11 @@ public class empleadoSQL implements empleadoDAO {
         emp.setStatus(rs.getBoolean("status"));
         emp.setIdempleado(rs.getLong("idempleado"));
         return emp;
+    }
+
+    @Override
+    public void modificarpassword(empleado emp) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

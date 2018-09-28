@@ -5,8 +5,14 @@
  */
 package farmacia.vista.mantenimientoEmpleado;
 
+import static farmacia.calculos.EncriptacionPass.cryptMD5;
 import farmacia.calculos.Permisos;
+import farmacia.calculos.calculosTipousuario;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empleado;
+import farmacia.jdbc.modelado.persona;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -50,9 +57,9 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
     Font fontboton = new Font("Geneva", 1, 14);
     configuracionImagenes config = new configuracionImagenes();
     public static String action = "nothing";
-    Permisos acceso=new Permisos();
+    Permisos acceso = new Permisos();
 
-    public frmEmpleados() {
+    public frmEmpleados() throws DAOException {
         super("Formulario Empleado", false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Iniciar_componentes();
@@ -62,6 +69,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         perzonalizartipoletra();
         personalizarboton();
         pack();
+        pane1.actualizartabla();
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -136,11 +144,25 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == jbModificar) {
+            habilitar();
+            int fila = pane1.tabla.getSelectedRow();
+            pane2.txtidempleado.setText((Long) pane1.tabla.getValueAt(fila, 0) + "");
+            pane2.txtidpersona.setText((Long) pane1.tabla.getValueAt(fila, 1) + "");
+            pane2.txtnombre.setText((String) pane1.tabla.getValueAt(fila, 2));
+            pane2.txtapellidop.setText((String) pane1.tabla.getValueAt(fila, 3));
+            pane2.txtapellidom.setText((String) pane1.tabla.getValueAt(fila, 4));
+            pane2.txtdocumento.setText((String) pane1.tabla.getValueAt(fila, 5));
+            pane2.txtedad.setText((int) pane1.tabla.getValueAt(fila, 6) + "");
+            pane2.txtdireccion.setText((String) pane1.tabla.getValueAt(fila, 7) + "");
+            pane2.txttelefono.setText((String) pane1.tabla.getValueAt(fila, 8) + "");
+            pane2.txtuser.setEnabled(false);
+            pane2.txtpassw.setEnabled(false);
+            pane2.cbxtipodeempleado.setEnabled(false);
             action = "modificar";
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-            habilitar();
+
             jbEliminar.setEnabled(false);
             jbSalir.setEnabled(false);
             jbNuevo.setEnabled(false);
@@ -150,7 +172,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
-            pane1.control=true;
+            pane1.control = true;
             action = "nothing";
             pane1.txtBuscar.requestFocus();
 
@@ -180,58 +202,142 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
-               
-               
-               //verificar dni
-                if(pane2.txtdocumento.getText().length()!=8)
-                {
-                   JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI Valido", "Campo en Invalido", JOptionPane.ERROR_MESSAGE);
+
+                //verificar dni
+                if (pane2.txtdocumento.getText().length() != 8) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI Valido", "Campo en Invalido", JOptionPane.ERROR_MESSAGE);
                     pane2.txtdocumento.requestFocus();
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
-                 if(pane2.txtuser.getText().length()<=4)
-                {
-                   JOptionPane.showMessageDialog(null, "El nombre de usuario debe tener minimo 4 caracteres", "Campo en Invalido", JOptionPane.ERROR_MESSAGE);
+                if (pane2.txtuser.getText().length() <= 4) {
+                    JOptionPane.showMessageDialog(null, "El nombre de usuario debe tener minimo 4 caracteres", "Campo en Invalido", JOptionPane.ERROR_MESSAGE);
                     pane2.txtuser.requestFocus();
                     pane2.txtuser.setBackground(Color.yellow);
                     return;
                 }
-                  if (pane2.txtpassw.getText().isEmpty()) {
+                if (pane2.txtpassw.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña  para el Poder registrarse", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtpassw.requestFocus();
                     pane2.txtpassw.setBackground(Color.yellow);
                     return;
                 }
-                
-                //mensaje de exito
-                JOptionPane.showMessageDialog(null, "Se Registro el Empleado satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    persona p;
+                    String nombre = pane2.txtnombre.getText();
+                    String appaterno = pane2.txtapellidop.getText();
+                    String apmaterno = pane2.txtapellidom.getText();
+                    String dni = pane2.txtdocumento.getText();
+                    char[] numerodni = dni.toCharArray();
+                    int personaedad = Integer.parseInt(pane2.txtedad.getText());
+                    String direccion = pane2.txtdireccion.getText();
+                    String telefono = pane2.txttelefono.getText();
+                    p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
+
+                    empleado emp;
+                    Long tipousuario = new Long(calculosTipousuario.obtenerIdtipousuario((String) pane2.cbxtipodeempleado.getSelectedItem()));
+                    Date time = (Date) pane2.fecharegistro.getDate();
+                    String usuario = pane2.txtuser.getText();
+                    String contraseña_encrip = cryptMD5(pane2.txtpassw.getText());
+                    if (tipousuario == null) {
+                        JOptionPane.showMessageDialog(null, "algo ocurrio mal");
+
+                    }
+                    emp = new empleado(0L, tipousuario, usuario, contraseña_encrip, time);
+
+                    manager.getEmpleadoDAO().insertarNuevo(p, emp);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                    //mensaje de exito
+                    JOptionPane.showMessageDialog(null, "Se Registro el Empleado satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                    deshabilitar();
+                    pestañas.setEnabledAt(0, true);
+                    pestañas.setSelectedIndex(0);
+                } catch (DAOException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+
             } else if (action.equals("modificar")) {
-                JOptionPane.showMessageDialog(null, "Se Editó el Empleado satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    persona p;
+                    Long idp = new Long(pane2.txtidpersona.getText());
+                    Long ide = new Long(pane2.txtidempleado.getText());
+                    String nombre = pane2.txtnombre.getText();
+                    String appaterno = pane2.txtapellidop.getText();
+                    String apmaterno = pane2.txtapellidom.getText();
+                    String dni = pane2.txtdocumento.getText();
+                    char[] numerodni = dni.toCharArray();
+                    int personaedad = Integer.parseInt(pane2.txtedad.getText());
+                    String direccion = pane2.txtdireccion.getText();
+                    String telefono = pane2.txttelefono.getText();
+                    p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
+                    p.setIdPersona(idp);
+
+                    empleado emp;
+                    Long tipousuario = calculosTipousuario.obtenerIdtipousuario((String) pane2.cbxtipodeempleado.getSelectedItem());
+                    Date time = (Date) pane2.fecharegistro.getDate();
+                    String usuario = pane2.txtuser.getText();
+                    String contraseña_encrip = cryptMD5(pane2.txtpassw.getText());
+                    if (tipousuario == null) {
+                        JOptionPane.showMessageDialog(null, "algo ocurrio mal");
+
+                    }
+                    emp = new empleado(0L, tipousuario, usuario, contraseña_encrip, time);
+                    emp.setIdpersona(idp);
+                    emp.setIdempleado(ide);
+                    manager.getEmpleadoDAO().modificar(emp);
+                    manager.getPersonaDAO().modificar(p);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                    JOptionPane.showMessageDialog(null, "Se Editó el Empleado satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                    deshabilitar();
+                    pestañas.setEnabledAt(0, true);
+                    pestañas.setSelectedIndex(0);
+                } catch (DAOException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+
             }
-            pane1.control=true;
-             pane1.txtBuscar.requestFocus();
-             action = "nothing";
+            deshabilitar();
+            pane1.control = true;
+            pane1.txtBuscar.requestFocus();
+            action = "nothing";
 
         } else if (source == jbEliminar) {
-//          if(!acceso.verificarClienteEliminar())
-//          {
-//              frmpermiso from=new frmpermiso();
-//              from.setVisible(true);
-//              from.toFront();
-//              
-//          }
+            DAOManagerSQL manager = null;
+            try {
+                manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                persona p;
+                int fila = pane1.tabla.getSelectedRow();
+                Long idp = new Long((long) pane1.tabla.getValueAt(fila, 1));
+                Long ide = new Long((long) pane1.tabla.getValueAt(fila, 0));
+
+                p = new persona();
+                p.setIdPersona(idp);
+                empleado emp;
+
+                emp = new empleado();
+                emp.setIdpersona(idp);
+                emp.setIdempleado(ide);
+
+                manager.getEmpleadoDAO().eliminar(emp);
+                manager.getPersonaDAO().eliminar(p);
+                manager.cerrarConexion();
+                pane1.actualizartabla();
+            } catch (DAOException ex) {
+                System.out.println(" errorr");
+
+            }
+
             pane1.tabla.clearSelection();
             jbEliminar.setEnabled(false);
             jbModificar.setEnabled(false);
             action = "nothing";
-             pane1.txtBuscar.requestFocus();
+            pane1.txtBuscar.requestFocus();
 
         } else if (source == jbSalir) {
             deshabilitar();
@@ -242,18 +348,18 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
             jbCancelar.setEnabled(false);
             jbEliminar.setEnabled(false);
             jbGuardar.setEnabled(false);
-            pane1.control=true;
+            pane1.control = true;
 
             setVisible(false);
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
-            pane1.control=true;
+            pane1.control = true;
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-           jbSalir.setEnabled(false);
-           jbNuevo.setEnabled(false);
+            jbSalir.setEnabled(false);
+            jbNuevo.setEnabled(false);
 
         }
     }
@@ -288,12 +394,6 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         jbSalir.addActionListener(this);
         jbModificar.addActionListener(this);
 
-        pestañas.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-
-            }
-        });
-
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
     }
@@ -310,8 +410,8 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
 //        pane2.cbxtipodocumento.setEnabled(true);
         pane2.txtuser.setEnabled(true);
         pane2.txtpassw.setEnabled(true);
-         pane2.cbxtipodeempleado.setEnabled(true);
-         
+        pane2.cbxtipodeempleado.setEnabled(true);
+
         jbNuevo.setEnabled(true);
         jbEliminar.setEnabled(false);
         jbModificar.setEnabled(false);
@@ -324,7 +424,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         pane2.txtidtipodepersona.setText("");
         pane2.txtidpersona.setText("");
         pane2.txtnombre.setText("");
-         pane2.txtedad.setText("");
+        pane2.txtedad.setText("");
         pane2.txtapellidop.setText("");
         pane2.txtapellidom.setText("");
         pane2.txtdocumento.setText("");
@@ -344,19 +444,19 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         pane2.txtdocumento.setEnabled(false);
         pane2.txtdireccion.setEnabled(false);
         pane2.fecharegistro.setEnabled(false);
-         pane2.txtedad.setEnabled(false);
+        pane2.txtedad.setEnabled(false);
         pane2.txttelefono.setEnabled(false);
 //        pane2.cbxtipodocumento.setEnabled(false);
         pane2.txtuser.setEnabled(false);
         pane2.txtpassw.setEnabled(false);
-         pane2.cbxtipodeempleado.setEnabled(false);
-         
+        pane2.cbxtipodeempleado.setEnabled(false);
+
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);
         jbSalir.setEnabled(true);
         jbCancelar.setEnabled(false);
 
-       pane2.txtidempleado.setText("");
+        pane2.txtidempleado.setText("");
         pane2.txtidtipodepersona.setText("");
         pane2.txtidpersona.setText("");
         pane2.txtnombre.setText("");
@@ -372,7 +472,8 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         pane2.cbxtipodeempleado.setSelectedIndex(0);
 
     }
-      public void personalizarboton() {
+
+    public void personalizarboton() {
 
         jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
         jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -392,7 +493,6 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
-
     @Override
     public void keyTyped(KeyEvent ke) {
 
@@ -408,7 +508,12 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
 
     }
 
-    public static void main(String[] args) {
-        new frmEmpleados().setVisible(true);
+    public void actualizaritem(String[] lista) {
+        pane2.cbxtipodeempleado.removeAllItems();
+        for (int i = 0; i < lista.length; i++) {
+            pane2.cbxtipodeempleado.addItem(lista[i]);
+
+        }
+
     }
 }

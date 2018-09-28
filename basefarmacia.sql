@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-09-2018 a las 22:57:31
+-- Tiempo de generación: 28-09-2018 a las 15:08:33
 -- Versión del servidor: 10.1.34-MariaDB
--- Versión de PHP: 7.1.19
+-- Versión de PHP: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -30,13 +30,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `boletacabecera` (
   `idboletacabecera` int(11) NOT NULL,
-  `correlativoboleta` int(4) NOT NULL,
-  `numeroboleta` int(8) NOT NULL,
+  `correlativoboleta` varchar(4) NOT NULL,
+  `numeroboleta` varchar(8) NOT NULL,
   `fechaemisionboleta` date NOT NULL,
   `idpersonacliente` int(11) NOT NULL,
   `idempleado` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `boletacabecera`
+--
+
+INSERT INTO `boletacabecera` (`idboletacabecera`, `correlativoboleta`, `numeroboleta`, `fechaemisionboleta`, `idpersonacliente`, `idempleado`, `status`) VALUES
+(1, 'B001', '00000001', '2018-09-28', 1, 1, 1),
+(2, 'B001', '00000002', '2018-09-28', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -52,6 +60,16 @@ CREATE TABLE `boletadetalle` (
   `subtotal` double(5,2) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `boletadetalle`
+--
+
+INSERT INTO `boletadetalle` (`idboletadetalle`, `idboletacabecera`, `idproducto`, `cantidad`, `subtotal`, `status`) VALUES
+(1, 1, 1, 6.00, 8.34, 1),
+(2, 1, 2, 8.00, 18.88, 1),
+(3, 2, 1, 12.00, 16.68, 1),
+(4, 2, 2, 5.00, 11.80, 1);
 
 -- --------------------------------------------------------
 
@@ -84,6 +102,14 @@ CREATE TABLE `empleado` (
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `empleado`
+--
+
+INSERT INTO `empleado` (`idempleado`, `idpersona`, `login`, `password`, `fechaalta`, `idtipotrabajador`, `status`) VALUES
+(1, 1, 'admin', '81dc9bdb52d04dc20036dbd8313ed055', '2018-09-27', 1, 1),
+(3, 5, 'vender', '1a19b39699d9a03071c1478b3f425ea0', '2018-09-28', 2, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -99,6 +125,14 @@ CREATE TABLE `empresa` (
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `empresa`
+--
+
+INSERT INTO `empresa` (`idempresa`, `rucempresa`, `razonsocial`, `telefono`, `direccion`, `status`) VALUES
+(9, '12332323212', 'EMPRESASS', '121231231', '121231231', 1),
+(10, '12312835467', 'EJEMPLO', '123128381', 'ASJDAJSDJAJSD', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -112,6 +146,14 @@ CREATE TABLE `empresacliente` (
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `empresacliente`
+--
+
+INSERT INTO `empresacliente` (`idempresacliente`, `idempresa`, `fecharegistro`, `status`) VALUES
+(1, 9, '2018-09-28', 1),
+(2, 10, '2018-09-28', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -120,13 +162,20 @@ CREATE TABLE `empresacliente` (
 
 CREATE TABLE `facturacabecera` (
   `idfacturacabecera` int(11) NOT NULL,
-  `correlativofactura` int(4) NOT NULL,
-  `numerofactura` int(8) NOT NULL,
+  `correlativofactura` varchar(4) NOT NULL,
+  `numerofactura` varchar(8) NOT NULL,
   `fechaemisionfactura` date NOT NULL,
   `idempresacliente` int(11) NOT NULL,
   `idempleado` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `facturacabecera`
+--
+
+INSERT INTO `facturacabecera` (`idfacturacabecera`, `correlativofactura`, `numerofactura`, `fechaemisionfactura`, `idempresacliente`, `idempleado`, `status`) VALUES
+(5, 'F001', '00000001', '2018-09-28', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -161,6 +210,16 @@ CREATE TABLE `persona` (
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `persona`
+--
+
+INSERT INTO `persona` (`idpersona`, `nombre`, `appaterno`, `apmaterno`, `numerodni`, `personaedad`, `direccion`, `telefono`, `status`) VALUES
+(1, 'JOAN', 'LEYTON', 'CARRILLO', '76354201', 19, 'PIURA', '943542521', 1),
+(2, 'JUNIOR', 'HOLGUIN', 'RUIZ', '12312131', 21, 'PIURA', '458948484', 1),
+(3, 'CLIENTE', 'GENERICO', 'GENERICO', '00000000', 0, '', '', 1),
+(5, 'POL', 'LE', 'AC', '12313123', 12, 'TALARA', '1231321', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -172,6 +231,14 @@ CREATE TABLE `personacliente` (
   `idpersona` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `personacliente`
+--
+
+INSERT INTO `personacliente` (`idpersonacliente`, `idpersona`, `status`) VALUES
+(1, 2, 1),
+(2, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -185,11 +252,19 @@ CREATE TABLE `producto` (
   `descripcionproducto` varchar(128) NOT NULL,
   `dosisproducto` varchar(32) NOT NULL,
   `precioventa` double(5,2) NOT NULL,
-  `igv` double(2,2) NOT NULL,
+  `igv` double(5,2) NOT NULL,
   `preciofinal` double(5,2) NOT NULL,
   `stock` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`idproducto`, `nombreproducto`, `descripcionproducto`, `dosisproducto`, `precioventa`, `igv`, `preciofinal`, `stock`, `status`) VALUES
+(1, 'PRUEBA', 'EJEMPLO', '500 MG', 1.39, 18.00, 1.39, 100, 1),
+(2, 'IBUPROFENO', 'CALMAR DOLOR', '200 MG', 2.36, 18.00, 2.36, 100, 1);
 
 -- --------------------------------------------------------
 
@@ -227,6 +302,15 @@ CREATE TABLE `tipotrabajador` (
   `accedereliminartipoempleado` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `tipotrabajador`
+--
+
+INSERT INTO `tipotrabajador` (`idtipotrabajador`, `nombretipotrabajador`, `accederventas`, `accederproductos`, `accederclientes`, `accederconsultas`, `accederempleados`, `accedertipousuario`, `accedercambioclave`, `accederanulaciones`, `accedereliminarproducto`, `accedereliminarcliente`, `accedereliminarempleado`, `accedereliminartipoempleado`, `status`) VALUES
+(1, 'ADMINISTRADOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(2, 'VENDEDOR', 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
+(5, 'REGISTRADOR', 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1);
 
 --
 -- Índices para tablas volcadas
@@ -332,13 +416,13 @@ ALTER TABLE `tipotrabajador`
 -- AUTO_INCREMENT de la tabla `boletacabecera`
 --
 ALTER TABLE `boletacabecera`
-  MODIFY `idboletacabecera` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idboletacabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `boletadetalle`
 --
 ALTER TABLE `boletadetalle`
-  MODIFY `idboletadetalle` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idboletadetalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `descuento`
@@ -350,25 +434,25 @@ ALTER TABLE `descuento`
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `idempleado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idempleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `idempresa` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idempresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `empresacliente`
 --
 ALTER TABLE `empresacliente`
-  MODIFY `idempresacliente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idempresacliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `facturacabecera`
 --
 ALTER TABLE `facturacabecera`
-  MODIFY `idfacturacabecera` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idfacturacabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `facturadetalle`
@@ -380,19 +464,19 @@ ALTER TABLE `facturadetalle`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `personacliente`
 --
 ALTER TABLE `personacliente`
-  MODIFY `idpersonacliente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpersonacliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idproducto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `productodescuento`
@@ -404,7 +488,7 @@ ALTER TABLE `productodescuento`
 -- AUTO_INCREMENT de la tabla `tipotrabajador`
 --
 ALTER TABLE `tipotrabajador`
-  MODIFY `idtipotrabajador` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idtipotrabajador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas

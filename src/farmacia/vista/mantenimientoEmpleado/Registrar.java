@@ -382,7 +382,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         jlocupacion = new JLabel("Tipo de Empleado:");
         String[] tiposE = {"ADMINISTRADOR"};
         cbxtipodeempleado = new JComboBox(tiposE);
-        cbxtipodeempleado.setPreferredSize(new Dimension(100, 5));
+        cbxtipodeempleado.setPreferredSize(new Dimension(150, 5));
         paneocupacion.add(jlocupacion);
         paneocupacion.add(cbxtipodeempleado);
         paneocupacion.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));

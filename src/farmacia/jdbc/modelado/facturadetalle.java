@@ -13,8 +13,7 @@ public class facturadetalle {
     private double subtotal; //5,2
     private boolean status; 
 
-    public facturadetalle(Long idfacturacabecera, Long idproducto, double cantidad, double subtotal) {
-        this.idfacturacabecera = idfacturacabecera;
+    public facturadetalle( Long idproducto, double cantidad, double subtotal) {
         this.idproducto = idproducto;
         this.cantidad = cantidad;
         this.subtotal = subtotal;

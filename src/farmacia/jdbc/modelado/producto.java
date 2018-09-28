@@ -26,6 +26,9 @@ public class producto {
         status = true;
     }
 
+    public producto() {
+    }
+
     public Long getIdproducto() {
         return idproducto;
     }

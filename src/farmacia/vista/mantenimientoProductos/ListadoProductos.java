@@ -10,6 +10,9 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.producto;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
@@ -23,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -62,6 +66,26 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         this.regis = regis;
         iniciar_componentes();
         perzonalizartipoletra();
+    }
+     public void actualizartabla() throws DAOException {
+         for (int i = 0; i < modelo.getRowCount(); ) {
+            modelo.removeRow(i);
+         }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            List<producto> lista = manager.getProductoDAO().obtenertodos();
+            for (int i = 0; i < lista.size(); i++) {
+                Object obj[] = {lista.get(i).getIdproducto(), lista.get(i).getNombreproducto(), lista.get(i).getDescripcionproducto(), lista.get(i).getDosisproducto(), lista.get(i).getPrecioventa(), lista.get(i).getIgv(),lista.get(i).getPreciofinal(),lista.get(i).getStock(), lista.get(i).isStatus()};
+
+                modelo.addRow(obj);
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
     }
 
     public void perzonalizartipoletra() {
@@ -113,6 +137,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         tabla.addKeyListener(this);
         txtBuscar.addKeyListener(this);
         buscarPor.addKeyListener(this);
+       
 
     }
 
@@ -139,6 +164,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
             }
         }
         );
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
         int[] tamaño = { 80, 180, 180, 120, 100, 80, 80, 80, 0};
         config.fijarTamaño(tabla, tamaño);
@@ -185,15 +211,15 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-//            control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+////            control = true;
                 frmProducto.jbModificar.doClick();
 
             } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {

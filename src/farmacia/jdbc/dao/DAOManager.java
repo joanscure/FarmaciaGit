@@ -32,4 +32,5 @@ public interface DAOManager {
     
     facturaDAO getFactura();
 
+
 }

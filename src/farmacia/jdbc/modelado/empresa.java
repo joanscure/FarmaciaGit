@@ -22,6 +22,9 @@ public class empresa {
         status = true;
     }
 
+    public empresa() {
+    }
+
     public Long getIdempresa() {
         return idempresa;
     }

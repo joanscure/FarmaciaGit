@@ -36,12 +36,12 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     frmClientes regis;
 
     JPanel pane;
-    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idcliente, jlfecha, jledad;
+    JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idcliente, jledad;
     public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidcliente, txttelefono, txtdocumento, txtedad;
     JTextField txtdireccion;
 //    JComboBox cbxtipodocumento;
 //    JLabel tipodocumento;
-    JDateChooser fecharegistro;
+    
     configuracionImagenes iamgeConfig = new configuracionImagenes();
     Color c = new java.awt.Color(255, 255, 153);
     Font fontboton = new Font("Geneva", 1, 13);
@@ -108,7 +108,6 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         direccion.setFont(fontboton);
 //        tipodocumento.setFont(fontboton);
         idcliente.setFont(fontboton);
-        jlfecha.setFont(fontboton);
         jledad.setFont(fontboton);
 
         txtnombre.setFont(fontboton);
@@ -120,7 +119,6 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         txtdocumento.setFont(fontboton);
         txtdireccion.setFont(fontboton);
 //        cbxtipodocumento.setFont(fontboton);
-        fecharegistro.setFont(fontboton);
         txtedad.setFont(fontboton);
     }
 
@@ -298,12 +296,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         panelscroll.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         //quinto 
-        JPanel panefecha = new JPanel(new GridLayout(1, 2));
-        jlfecha = new JLabel("Fecha de Registro:");
-        fecharegistro = new JDateChooser();
-        panefecha.add(jlfecha);
-        panefecha.add(fecharegistro);
-        panefecha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+       
 
         JPanel panetelefono = new JPanel(new GridLayout(1, 2));
         telefono = new JLabel("Telefono:");
@@ -342,9 +335,8 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         cuarto.setBackground(c);
 
         JPanel quinto = new JPanel(new BorderLayout());
-        quinto.add(panefecha, BorderLayout.WEST);
-        panefecha.setBackground(c);
-        quinto.add(panetelefono, BorderLayout.EAST);
+        
+        quinto.add(panetelefono, BorderLayout.WEST);
         panetelefono.setBackground(c);
         quinto.setBackground(c);
 

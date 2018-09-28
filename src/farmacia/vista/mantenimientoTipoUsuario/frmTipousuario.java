@@ -8,6 +8,9 @@ package farmacia.vista.mantenimientoTipoUsuario;
 import farmacia.vista.mantenimientoProductos.*;
 import farmacia.vista.mantenimientoCliente.*;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.tipotrabajador;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbNuevo;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
 import java.awt.BorderLayout;
@@ -47,14 +50,12 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
     public Registrar pane2;
     public static JButton jbNuevo, jbEliminar, jbGuardar, jbModificar, jbSalir, jbCancelar;
     JToolBar toolBar;
-
-    public String nombreAlm, telefonoAlm, direccionAlm;
     private Color c = Color.white;
     Font fontboton = new Font("Geneva", 1, 14);
     configuracionImagenes config = new configuracionImagenes();
     public static String action = "nothing";
 
-    public frmTipousuario() {
+    public frmTipousuario() throws DAOException {
         super("Formulario Tipo de Usuario", false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Iniciar_componentes();
@@ -64,6 +65,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         perzonalizartipoletra();
         personalizarboton();
         pack();
+        pane1.actualizartabla();
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -138,11 +140,29 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == jbModificar) {
+            habilitar();
+            int fila = pane1.tabla.getSelectedRow();
+            pane2.txtidtipouser.setText((Long) pane1.tabla.getValueAt(fila, 0) + "");
+            pane2.txtdescripcion.setText((String) pane1.tabla.getValueAt(fila, 1));
+
+            pane2.aventas.setSelected((boolean) pane1.tabla.getValueAt(fila, 2));
+            pane2.aproductos.setSelected((boolean) pane1.tabla.getValueAt(fila, 3));
+            pane2.aclientes.setSelected((boolean) pane1.tabla.getValueAt(fila, 4));
+            pane2.aconsultas.setSelected((boolean) pane1.tabla.getValueAt(fila, 5));
+            pane2.aempleados.setSelected((boolean) pane1.tabla.getValueAt(fila, 6));
+            pane2.atiposusuario.setSelected((boolean) pane1.tabla.getValueAt(fila, 7));
+            pane2.acambioclave.setSelected((boolean) pane1.tabla.getValueAt(fila, 8));
+            pane2.aanularventas.setSelected((boolean) pane1.tabla.getValueAt(fila, 9));
+            pane2.aeliminarproducto.setSelected((boolean) pane1.tabla.getValueAt(fila, 10));
+            pane2.aelmininartipotrabajor.setSelected((boolean) pane1.tabla.getValueAt(fila, 11));
+            pane2.aeliminarusuario.setSelected((boolean) pane1.tabla.getValueAt(fila, 12));
+            pane2.aeliminarclientes.setSelected((boolean) pane1.tabla.getValueAt(fila, 13));
+
             action = "modificar";
             pestañas.setSelectedIndex(1);
             pane2.txtdescripcion.requestFocus();
             pestañas.setEnabledAt(0, false);
-            habilitar();
+
             jbEliminar.setEnabled(false);
             jbSalir.setEnabled(false);
             jbNuevo.setEnabled(false);
@@ -171,13 +191,64 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
                     return;
                 }
 
-                //verificar dni
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    String descripcion = pane2.txtdescripcion.getText();
+                    boolean aventas = pane2.aventas.isSelected();
+                    boolean aproductos = pane2.aproductos.isSelected();
+                    boolean aclientes = pane2.aclientes.isSelected();
+                    boolean aconsultas = pane2.aconsultas.isSelected();
+                    boolean ampleados = pane2.aempleados.isSelected();
+                    boolean atiposusuario = pane2.atiposusuario.isSelected();
+                    boolean acambioclave = pane2.acambioclave.isSelected();
+                    boolean aanularventas = pane2.aanularventas.isSelected();
+                    boolean aeliminarproducto = pane2.aeliminarproducto.isSelected();
+                    boolean aelmininartipotrabajor = pane2.aelmininartipotrabajor.isSelected();
+                    boolean aeliminarusuario = pane2.aeliminarusuario.isSelected();
+                    boolean aeliminarclientes = pane2.aeliminarclientes.isSelected();
+
+                    tipotrabajador t = new tipotrabajador(descripcion, aventas, aproductos, aclientes, aconsultas, ampleados, atiposusuario, acambioclave, aanularventas, aeliminarproducto, aeliminarclientes, aeliminarusuario, aelmininartipotrabajor);
+                    manager.getTipoTrabajadorDAO().insertar(t);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                } catch (DAOException ex) {
+                    System.out.println(" error" + ex.getMessage());
+
+                }
                 //mensaje de exito
                 JOptionPane.showMessageDialog(null, "Se Registro el Tipo de trabajador satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
                 deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             } else if (action.equals("modificar")) {
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    String descripcion = pane2.txtdescripcion.getText();
+                    boolean aventas = pane2.aventas.isSelected();
+                    boolean aproductos = pane2.aproductos.isSelected();
+                    boolean aclientes = pane2.aclientes.isSelected();
+                    boolean aconsultas = pane2.aconsultas.isSelected();
+                    boolean ampleados = pane2.aempleados.isSelected();
+                    boolean atiposusuario = pane2.atiposusuario.isSelected();
+                    boolean acambioclave = pane2.acambioclave.isSelected();
+                    boolean aanularventas = pane2.aanularventas.isSelected();
+                    boolean aeliminarproducto = pane2.aeliminarproducto.isSelected();
+                    boolean aelmininartipotrabajor = pane2.aelmininartipotrabajor.isSelected();
+                    boolean aeliminarusuario = pane2.aeliminarusuario.isSelected();
+                    boolean aeliminarclientes = pane2.aeliminarclientes.isSelected();
+
+                    tipotrabajador t = new tipotrabajador(descripcion, aventas, aproductos, aclientes, aconsultas, ampleados, atiposusuario, acambioclave, aanularventas, aeliminarproducto, aeliminarclientes, aeliminarusuario, aelmininartipotrabajor);
+                    t.setIdtipotrabajador(new Long(pane2.txtidtipouser.getText()));
+                    manager.getTipoTrabajadorDAO().modificar(t);
+
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                } catch (DAOException ex) {
+                    System.out.println(" error" + ex.getMessage());
+
+                }
                 JOptionPane.showMessageDialog(null, "Se Editó el Tipo de trabajador satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
                 deshabilitar();
                 pestañas.setEnabledAt(0, true);
@@ -188,6 +259,21 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
             action = "nothing";
 
         } else if (source == jbEliminar) {
+            DAOManagerSQL manager = null;
+            try {
+                manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                int fila = pane1.tabla.getSelectedRow();
+                Long idtipo = new Long((Long) pane1.tabla.getValueAt(fila, 0));
+                tipotrabajador t = new tipotrabajador();
+                t.setIdtipotrabajador(idtipo);
+                manager.getTipoTrabajadorDAO().eliminar(t);
+
+                manager.cerrarConexion();
+                pane1.actualizartabla();
+            } catch (DAOException ex) {
+                System.out.println(" error" + ex.getMessage());
+
+            }
 
             pane1.tabla.clearSelection();
             jbEliminar.setEnabled(false);
@@ -369,7 +455,4 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
 
     }
 
-    public static void main(String[] args) {
-        new frmTipousuario().setVisible(true);
-    }
 }

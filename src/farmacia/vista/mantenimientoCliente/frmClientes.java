@@ -5,8 +5,15 @@
  */
 package farmacia.vista.mantenimientoCliente;
 
+import static farmacia.calculos.EncriptacionPass.cryptMD5;
 import farmacia.calculos.Permisos;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empleado;
+import farmacia.jdbc.modelado.persona;
+import farmacia.jdbc.modelado.personacliente;
+import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmpermiso;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,6 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -51,9 +59,9 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
     Font fontboton = new Font("Geneva", 1, 14);
     configuracionImagenes config = new configuracionImagenes();
     public static String action = "nothing";
-    Permisos acceso=new Permisos();
+    Permisos acceso = new Permisos();
 
-    public frmClientes() {
+    public frmClientes() throws DAOException {
         super("Formulario Clientes", false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Iniciar_componentes();
@@ -63,6 +71,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         perzonalizartipoletra();
         personalizarboton();
         pack();
+        pane1.actualizartabla();
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -137,11 +146,22 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == jbModificar) {
+            habilitar();
+            int fila = pane1.tabla.getSelectedRow();
+            pane2.txtidcliente.setText((Long) pane1.tabla.getValueAt(fila, 0) + "");
+            pane2.txtidpersona.setText((Long) pane1.tabla.getValueAt(fila, 1) + "");
+            pane2.txtnombre.setText((String) pane1.tabla.getValueAt(fila, 2));
+            pane2.txtapellidop.setText((String) pane1.tabla.getValueAt(fila, 3));
+            pane2.txtapellidom.setText((String) pane1.tabla.getValueAt(fila, 4));
+            pane2.txtdocumento.setText((String) pane1.tabla.getValueAt(fila, 5));
+            pane2.txtedad.setText((int) pane1.tabla.getValueAt(fila, 6) + "");
+            pane2.txtdireccion.setText((String) pane1.tabla.getValueAt(fila, 7) + "");
+            pane2.txttelefono.setText((String) pane1.tabla.getValueAt(fila, 8) + "");
             action = "modificar";
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-            habilitar();
+
             jbEliminar.setEnabled(false);
             jbSalir.setEnabled(false);
             jbNuevo.setEnabled(false);
@@ -151,7 +171,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
-            pane1.control=true;
+            pane1.control = true;
             action = "nothing";
             pane1.txtBuscar.requestFocus();
 
@@ -181,43 +201,121 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
-                
+
                 //verificar dni
-                if(pane2.txtdocumento.getText().length()!=8)
-                {
-                   JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+                if (pane2.txtdocumento.getText().length() != 8) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtdocumento.requestFocus();
                     pane2.txtdocumento.setBackground(Color.yellow);
                     return;
                 }
+
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    persona p;
+                    String nombre = pane2.txtnombre.getText();
+                    String appaterno = pane2.txtapellidop.getText();
+                    String apmaterno = pane2.txtapellidom.getText();
+                    String dni = pane2.txtdocumento.getText();
+                    char[] numerodni = dni.toCharArray();
+                    int personaedad =0;
+                    try {
+                     personaedad = Integer.parseInt(pane2.txtedad.getText());
+                    }catch(NumberFormatException ne)
+                    {
+                    }
+                    String direccion = pane2.txtdireccion.getText();
+                    String telefono = pane2.txttelefono.getText();
+                    p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
+
+                    personacliente cliente;
+
+                    cliente = new personacliente(0L);
+
+                    manager.getPersonaClienteDAO().ingresarNuevo(cliente, p);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                } catch (DAOException ex) {
+                    System.out.println(" errorr");
+
+                }
                 //mensaje de exito
                 JOptionPane.showMessageDialog(null, "Se Registro el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
+                 deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             } else if (action.equals("modificar")) {
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    persona p;
+                    Long idp = new Long(pane2.txtidpersona.getText());
+                    Long idc = new Long(pane2.txtidcliente.getText());
+                    String nombre = pane2.txtnombre.getText();
+                    String appaterno = pane2.txtapellidop.getText();
+                    String apmaterno = pane2.txtapellidom.getText();
+                    String dni = pane2.txtdocumento.getText();
+                    char[] numerodni = dni.toCharArray();
+                    int personaedad = Integer.parseInt(pane2.txtedad.getText());
+                    String direccion = pane2.txtdireccion.getText();
+                    String telefono = pane2.txttelefono.getText();
+                    p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
+                    p.setIdPersona(idp);
+                    personacliente cliente;
+
+                    cliente = new personacliente(0L);
+                    cliente.setIdpersona(idp);
+                    cliente.setIdpersonacliente(idc);
+
+                    manager.getPersonaClienteDAO().modificar(cliente);
+                    manager.getPersonaDAO().modificar(p);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                } catch (DAOException ex) {
+                    System.out.println(" errorr");
+
+                }
                 JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
+                 deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             }
-            pane1.control=true;
-             pane1.txtBuscar.requestFocus();
-             action = "nothing";
+            deshabilitar();
+            pane1.control = true;
+            pane1.txtBuscar.requestFocus();
+            action = "nothing";
 
         } else if (source == jbEliminar) {
-//          if(!acceso.verificarClienteEliminar())
-//          {
-//              frmpermiso from=new frmpermiso();
-//              from.setVisible(true);
-//              from.toFront();
-//              
-//          }
+            DAOManagerSQL manager = null;
+            try {
+                manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                persona p;
+                int fila = pane1.tabla.getSelectedRow();
+                Long idp = new Long((long) pane1.tabla.getValueAt(fila, 1));
+                Long idc = new Long((long) pane1.tabla.getValueAt(fila, 0));
+
+                p = new persona();
+                p.setIdPersona(idp);
+                personacliente cliente;
+
+                cliente = new personacliente();
+                cliente.setIdpersona(idp);
+                cliente.setIdpersonacliente(idc);
+
+                manager.getPersonaClienteDAO().eliminar(cliente);
+                manager.getPersonaDAO().eliminar(p);
+                manager.cerrarConexion();
+                pane1.actualizartabla();
+            } catch (DAOException ex) {
+                System.out.println(" errorr");
+
+            }
             pane1.tabla.clearSelection();
             jbEliminar.setEnabled(false);
             jbModificar.setEnabled(false);
             action = "nothing";
-             pane1.txtBuscar.requestFocus();
+            pane1.txtBuscar.requestFocus();
 
         } else if (source == jbSalir) {
             deshabilitar();
@@ -228,18 +326,18 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
             jbCancelar.setEnabled(false);
             jbEliminar.setEnabled(false);
             jbGuardar.setEnabled(false);
-            pane1.control=true;
+            pane1.control = true;
 
             setVisible(false);
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
-            pane1.control=true;
+            pane1.control = true;
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-           jbSalir.setEnabled(false);
-           jbNuevo.setEnabled(false);
+            jbSalir.setEnabled(false);
+            jbNuevo.setEnabled(false);
 
         }
     }
@@ -274,12 +372,6 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         jbSalir.addActionListener(this);
         jbModificar.addActionListener(this);
 
-        pestañas.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent evt) {
-
-            }
-        });
-
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
     }
@@ -290,9 +382,8 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtapellidom.setEnabled(true);
         pane2.txtdocumento.setEnabled(true);
         pane2.txtdireccion.setEnabled(true);
-        pane2.fecharegistro.setEnabled(true);
         pane2.txttelefono.setEnabled(true);
-         pane2.txtedad.setEnabled(true);
+        pane2.txtedad.setEnabled(true);
 //        pane2.cbxtipodocumento.setEnabled(true);
 
         jbNuevo.setEnabled(true);
@@ -305,7 +396,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtidcliente.setText("");
         pane2.txtidpersona.setText("");
         pane2.txtnombre.setText("");
-          pane2.txtedad.setText("");
+        pane2.txtedad.setText("");
         pane2.txtapellidop.setText("");
         pane2.txtapellidom.setText("");
         pane2.txtdocumento.setText("");
@@ -320,9 +411,8 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtapellidop.setEnabled(false);
         pane2.txtapellidom.setEnabled(false);
         pane2.txtdocumento.setEnabled(false);
-         pane2.txtedad.setEnabled(false);
+        pane2.txtedad.setEnabled(false);
         pane2.txtdireccion.setEnabled(false);
-        pane2.fecharegistro.setEnabled(false);
         pane2.txttelefono.setEnabled(false);
 //        pane2.cbxtipodocumento.setEnabled(false);
 
@@ -337,13 +427,14 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtapellidop.setText("");
         pane2.txtapellidom.setText("");
         pane2.txtdocumento.setText("");
-          pane2.txtedad.setText("");
+        pane2.txtedad.setText("");
         pane2.txtdireccion.setText("");
         pane2.txttelefono.setText("");
 //        pane2.cbxtipodocumento.setSelectedIndex(0);
 
     }
-      public void personalizarboton() {
+
+    public void personalizarboton() {
 
         jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
         jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -363,7 +454,6 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
-
     @Override
     public void keyTyped(KeyEvent ke) {
 
@@ -379,7 +469,5 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
 
     }
 
-    public static void main(String[] args) {
-        new frmClientes().setVisible(true);
-    }
+    
 }

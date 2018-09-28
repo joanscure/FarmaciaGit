@@ -6,6 +6,11 @@
 package farmacia.vista.mantenimientoProductos;
 
 import farmacia.calculos.configuracionImagenes;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.DAOManager;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.producto;
+import farmacia.vista.frmVentas;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +19,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -32,7 +43,7 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmProducto extends JInternalFrame implements ActionListener, KeyListener {
+public class frmProducto extends JInternalFrame implements ActionListener, KeyListener{
 
     public JTabbedPane pestañas;
     public ListadoProductos pane1;
@@ -46,7 +57,7 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
     configuracionImagenes config = new configuracionImagenes();
     public static String action = "nothing";
 
-    public frmProducto() {
+    public frmProducto() throws DAOException {
         super("Formulario Productos", false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Iniciar_componentes();
@@ -55,6 +66,7 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
         deshabilitar();
         perzonalizartipoletra();
         personalizarboton();
+         pane1.actualizartabla();
         pack();
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
@@ -130,11 +142,21 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == jbModificar) {
+             habilitar();
+             int fila = pane1.tabla.getSelectedRow();
+           pane2.txtidproducto.setText((Long) pane1.tabla.getValueAt(fila, 0)+"");
+            pane2.txtnombre.setText((String) pane1.tabla.getValueAt(fila, 1));
+            pane2.txtdescripcion.setText((String) pane1.tabla.getValueAt(fila, 2));
+            pane2.txtdosis.setText((String) pane1.tabla.getValueAt(fila, 3));
+            pane2.txtprecioventa.setText((Double) pane1.tabla.getValueAt(fila, 4)+"");
+            pane2.txtigv.setText((Double) pane1.tabla.getValueAt(fila, 5)+"");
+            pane2.txtpreciofinal.setText((Double) pane1.tabla.getValueAt(fila, 6)+"");
+            pane2.txtstock.setText((int) pane1.tabla.getValueAt(fila, 7)+"");
             action = "modificar";
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-            habilitar();
+           
             jbEliminar.setEnabled(false);
             jbSalir.setEnabled(false);
             jbNuevo.setEnabled(false);
@@ -168,30 +190,89 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
                     pane2.txtprecioventa.setBackground(Color.yellow);
                     return;
                 }
-                 if (pane2.txtstock.getText().isEmpty()) {
+                if (pane2.txtstock.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Debe ingresar El Stock del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtstock.requestFocus();
                     pane2.txtstock.setBackground(Color.yellow);
                     return;
                 }
 
-                //verificar dni
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    String nombre = pane2.txtnombre.getText();
+                    String descripcion = pane2.txtdescripcion.getText();
+                    String dosis = pane2.txtdosis.getText();
+                    double precioventa = Double.parseDouble(pane2.txtprecioventa.getText());
+                    double igv = Double.parseDouble(pane2.txtigv.getText());
+                    double preciofinal = Double.parseDouble(pane2.txtpreciofinal.getText());
+                    int stock = Integer.parseInt(pane2.txtstock.getText());
+                    
+                    producto p=new producto(nombre, descripcion, dosis, precioventa, igv, preciofinal, stock);
+                    manager.getProductoDAO().insertar(p);
+                    manager.cerrarConexion();
+                     pane1.actualizartabla();
+                } catch (DAOException ex) {
+                    System.out.println(" error"+ ex.getMessage());
+                   
+                }
+
                 //mensaje de exito
                 JOptionPane.showMessageDialog(null, "Se Registro el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
+                
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             } else if (action.equals("modificar")) {
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    Long idproducto= new Long(pane2.txtidproducto.getText());
+                    String nombre = pane2.txtnombre.getText();
+                    String descripcion = pane2.txtdescripcion.getText();
+                    String dosis = pane2.txtdosis.getText();
+                    double precioventa = Double.parseDouble(pane2.txtprecioventa.getText());
+                    double igv = Double.parseDouble(pane2.txtigv.getText());
+                    double preciofinal = Double.parseDouble(pane2.txtpreciofinal.getText());
+                    int stock = Integer.parseInt(pane2.txtstock.getText());
+                    
+                    producto p=new producto(nombre, descripcion, dosis, precioventa, igv, preciofinal, stock);
+                    p.setIdproducto(idproducto);
+                    manager.getProductoDAO().modificar(p);
+                    manager.cerrarConexion();
+                     pane1.actualizartabla();
+                } catch (DAOException ex) {
+                        System.out.println(" errorr");
+                   
+                }
                 JOptionPane.showMessageDialog(null, "Se Editó el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             }
+            //actualizar taba
+           deshabilitar();
             pane1.control = true;
             pane1.txtBuscar.requestFocus();
             action = "nothing";
 
         } else if (source == jbEliminar) {
+             DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    int fila = pane1.tabla.getSelectedRow();
+                    Long idproducto= new Long((long) pane1.tabla.getValueAt(fila, 0));
+                    producto p=new producto();
+                    p.setIdproducto(idproducto);
+                    manager.getProductoDAO().eliminar(p);
+                    manager.cerrarConexion();
+                     pane1.actualizartabla();
+                } catch (DAOException ex) {
+                    try {
+                        throw new DAOException("error al insertar producto");
+                    } catch (DAOException ex1) {
+                        System.out.println(" errorr");
+                    }
+                   
+                }
 
             pane1.tabla.clearSelection();
             jbEliminar.setEnabled(false);
@@ -218,8 +299,8 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-             jbSalir.setEnabled(false);
-           jbNuevo.setEnabled(false);
+            jbSalir.setEnabled(false);
+            jbNuevo.setEnabled(false);
         }
     }
 
@@ -252,7 +333,7 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
         jbEliminar.addActionListener(this);
         jbSalir.addActionListener(this);
         jbModificar.addActionListener(this);
-
+         
         pestañas.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent evt) {
 
@@ -315,7 +396,8 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
         pane2.txtstock.setText("");
 
     }
-      public void personalizarboton() {
+
+    public void personalizarboton() {
 
         jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
         jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -335,7 +417,6 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
         jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
-
     @Override
     public void keyTyped(KeyEvent ke) {
 
@@ -351,7 +432,4 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
 
     }
 
-    public static void main(String[] args) {
-        new frmProducto().setVisible(true);
-    }
 }

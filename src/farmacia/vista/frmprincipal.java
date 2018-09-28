@@ -6,6 +6,7 @@
 package farmacia.vista;
 
 import farmacia.calculos.configuracionImagenes;
+import farmacia.jdbc.dao.DAOException;
 import farmacia.vista.mantenimientoCliente.frmClientes;
 import farmacia.vista.mantenimientoEmpleado.frmEmpleados;
 import farmacia.vista.mantenimientoEmpresa.frmEmpresa;
@@ -18,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -30,8 +33,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
     public static JDesktopPane desktopPane;
     private JMenuBar barra;
-    String jlidpersona, jlidempleado;
-    String jlocupacion;
+    public static Long jlidpersona, jlidempleado;
+    public static Long jlocupacion;
     Font fontgeneral = new Font("Geneva", 1, 15);
     Font fontitem = new Font("Geneva", 1, 13);
     frmClientes frmclientes;
@@ -42,8 +45,9 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     frmEmpresa frmempresa;
     configuracionImagenes imageconfig = new configuracionImagenes();
     frmusuariologin login;
+    boolean eproducto, ecliente, eempleado, etipousuario;
 
-    public frmprincipal(frmusuariologin login) {
+    public frmprincipal(frmusuariologin login) throws DAOException {
 
         this.login = login;
         this.setResizable(false);
@@ -65,6 +69,41 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         setVisible(true);
         perzonalizartipoletra();
+
+    }
+
+    public void permisos() {
+        int posicion;
+        boolean[] permiso = new boolean[12];
+        for (int i = 0; i < frmtipousuario.pane1.tabla.getRowCount(); i++) {
+            if (Long.compare(jlocupacion, (Long) frmtipousuario.pane1.tabla.getValueAt(i, 0)) == 0) {
+                posicion = i;
+                permiso[0] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 2);
+                
+                permiso[1] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 3);
+                permiso[2] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 4);
+                permiso[3] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 5);
+                permiso[4] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 6);
+                permiso[5] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 7);
+                permiso[6] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 8);
+
+                permiso[7] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 9);
+                permiso[8] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 10);
+                permiso[9] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 11);
+                permiso[10] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 12);
+                permiso[11] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 13);
+
+            }
+        }
+        iventas.setEnabled(permiso[0]);
+        iproductos.setEnabled(permiso[1]);
+        iusuarios_accesos.setEnabled(permiso[4]);
+        itipousuario.setEnabled(permiso[5]);
+        icambiarPass.setEnabled(permiso[6]);
+        ianularventas.setEnabled(permiso[7]);
+        iclientes.setEnabled(permiso[2]);
+        mconsultas.setEnabled(permiso[3]);
+        iempresa.setEnabled(permiso[2]);
 
     }
 
@@ -206,7 +245,11 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         Object source = e.getSource();
         if (source == iclientes) {
             if (frmclientes == null) {
-                frmclientes = new frmClientes();
+                try {
+                    frmclientes = new frmClientes();
+                } catch (DAOException ex) {
+                    System.out.println("error" + ex.getMessage());
+                }
                 desktopPane.add(frmclientes);
             }
 
@@ -247,7 +290,11 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         } else if (source == iproductos) {
             if (frmproducto == null) {
-                frmproducto = new frmProducto();
+                try {
+                    frmproducto = new frmProducto();
+                } catch (DAOException ex) {
+                    System.out.println("error" + ex.getMessage());
+                }
                 desktopPane.add(frmproducto);
             }
 
@@ -263,13 +310,20 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         } else if (source == iusuarios_accesos) {
             if (frmempleados == null) {
-                frmempleados = new frmEmpleados();
-                desktopPane.add(frmempleados);
+                try {
+                    frmempleados = new frmEmpleados();
+                    desktopPane.add(frmempleados);
+                } catch (DAOException ex) {
+                    System.out.println("error" + ex.getMessage());
+                }
+                
             }
 
             frmempleados.toFront();
             frmempleados.setVisible(true);
             frmempleados.pane1.txtBuscar.requestFocus();
+           
+            actualizaritem();
 
         } else if (source == iventas) {
             if (frmventas == null) {
@@ -283,8 +337,13 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         } else if (source == iempresa) {
 
             if (frmempresa == null) {
-                frmempresa = new frmEmpresa();
-                desktopPane.add(frmempresa);
+                try {
+                    frmempresa = new frmEmpresa();
+                     desktopPane.add(frmempresa);
+                } catch (DAOException ex) {
+                     System.out.println("error" + ex.getMessage());
+                }
+               
             }
 
             frmempresa.toFront();
@@ -316,6 +375,14 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
     @Override
     public void mouseExited(MouseEvent e) {
+    }
+
+    private void actualizaritem() {
+        String list[]=new String[frmtipousuario.pane1.tabla.getRowCount()];
+         for (int i = 0; i < list.length; i++) {
+                list[i]=(String) frmtipousuario.pane1.tabla.getValueAt(i, 1);
+            }
+        frmempleados.actualizaritem(list);
     }
 
 }

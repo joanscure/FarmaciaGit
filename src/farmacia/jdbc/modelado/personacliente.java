@@ -14,6 +14,9 @@ public class personacliente {
         status = true;
     }
 
+    public personacliente() {
+    }
+
     public Long getIdpersonacliente() {
         return idpersonacliente;
     }

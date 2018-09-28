@@ -10,6 +10,10 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.persona;
+import farmacia.jdbc.modelado.personacliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +28,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -84,6 +89,35 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
         });
     }
 
+    public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
+            modelo.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+
+            List<personacliente> lista = manager.getPersonaClienteDAO().obtenertodos();
+            List<persona> lista2 = manager.getPersonaDAO().obtenertodos();
+
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = 0; j < lista2.size(); j++) {
+                    if (Long.compare(lista.get(i).getIdpersona(), lista2.get(j).getIdPersona()) == 0) {
+                        Object obj[] = {lista.get(i).getIdpersonacliente(), lista.get(i).getIdpersona(), lista2.get(j).getNombre(),
+                            lista2.get(j).getAppaterno(), lista2.get(j).getApmaterno(), String.valueOf(lista2.get(j).getNumerodni()), lista2.get(j).getPersonaedad(), lista2.get(j).getDireccion(), lista2.get(j).getTelefono(), lista.get(i).isStatus()};
+
+                        modelo.addRow(obj);
+                    }
+                }
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
+    }
+
     public void perzonalizartipoletra() {
         buscar.setFont(fontboton);
         txtBuscar.setFont(fontboton);
@@ -142,7 +176,7 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
     public JScrollPane clientes_tabla() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI","Edad", "Direccion", "Telefono", "Fecha de Registro", "estado"};
+        String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI", "Edad", "Direccion", "Telefono", "estado"};
         modelo = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -156,22 +190,20 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
-        tabla.getSelectionModel().addListSelectionListener(e -> {
+         tabla.getSelectionModel().addListSelectionListener(e -> {
             if (control) {
                 agregar.setEnabled(true);
             }
         }
-        );
-
-        Object[] l1 = {"123", "123", "joan", "leyton", "carrillo", "32324234",19 ,"piura", "12312312", "09/13/2012"};
-        modelo.addRow(l1);
+);
+         tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
-        int[] tamaño = {0, 0, 150, 150, 150, 180,100, 200, 80, 130, 0};
+        int[] tamaño = {0, 0, 150, 150, 150, 180, 100, 200, 80, 0};
         config.fijarTamaño(tabla, tamaño);
-        int[] columnas = {0, 1, 10};
+        int[] columnas = {0, 1, 9};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
         tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
@@ -186,7 +218,7 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3, 4));
             } else if (buscarPor.getSelectedItem().toString().equals("Por DNI")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 5));
-            }else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
+            } else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
             }
 
@@ -204,9 +236,10 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
             dispose();
 
         } else if (source == agregar) {
-            frmVentas.txtidcliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0));
+            frmVentas.txtidcliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0).toString());
             frmVentas.txtnombrecliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 2) + " " + (String) modelo.getValueAt(tabla.getSelectedRow(), 3));
             tabla.clearSelection();
+            txtBuscar.requestFocus();
         }
 
     }
@@ -224,15 +257,15 @@ public class frmvistalistadocliente extends JFrame implements ActionListener, Ke
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-//            control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+////            control = true;
                 agregar.doClick();
 
             }

@@ -7,4 +7,5 @@ import java.util.List;
 public interface empleadoDAO extends DAO<empleado, Long> {
 
     void insertarNuevo(persona per, empleado emp) throws DAOException;
+    void modificarpassword(empleado emp)throws DAOException;
 }

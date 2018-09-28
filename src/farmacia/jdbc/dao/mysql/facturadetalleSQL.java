@@ -126,7 +126,8 @@ public class facturadetalleSQL implements facturadetalleDAO {
         Long idproducto=rs.getLong("idproducto");
         double cantidad=rs.getDouble("cantidad");
         double subtotal=rs.getDouble("subtotal");
-        f=new facturadetalle(idfacturacabecera,idproducto, cantidad, subtotal);
+        f=new facturadetalle(idproducto, cantidad, subtotal);
+        f.setIdfacturacabecera(idfacturacabecera);
         f.setIdfacturadetalle(rs.getLong("idboletadetalle"));
         f.setStatus(rs.getBoolean("status"));
         return f;

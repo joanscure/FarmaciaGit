@@ -11,6 +11,10 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empresa;
+import farmacia.jdbc.modelado.empresacliente;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
@@ -24,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -75,6 +80,33 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
 
     }
 
+     public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
+            modelo.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+           
+            List<empresacliente> lista = manager.getEmpresaClienteDAO().obtenertodos();
+            List<empresa> lista2 = manager.getEmpresaDAO().obtenertodos();
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = 0; j < lista2.size(); j++) {
+                    if (Long.compare(lista.get(i).getIdempresa(), lista2.get(j).getIdempresa())==0) {
+                        Object obj[] = {lista.get(i).getIdempresacliente(), lista.get(i).getIdempresa(), lista2.get(j).getRazonsocial(),
+                            String.valueOf(lista2.get(j).getRucempresa()), lista2.get(j).getDireccion(), lista2.get(j).getTelefono(),  lista.get(j).getFecharegistro(), lista.get(i).isStatus()};
+
+                        modelo.addRow(obj);
+                    }
+                }
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
+    }
     private void iniciar_componentes() {
         tabla = new JTable(20, 20);
 
@@ -141,6 +173,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
             }
         }
         );
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
         int[] tamaño = {0, 0, 150, 150, 250, 150, 150, 0};
         config.fijarTamaño(tabla, tamaño);
@@ -187,15 +220,15 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-//            control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+////            control = true;
                 frmEmpresa.jbModificar.doClick();
 
             } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {

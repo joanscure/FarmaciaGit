@@ -10,6 +10,10 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empresa;
+import farmacia.jdbc.modelado.empresacliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +28,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -85,6 +90,34 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
             }
 
         });
+    }
+
+    public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
+            modelo.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+
+            List<empresacliente> lista = manager.getEmpresaClienteDAO().obtenertodos();
+            List<empresa> lista2 = manager.getEmpresaDAO().obtenertodos();
+            for (int i = 0; i < lista.size(); i++) {
+                for (int j = 0; j < lista2.size(); j++) {
+                    if (Long.compare(lista.get(i).getIdempresa(), lista2.get(j).getIdempresa()) == 0) {
+                        Object obj[] = {lista.get(i).getIdempresacliente(), lista.get(i).getIdempresa(), lista2.get(j).getRazonsocial(),
+                            String.valueOf(lista2.get(j).getRucempresa()), lista2.get(j).getDireccion(), lista2.get(j).getTelefono(), lista.get(j).getFecharegistro(), lista.get(i).isStatus()};
+
+                        modelo.addRow(obj);
+                    }
+                }
+
+            }
+
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
     }
 
     public void perzonalizartipoletra() {
@@ -160,13 +193,14 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
             }
         }
         );
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
         int[] tamaño = {0, 0, 150, 150, 250, 150, 150, 0};
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {0, 1, 7};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
         tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
@@ -195,9 +229,10 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
             dispose();
 
         } else if (source == agregar) {
-            frmVentas.txtidcliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0));
+            frmVentas.txtidcliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0).toString());
             frmVentas.txtnombrecliente.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 2));
             tabla.clearSelection();
+            txtBuscar.requestFocus();
         }
 
     }
@@ -215,15 +250,15 @@ public class frmvistalistadoEmpresa extends JFrame implements ActionListener, Ke
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                int index = tabla.getSelectedRow();
-                if (index == 0) {
-                    index = tabla.getRowCount();
-                }
-                index--;
-                control = false;
-                tabla.changeSelection(index, 0, false, false);
-                //se pasa el index como parametro o se usa el selected
-                control = true;
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+//                control = true;
                 agregar.doClick();
 
             }
