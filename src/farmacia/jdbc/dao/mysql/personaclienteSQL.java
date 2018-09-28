@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class personaclienteSQL implements personaclienteDAO{
@@ -26,8 +27,33 @@ public class personaclienteSQL implements personaclienteDAO{
     }
 
     @Override
-    public Long insertar(personacliente obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Long insertar(personacliente obj) throws DAOException {  
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        try {
+            stat = conexion.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);
+           
+            stat.setLong(1, obj.getIdpersona());
+            stat.setBoolean(2, obj.isStatus());
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al ingresar un registro.");
+            }
+           
+            rs = stat.getGeneratedKeys();
+            if(rs.next()){
+               obj.setIdpersonacliente(rs.getLong(1));
+            }else{
+                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
+            }
+
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
+        System.out.println(obj.getIdpersonacliente());
+        return obj.getIdpersonacliente();    
+        
     }
 
     @Override
@@ -36,14 +62,39 @@ public class personaclienteSQL implements personaclienteDAO{
     }
 
     @Override
-    public void eliminar(personacliente obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminar(personacliente obj) throws DAOException {
+         PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(DELETE);
+            stat.setLong(1, obj.getIdpersonacliente());
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al eliminar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
 
     @Override
-    public List<personacliente> obtenertodos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<personacliente> obtenertodos() throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        List<personacliente> lista = new ArrayList<>();
+        try {
+            stat = conexion.prepareStatement(GETALL);
+            rs = stat.executeQuery();
+            while (rs.next()) {
+                lista.add(convertir(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return lista;
     }
 
     @Override
