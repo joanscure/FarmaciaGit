@@ -46,15 +46,15 @@ public class productoSQL implements productoDAO {
                 throw new DAOException("Error al ingresar un registro.");
             }
             rs = stat.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 obj.setIdproducto(rs.getLong(1));
-            }else{
+            } else {
                 throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
-            UtilSQL.cerrar(stat);
+            UtilSQL.cerrar(stat, rs);
         }
         return obj.getIdproducto();
     }
@@ -86,15 +86,15 @@ public class productoSQL implements productoDAO {
     @Override
     public void eliminar(producto obj) throws DAOException {
         PreparedStatement stat = null;
-        try{
+        try {
             stat = conexion.prepareStatement(DELETE);
             stat.setLong(1, obj.getIdproducto());
-            if(stat.executeUpdate()==0){
+            if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al eliminar registro.");
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
-        }finally{
+        } finally {
             UtilSQL.cerrar(stat);
         }
     }
@@ -129,7 +129,7 @@ public class productoSQL implements productoDAO {
             rs = stat.executeQuery();
             if (rs.next()) {
                 pro = convertir(rs);
-            } 
+            }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {

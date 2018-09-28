@@ -25,67 +25,68 @@ import java.util.logging.Logger;
  *
  * @author fecyp
  */
-public class boletaSQL implements boletaDAO{
+public class boletaSQL implements boletaDAO {
+
     Connection conexion;
-     public boletaSQL(Connection conn) {
+
+    public boletaSQL(Connection conn) {
         this.conexion = conn;
     }
-  
-   
 
     @Override
     public Long insertar(boleta obj) throws DAOException {
         try {
             conexion.setAutoCommit(false);// para  poder controlar que parte se envia y si hay un error en todo ese segemento poder hacer el roolback
-           // instaciamos cada dao para poder utilizar sus funciones insertar modificar etc
-            boletacabeceraDAO cabeceradao=new boletacabeceraSQL(conexion);
-            boletadetalleDAO detalledao=new boletadetalleSQL(conexion);
+            // instaciamos cada dao para poder utilizar sus funciones insertar modificar etc
+            boletacabeceraSQL cabeceraSQL = new boletacabeceraSQL(conexion);
+            boletadetalleSQL detalleSQL = new boletadetalleSQL(conexion);
             //damos valores a la cabecera y detalle para que se puedan buscar mediante sus atributos
-            boletacabecera cabecera=obj.getCabecera();
-            List<boletadetalle> listadodetalle=obj.getDetalle();
-            
-            cabeceradao.insertar(cabecera);
+            boletacabecera cabecera = obj.getCabecera();
+            List<boletadetalle> listadodetalle = obj.getDetalle();
+
+            cabeceraSQL.insertar(cabecera);
             for (int i = 0; i < listadodetalle.size(); i++) {
-               
-                detalledao.insertar(listadodetalle.get(i));
+
+                detalleSQL.insertar(listadodetalle.get(i));
             }
             conexion.commit();
-            
+
         } catch (SQLException ex) {
             try {
                 conexion.rollback();
             } catch (SQLException ex1) {
-               System.err.println("algo salio mal1 :c " + ex1.getMessage());
+                throw new DAOException("Error en transaccion.", ex);
             }
-          System.err.println("algo salio mal1 :c " + ex.getMessage());
         }
-       return 0L;
+        return 0L;
     }
 
     @Override
     public void modificar(boleta obj) throws DAOException {
-        //no se puede modificar esto
+        throw new DAOException("No se puede modificar este registro");
     }
 
     @Override
     public void eliminar(boleta obj) throws DAOException {
         try {
-             conexion.setAutoCommit(false);
-             boletacabeceraDAO cabeceradao=new boletacabeceraSQL(conexion);
-            boletadetalleDAO detalledao=new boletadetalleSQL(conexion);
-             boletacabecera cabecera=obj.getCabecera();
-             boletadetalle  detalle=obj.getOneDetalle(0);
-             detalledao.eliminar(detalle);
-             cabeceradao.eliminar(cabecera);
-             conexion.commit();
-             
+            conexion.setAutoCommit(false);
+            boletacabeceraSQL cabSQL = new boletacabeceraSQL(conexion);
+            boletadetalleSQL detalleSQL = new boletadetalleSQL(conexion);
+
+            boletacabecera cabecera = obj.getCabecera();
+            boletadetalle detalle = obj.getOneDetalle(0);
+
+            detalleSQL.eliminar(detalle);
+            cabSQL.eliminar(cabecera);
+            conexion.commit();
+
         } catch (SQLException ex) {
-             try {
+            try {
                 conexion.rollback();
             } catch (SQLException ex1) {
-               System.err.println("algo salio mal1 :c " + ex1.getMessage());
+                System.err.println("algo salio mal1 :c " + ex1.getMessage());
             }
-          System.err.println("algo salio mal1 :c " + ex.getMessage());
+            System.err.println("algo salio mal1 :c " + ex.getMessage());
         }
     }
 
@@ -115,7 +116,7 @@ public class boletaSQL implements boletaDAO{
 //        long b = 2;//debe existir un empleado con este id
 //        long c=1;//debe existir unprodcto con este id
 //          //para resetear el autoincrement:   ALTER TABLE (nombre de la tabla) AUTO_INCREMENT = 0;
-    
+
 //       
 //        boletacabecera boletacabecera = new boletacabecera(12345, 123, fecha, a,b );
 //        

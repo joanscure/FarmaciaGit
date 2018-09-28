@@ -48,9 +48,9 @@ public class facturadetalleSQL implements facturadetalleDAO {
             }
 
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            throw new DAOException("Error en sql.", ex);
         } finally {
-            UtilSQL.cerrar(stat);
+            UtilSQL.cerrar(stat, rs);
         }
           return obj.getIdfacturadetalle();
     }

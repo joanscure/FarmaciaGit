@@ -150,13 +150,4 @@ public class descuentoSQL implements descuentoDAO {
         return des;
     }
 
-    public static void main(String[] args) throws SQLException, DAOException {
-        DAOManagerSQL man = null;
-        
-        man = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-        descuento des = null;
-        des = new descuento("nombre", "condicion", (double)23.49, "descripcion");
-        man.getDescuentoDAO().insertar(des);
-        
-    }
 }

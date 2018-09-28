@@ -41,30 +41,30 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
             stat.setLong(5, obj.getIdempleado());
             stat.setBoolean(6, (boolean) obj.isStatus());
 
-            if (stat.executeUpdate() == 0){
+            if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
-       
+
             rs = stat.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 obj.setIdboletacabecera(rs.getLong(1));
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
-            UtilSQL.cerrar(stat,rs);
+            UtilSQL.cerrar(stat, rs);
         }
         return obj.getIdboletacabecera();
     }
 
     @Override
-    public void modificar(boletacabecera obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(boletacabecera obj) throws DAOException {
+        throw new DAOException("No se puede modificar registro.");
     }
 
     @Override
     public void eliminar(boletacabecera obj) throws DAOException {
-          PreparedStatement stat = null;
+        PreparedStatement stat = null;
         try {
             stat = conexion.prepareStatement(DELETE);
             stat.setLong(1, obj.getIdboletacabecera());
@@ -80,9 +80,9 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
 
     @Override
     public List<boletacabecera> obtenertodos() throws DAOException {
-         PreparedStatement stat=null;
-        ResultSet rs=null;
-        List<boletacabecera> lista=new ArrayList<>();
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        List<boletacabecera> lista = new ArrayList<>();
         try {
             stat = conexion.prepareStatement(GETALL);
             rs = stat.executeQuery();
@@ -99,8 +99,8 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
 
     @Override
     public boletacabecera obtener(Long id) throws DAOException {
-        PreparedStatement stat=null;
-        ResultSet rs=null;
+        PreparedStatement stat = null;
+        ResultSet rs = null;
         boletacabecera b;
         try {
             stat = conexion.prepareStatement(GETONE);
@@ -121,16 +121,16 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
 
     @Override
     public boletacabecera convertir(ResultSet rs) throws SQLException {
-        boletacabecera b=null;
-      int correlativoboleta=rs.getInt("correlativoboleta");
-      int numeroboleta=rs.getInt("numeroboleta");
-      Date fechaemisionboleta=rs.getDate("fechaemisionboleta");
-      Long idpersonacliente=rs.getLong("idpersonacliente");
-      Long idempleado=rs.getLong("idempleado");
-      b=new boletacabecera(correlativoboleta, numeroboleta, fechaemisionboleta, idpersonacliente, idempleado);
-      b.setIdboletacabecera(rs.getLong("idboletacabecera"));
-      b.setStatus(rs.getBoolean("status"));
-      return b;
+        boletacabecera b = null;
+        int correlativoboleta = rs.getInt("correlativoboleta");
+        int numeroboleta = rs.getInt("numeroboleta");
+        Date fechaemisionboleta = rs.getDate("fechaemisionboleta");
+        Long idpersonacliente = rs.getLong("idpersonacliente");
+        Long idempleado = rs.getLong("idempleado");
+        b = new boletacabecera(correlativoboleta, numeroboleta, fechaemisionboleta, idpersonacliente, idempleado);
+        b.setIdboletacabecera(rs.getLong("idboletacabecera"));
+        b.setStatus(rs.getBoolean("status"));
+        return b;
     }
 
 }

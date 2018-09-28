@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class tipotrabajadorSQL implements tipotrabajadorDAO{
+public class tipotrabajadorSQL implements tipotrabajadorDAO {
 
     private Connection conexion;
-    
-    private final String INSERT = "INSERT INTO tipotrabajador(nombretipotrabajador, accederventas, accederproductos, accederclientes, accederconsultas, accederempleados, accedertipousuario, "+
-    "accedercambioclave, accederanulaciones, accedereliminarproducto, accedereliminarcliente, accedereliminarempleado, accedereliminartipoempleado, status ) "+
-    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-    private final String UPDATE = "UPDATE tipotrabajador SET nombretipotrabajador = ?, accederventas = ?, accederproductos = ?, accederclientes = ?, accederconsultas = ?, accederempleados = ?, accedertipousuario = ?, "+
-    "accedercambioclave = ?, accederanulaciones = ?, accedereliminarproducto = ?, accedereliminarcliente = ?, accedereliminarempleado = ?, accedereliminartipoempleado = ?, status = ?";
+
+    private final String INSERT = "INSERT INTO tipotrabajador(nombretipotrabajador, accederventas, accederproductos, accederclientes, accederconsultas, accederempleados, accedertipousuario, "
+            + "accedercambioclave, accederanulaciones, accedereliminarproducto, accedereliminarcliente, accedereliminarempleado, accedereliminartipoempleado, status ) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+    private final String UPDATE = "UPDATE tipotrabajador SET nombretipotrabajador = ?, accederventas = ?, accederproductos = ?, accederclientes = ?, accederconsultas = ?, accederempleados = ?, accedertipousuario = ?, "
+            + "accedercambioclave = ?, accederanulaciones = ?, accedereliminarproducto = ?, accedereliminarcliente = ?, accedereliminarempleado = ?, accedereliminartipoempleado = ?, status = ?";
     private final String DELETE = "UPDATE tipotrabajador SET status = 0 WHERE idtipotrabajador = ?";
     private final String GETALL = "SELECT * FROM tipotrabajador WHERE status = 1";
     private final String GETONE = "SELECT * FROM tipotrabajador WHERE idtipotrabajador = ?";
@@ -31,39 +31,39 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
     }
 
     @Override
-    public Long insertar(tipotrabajador obj) throws DAOException{
+    public Long insertar(tipotrabajador obj) throws DAOException {
         PreparedStatement stat = null;
         ResultSet rs = null;
-        try{
+        try {
             stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
             stat.setString(1, obj.getNombretipotrabajador());
             stat.setBoolean(2, obj.isAccederventas());
             stat.setBoolean(3, obj.isAccederproductos());
             stat.setBoolean(4, obj.isAccederclientes());
             stat.setBoolean(5, obj.isAccederconsultas());
-            stat.setBoolean(6, obj.isAccedereliminarempleado());            
-            stat.setBoolean(7, obj.isAccedertipousuario());            
-            stat.setBoolean(8, obj.isAccedercambioclave());            
-            stat.setBoolean(9, obj.isAccederanulaciones());            
-            stat.setBoolean(10, obj.isAccedereliminarproducto());            
-            stat.setBoolean(11, obj.isAccedereliminarcliente());            
-            stat.setBoolean(12, obj.isAccedereliminarempleado());            
-            stat.setBoolean(13, obj.isAccedereliminartipoempleado());            
+            stat.setBoolean(6, obj.isAccedereliminarempleado());
+            stat.setBoolean(7, obj.isAccedertipousuario());
+            stat.setBoolean(8, obj.isAccedercambioclave());
+            stat.setBoolean(9, obj.isAccederanulaciones());
+            stat.setBoolean(10, obj.isAccedereliminarproducto());
+            stat.setBoolean(11, obj.isAccedereliminarcliente());
+            stat.setBoolean(12, obj.isAccedereliminarempleado());
+            stat.setBoolean(13, obj.isAccedereliminartipoempleado());
             stat.setBoolean(14, obj.isStatus());
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
-           
+
             rs = stat.getGeneratedKeys();
-            if(rs.next()){
-               obj.setIdtipotrabajador(rs.getLong(1));
-            }else{
+            if (rs.next()) {
+                obj.setIdtipotrabajador(rs.getLong(1));
+            } else {
                 throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
-        }finally {
-            UtilSQL.cerrar(stat,rs);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
         }
         return obj.getIdtipotrabajador();
     }
@@ -71,21 +71,21 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
     @Override
     public void modificar(tipotrabajador obj) throws DAOException {
         PreparedStatement stat = null;
-        try{
+        try {
             stat = conexion.prepareStatement(INSERT);
             stat.setString(1, obj.getNombretipotrabajador());
             stat.setBoolean(2, obj.isAccederventas());
             stat.setBoolean(3, obj.isAccederproductos());
             stat.setBoolean(4, obj.isAccederclientes());
             stat.setBoolean(5, obj.isAccederconsultas());
-            stat.setBoolean(6, obj.isAccedereliminarempleado());            
-            stat.setBoolean(7, obj.isAccedertipousuario());            
-            stat.setBoolean(8, obj.isAccedercambioclave());            
-            stat.setBoolean(9, obj.isAccederanulaciones());            
-            stat.setBoolean(10, obj.isAccedereliminarproducto());            
-            stat.setBoolean(11, obj.isAccedereliminarcliente());            
-            stat.setBoolean(12, obj.isAccedereliminarempleado());            
-            stat.setBoolean(13, obj.isAccedereliminartipoempleado());            
+            stat.setBoolean(6, obj.isAccedereliminarempleado());
+            stat.setBoolean(7, obj.isAccedertipousuario());
+            stat.setBoolean(8, obj.isAccedercambioclave());
+            stat.setBoolean(9, obj.isAccederanulaciones());
+            stat.setBoolean(10, obj.isAccedereliminarproducto());
+            stat.setBoolean(11, obj.isAccedereliminarcliente());
+            stat.setBoolean(12, obj.isAccedereliminarempleado());
+            stat.setBoolean(13, obj.isAccedereliminartipoempleado());
             stat.setBoolean(14, obj.isStatus());
             stat.setLong(15, obj.getIdtipotrabajador());
             if (stat.executeUpdate() == 0) {
@@ -93,15 +93,15 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
-        }finally {
+        } finally {
             UtilSQL.cerrar(stat);
         }
     }
 
     @Override
-    public void eliminar(tipotrabajador obj) throws DAOException{
+    public void eliminar(tipotrabajador obj) throws DAOException {
         PreparedStatement stat = null;
-        try{
+        try {
             stat = conexion.prepareStatement(DELETE);
             stat.setLong(1, obj.getIdtipotrabajador());
             if (stat.executeUpdate() == 0) {
@@ -109,21 +109,20 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
-        }finally{
+        } finally {
             UtilSQL.cerrar(stat);
         }
     }
 
-
     @Override
-    public List<tipotrabajador> obtenertodos() throws DAOException{
+    public List<tipotrabajador> obtenertodos() throws DAOException {
         PreparedStatement stat = null;
         ResultSet rs = null;
         List<tipotrabajador> lista = new ArrayList<>();
         try {
             stat = conexion.prepareStatement(GETALL);
             rs = stat.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 lista.add(convertir(rs));
             }
         } catch (SQLException ex) {
@@ -145,7 +144,7 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
             rs = stat.executeQuery();
             if (rs.next()) {
                 tipo = convertir(rs);
-            } 
+            }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
@@ -157,9 +156,9 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
     @Override
     public tipotrabajador convertir(ResultSet rs) throws SQLException {
         tipotrabajador tipo;
-        
+
         String nombretipotrabajador = rs.getString("nombretipotrabajador");//32 NULO
-        boolean accederventas = rs.getBoolean("accederventas") ;
+        boolean accederventas = rs.getBoolean("accederventas");
         boolean accederproductos = rs.getBoolean("accederproductos");
         boolean accederclientes = rs.getBoolean("accederclientes");
         boolean accederconsultas = rs.getBoolean("accederconsultas");
@@ -171,18 +170,12 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO{
         boolean accedereliminarcliente = rs.getBoolean("accedereliminarcliente");
         boolean accedereliminarempleado = rs.getBoolean("accedereliminarempleado");
         boolean accedereliminartipoempleado = rs.getBoolean("accedereliminartipoempleado");
-        
+
         tipo = new tipotrabajador(nombretipotrabajador, accederventas, accederproductos, accederclientes, accederconsultas, accederempleados, accedertipousuario, accedercambioclave, accederanulaciones, accedereliminarproducto, accedereliminarcliente, accedereliminarempleado, accedereliminartipoempleado);
         tipo.setIdtipotrabajador(rs.getLong("idtipotrabajador"));
         tipo.setStatus(rs.getBoolean("status"));
-        
+
         return tipo;
     }
-    
-    public static void main(String[] args) throws DAOException{
-        tipotrabajador tipo = new tipotrabajador("Tipoptrueba", true, true, true, true, true, true, true, true, true, true, true, true);
-        DAOManagerSQL manager = new DAOManagerSQL("localhost", "practica", "root", "");
-        System.out.println(manager.getTipoTrabajadorDAO().insertar(tipo));
-        
-    }
+
 }

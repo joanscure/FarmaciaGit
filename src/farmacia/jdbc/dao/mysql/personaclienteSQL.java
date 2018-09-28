@@ -17,7 +17,7 @@ public class personaclienteSQL implements personaclienteDAO{
     
     private final String INSERT = "INSERT INTO personacliente(idpersona, status) "+
     "VALUES (?, ?) ";
-    private final String UPDATE = "UPDATE personacliente SET idpersona = ?, status = ?";
+    private final String UPDATE = "UPDATE personacliente SET idpersona = ?, status = ? WHERE idpersonacliente = ?";
     private final String DELETE = "UPDATE personacliente SET status = 0 WHERE idpersonacliente = ?";
     private final String GETALL = "SELECT * FROM personacliente WHERE status = 1";
     private final String GETONE = "SELECT * FROM personacliente WHERE idpersonacliente = ?";
@@ -49,7 +49,7 @@ public class personaclienteSQL implements personaclienteDAO{
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
-            UtilSQL.cerrar(stat);
+            UtilSQL.cerrar(stat, rs);
         }
         System.out.println(obj.getIdpersonacliente());
         return obj.getIdpersonacliente();    
@@ -57,8 +57,24 @@ public class personaclienteSQL implements personaclienteDAO{
     }
 
     @Override
-    public void modificar(personacliente obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(personacliente obj) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        try {
+            stat = conexion.prepareStatement(UPDATE);
+           
+            stat.setLong(1, obj.getIdpersona());
+            stat.setBoolean(2, obj.isStatus());
+            stat.setLong(3, obj.getIdpersonacliente());
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al modificar un registro.");
+            }
+           
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
     @Override
@@ -127,6 +143,24 @@ public class personaclienteSQL implements personaclienteDAO{
         per.setStatus(status);
         per.setIdpersonacliente(idpersonacliente);
         return per;
+    }
+
+    @Override
+    public void ingresarNuevo(personacliente cliente, persona per) throws DAOException {
+        try{
+            conexion.setAutoCommit(false);
+            personaSQL perSQL = new personaSQL(conexion);
+            cliente.setIdpersona(perSQL.insertar(per));
+            insertar(cliente);
+            conexion.commit();
+        } catch (SQLException ex) {
+            try {
+                conexion.rollback();
+            } catch (SQLException ex1) {
+                throw new DAOException("Error en transaccion.", ex1);
+            }
+            throw new DAOException("Error en SQL.", ex);
+        } 
     }
 
 

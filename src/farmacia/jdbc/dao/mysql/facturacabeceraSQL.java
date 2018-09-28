@@ -11,7 +11,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class facturacabeceraSQL implements facturacabeceraDAO{
+public class facturacabeceraSQL implements facturacabeceraDAO {
 
     private Connection conexion;
 
@@ -25,9 +25,10 @@ public class facturacabeceraSQL implements facturacabeceraDAO{
     public facturacabeceraSQL(Connection conexion) {
         this.conexion = conexion;
     }
+
     @Override
     public Long insertar(facturacabecera obj) throws DAOException {
-       PreparedStatement stat = null;
+        PreparedStatement stat = null;
         ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(INSERT);
@@ -39,25 +40,25 @@ public class facturacabeceraSQL implements facturacabeceraDAO{
             stat.setLong(5, obj.getIdempleado());
             stat.setBoolean(6, (boolean) obj.isStatus());
 
-            if (stat.executeUpdate() == 0){
+            if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
-       
+
             rs = stat.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 obj.setIdfacturacabecera(rs.getLong(1));
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            throw new DAOException("Error de sql.", ex);
         } finally {
-            UtilSQL.cerrar(stat,rs);
+            UtilSQL.cerrar(stat, rs);
         }
         return obj.getIdfacturacabecera();
     }
 
     @Override
-    public void modificar(facturacabecera obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(facturacabecera obj) throws DAOException {
+        throw new DAOException("No se puede modificar este registro");
     }
 
     @Override
@@ -76,12 +77,11 @@ public class facturacabeceraSQL implements facturacabeceraDAO{
         }
     }
 
-
     @Override
     public List<facturacabecera> obtenertodos() throws DAOException {
-       PreparedStatement stat=null;
-        ResultSet rs=null;
-        List<facturacabecera> lista=new ArrayList<>();
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        List<facturacabecera> lista = new ArrayList<>();
         try {
             stat = conexion.prepareStatement(GETALL);
             rs = stat.executeQuery();
@@ -98,8 +98,8 @@ public class facturacabeceraSQL implements facturacabeceraDAO{
 
     @Override
     public facturacabecera obtener(Long id) throws DAOException {
-         PreparedStatement stat=null;
-        ResultSet rs=null;
+        PreparedStatement stat = null;
+        ResultSet rs = null;
         facturacabecera f;
         try {
             stat = conexion.prepareStatement(GETONE);
@@ -120,20 +120,16 @@ public class facturacabeceraSQL implements facturacabeceraDAO{
 
     @Override
     public facturacabecera convertir(ResultSet rs) throws SQLException {
-        facturacabecera f=null;
-      int correlativofactura=rs.getInt("correlativofactura");
-      int numerofactura=rs.getInt("numeroboleta");
-      Date fechaemisionfactura=rs.getDate("fechaemisionfactura");
-      Long idempresacliente=rs.getLong("idempresacliente");
-      Long idempleado=rs.getLong("idempleado");
-      f=new facturacabecera(idempresacliente, idempleado, correlativofactura, numerofactura, fechaemisionfactura);
-      f.setIdfacturacabecera(rs.getLong("idfacturacabecera"));
-      f.setStatus(rs.getBoolean("status"));
-      return f;
+        facturacabecera f = null;
+        int correlativofactura = rs.getInt("correlativofactura");
+        int numerofactura = rs.getInt("numeroboleta");
+        Date fechaemisionfactura = rs.getDate("fechaemisionfactura");
+        Long idempresacliente = rs.getLong("idempresacliente");
+        Long idempleado = rs.getLong("idempleado");
+        f = new facturacabecera(idempresacliente, idempleado, correlativofactura, numerofactura, fechaemisionfactura);
+        f.setIdfacturacabecera(rs.getLong("idfacturacabecera"));
+        f.setStatus(rs.getBoolean("status"));
+        return f;
     }
 
-
-
-
-    
 }

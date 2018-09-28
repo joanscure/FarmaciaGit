@@ -38,32 +38,32 @@ public class boletadetalleSQL implements boletadetalleDAO {
             stat.setDouble(3, obj.getSubtotal());
             stat.setBoolean(4, (boolean) obj.isStatus());
 
-            if (stat.executeUpdate() == 0){
+            if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
             rs = stat.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 obj.setIdboletadetalle(rs.getLong(1));
-            }else{
+            } else {
                 throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
             }
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         } finally {
-            UtilSQL.cerrar(stat);
+            UtilSQL.cerrar(stat, rs);
         }
         return obj.getIdboletadetalle();
     }
 
     @Override
-    public void modificar(boletadetalle obj) {
-      //esto no se puede modificar
+    public void modificar(boletadetalle obj) throws DAOException {
+        throw new DAOException("No se puede modificar este registro.");
     }
 
     @Override
     public void eliminar(boletadetalle obj) throws DAOException {
-          PreparedStatement stat = null;
+        PreparedStatement stat = null;
         try {
             stat = conexion.prepareStatement(DELETE);
             stat.setLong(1, obj.getIdboletacabecera());
@@ -79,9 +79,9 @@ public class boletadetalleSQL implements boletadetalleDAO {
 
     @Override
     public List<boletadetalle> obtenertodos() throws DAOException {
-       List<boletadetalle> lista =new  ArrayList<>();
-        PreparedStatement stat=null;
-        ResultSet rs=null;
+        List<boletadetalle> lista = new ArrayList<>();
+        PreparedStatement stat = null;
+        ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(GETALL);
             rs = stat.executeQuery();
@@ -90,7 +90,7 @@ public class boletadetalleSQL implements boletadetalleDAO {
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
-        } finally {        
+        } finally {
             UtilSQL.cerrar(stat, rs);
         }
         return lista;
@@ -98,10 +98,10 @@ public class boletadetalleSQL implements boletadetalleDAO {
 
     @Override
     public boletadetalle obtener(Long id) throws DAOException {
-        boletadetalle b=null;
-        PreparedStatement stat=null;
-        ResultSet rs=null;
-        
+        boletadetalle b = null;
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+
         try {
             stat = conexion.prepareStatement(GETONE);
             stat.setLong(1, id);
@@ -121,12 +121,12 @@ public class boletadetalleSQL implements boletadetalleDAO {
 
     @Override
     public boletadetalle convertir(ResultSet rs) throws SQLException {
-        boletadetalle b=null;
-        Long idboletacabecera=rs.getLong("idboletacabecera");
-        Long idproducto=rs.getLong("idproducto");
-        double cantidad=rs.getDouble("cantidad");
-        double subtotal=rs.getDouble("subtotal");
-        b=new boletadetalle(idproducto, cantidad, subtotal);
+        boletadetalle b = null;
+        Long idboletacabecera = rs.getLong("idboletacabecera");
+        Long idproducto = rs.getLong("idproducto");
+        double cantidad = rs.getDouble("cantidad");
+        double subtotal = rs.getDouble("subtotal");
+        b = new boletadetalle(idproducto, cantidad, subtotal);
         b.setIdboletacabecera(idboletacabecera);
         b.setIdboletadetalle(rs.getLong("idboletadetalle"));
         b.setStatus(rs.getBoolean("status"));

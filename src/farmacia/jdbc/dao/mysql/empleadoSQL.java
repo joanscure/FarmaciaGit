@@ -62,7 +62,7 @@ public class empleadoSQL implements empleadoDAO {
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
         } finally {
-            UtilSQL.cerrar(stat);
+            UtilSQL.cerrar(stat, rs);
 
         }
         return obj.getIdempleado();
@@ -185,26 +185,4 @@ public class empleadoSQL implements empleadoDAO {
         return emp;
     }
 
-    public static void main(String[] args) throws DAOException {
-        DAOManagerSQL man = null;
-        man = new DAOManagerSQL("localhost", "practica", "root", "");
-        persona p;
-        String nombre = "Manuel";
-        String appaterno = "Perez";
-        String apmaterno = "Ramirez";
-        String dni = "12345678";
-        char[] numerodni = dni.toCharArray();
-        int personaedad = 13;
-        String direccion = "Calle los robles 123";
-        String telefono = "323231231";
-        p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
-
-        
-        empleado emp;
-        long time = System.currentTimeMillis();
-        emp = new empleado(0L, 1L, "sds", "dasdsa", new Date(time));
-        
-        man.getEmpleadoDAO().insertarNuevo(p, emp);
-        man.cerrarConexion();
-    }
 }
