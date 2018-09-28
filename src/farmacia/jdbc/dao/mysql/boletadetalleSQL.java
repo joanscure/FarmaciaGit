@@ -4,7 +4,6 @@ import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.boletadetalleDAO;
 import farmacia.jdbc.modelado.boletadetalle;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

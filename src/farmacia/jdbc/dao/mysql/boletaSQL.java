@@ -7,19 +7,13 @@ package farmacia.jdbc.dao.mysql;
 
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.boletaDAO;
-import farmacia.jdbc.dao.boletacabeceraDAO;
-import farmacia.jdbc.dao.boletadetalleDAO;
 import farmacia.jdbc.modelado.boleta;
 import farmacia.jdbc.modelado.boletacabecera;
 import farmacia.jdbc.modelado.boletadetalle;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
