@@ -19,7 +19,7 @@ public class empresaclienteSQL implements empresaclienteDAO {
     private Connection conexion;
 
     private final String INSERT = "INSERT INTO empresacliente(idempresa, fecharegistro, status) "
-            + "VALUES (( SELECT idempresa from empresa order by idempresa desc limit 1), ?, ?) ";
+            + "VALUES (?, ?, ?) ";
     private final String UPDATE = "UPDATE empresacliente SET idempresa = ?, fecharegistro = ?, status = ? WHERE idempresacliente = ?";
     private final String DELETE = "UPDATE empresacliente SET status = 0 WHERE idempresacliente = ?";
     private final String GETALL = "SELECT * FROM empresacliente WHERE status = 1";//solo obtiene los activos 
@@ -35,9 +35,9 @@ public class empresaclienteSQL implements empresaclienteDAO {
         ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
-//            stat.setLong(1, obj.getIdempresa());
-            stat.setDate(1, new java.sql.Date(obj.getFecharegistro().getTime()));
-            stat.setBoolean(2, obj.isStatus());
+            stat.setLong(1, obj.getIdempresa());
+            stat.setDate(2, new java.sql.Date(obj.getFecharegistro().getTime()));
+            stat.setBoolean(3, obj.isStatus());
             if (stat.executeUpdate() == 0){
                 throw new DAOException("Error al ingresar un registro");
             }

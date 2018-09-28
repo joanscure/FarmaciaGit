@@ -245,15 +245,17 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
 
                     manager.cerrarConexion();
                     pane1.actualizartabla();
+                    JOptionPane.showMessageDialog(null, "Se Editó el Tipo de trabajador satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                    deshabilitar();
+                    pestañas.setEnabledAt(0, true);
+                    pestañas.setSelectedIndex(0);
                 } catch (DAOException ex) {
                     System.out.println(" error" + ex.getMessage());
 
                 }
-                JOptionPane.showMessageDialog(null, "Se Editó el Tipo de trabajador satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
+
             }
+            deshabilitar();
             pane1.control = true;
             pane1.txtBuscar.requestFocus();
             action = "nothing";

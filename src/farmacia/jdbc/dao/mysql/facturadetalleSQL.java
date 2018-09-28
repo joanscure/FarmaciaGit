@@ -30,7 +30,7 @@ public class facturadetalleSQL implements facturadetalleDAO {
          PreparedStatement stat = null;
         ResultSet rs = null;
          try {
-            stat = conexion.prepareStatement(INSERT);
+            stat = conexion.prepareStatement(INSERT,1);
 
             stat.setLong(1, obj.getIdproducto());
             stat.setDouble(2, obj.getCantidad());

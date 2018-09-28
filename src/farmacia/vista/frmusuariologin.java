@@ -229,7 +229,7 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
     public void keyReleased(KeyEvent e) {
     }
 
-    private void llenartabla() throws DAOException {
+    public void llenartabla() throws DAOException {
         DAOManagerSQL manager = null;
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");

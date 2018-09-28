@@ -32,7 +32,7 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
         PreparedStatement stat = null;
         ResultSet rs = null;
         try {
-            stat = conexion.prepareStatement(INSERT);
+            stat = conexion.prepareStatement(INSERT, 1);
 
             stat.setString(1, obj.getCorrelativoboleta());
             stat.setString(2, obj.getNumeroboleta());

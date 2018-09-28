@@ -21,7 +21,7 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO {
             + "accedercambioclave, accederanulaciones, accedereliminarproducto, accedereliminarcliente, accedereliminarempleado, accedereliminartipoempleado, status ) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
     private final String UPDATE = "UPDATE tipotrabajador SET nombretipotrabajador = ?, accederventas = ?, accederproductos = ?, accederclientes = ?, accederconsultas = ?, accederempleados = ?, accedertipousuario = ?, "
-            + "accedercambioclave = ?, accederanulaciones = ?, accedereliminarproducto = ?, accedereliminarcliente = ?, accedereliminarempleado = ?, accedereliminartipoempleado = ?, status = ?";
+            + "accedercambioclave = ?, accederanulaciones = ?, accedereliminarproducto = ?, accedereliminarcliente = ?, accedereliminarempleado = ?, accedereliminartipoempleado = ?, status = ? where idtipotrabajador=?";
     private final String DELETE = "UPDATE tipotrabajador SET status = 0 WHERE idtipotrabajador = ?";
     private final String GETALL = "SELECT * FROM tipotrabajador WHERE status = 1";
     private final String GETONE = "SELECT * FROM tipotrabajador WHERE idtipotrabajador = ?";
@@ -72,7 +72,7 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO {
     public void modificar(tipotrabajador obj) throws DAOException {
         PreparedStatement stat = null;
         try {
-            stat = conexion.prepareStatement(INSERT);
+            stat = conexion.prepareStatement(UPDATE);
             stat.setString(1, obj.getNombretipotrabajador());
             stat.setBoolean(2, obj.isAccederventas());
             stat.setBoolean(3, obj.isAccederproductos());
@@ -92,7 +92,7 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO {
                 throw new DAOException("Error al modificar un registro.");
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error en SQL.", ex);
+            throw new DAOException("Error en SQL."+ ex.getMessage());
         } finally {
             UtilSQL.cerrar(stat);
         }
