@@ -47,7 +47,6 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
     public JTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
-    frmEmpleados regis;
     TextAutoCompleter autocompletar;
     TableRowSorter<TableModel> elQueOrdena;
     int indexSelecion = -1;
@@ -59,8 +58,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
     public boolean control = true;
     public boolean teclamas=false;
 
-    ListadoEmpleado(frmEmpleados regis) {
-        this.regis = regis;
+    public ListadoEmpleado() {
         iniciar_componentes();
         perzonalizartipoletra();
     }

@@ -8,6 +8,7 @@ package farmacia.vista.mantenimientoEmpleado;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.vista.frmregistrarSuperusuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,8 +35,6 @@ import javax.swing.JTextField;
  */
 public class Registrar extends JPanel implements ActionListener, KeyListener {
 
-    frmEmpleados regis;
-
     JPanel pane;
     JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion, jledad;
     public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona, txtedad;
@@ -43,15 +42,14 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     JPasswordField txtpassw;
 //    JComboBox cbxtipodocumento;
 //    JLabel tipodocumento;
-    JComboBox cbxtipodeempleado;
+    public JComboBox cbxtipodeempleado;
     JDateChooser fecharegistro;
     configuracionImagenes iamgeConfig = new configuracionImagenes();
     Color c = new java.awt.Color(255, 255, 153);
     Font fontboton = new Font("Geneva", 1, 13);
     boolean teclaunida = false;
 
-    public Registrar(frmEmpleados regis) {
-        this.regis = regis;
+    public Registrar() {
         iniciar_componentes();
         setBackground(c);
         personalizartipoletra();
@@ -238,12 +236,20 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         if (source == cbxtipodeempleado) {
             if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
                 cbxtipodeempleado.setPopupVisible(false);
-                frmEmpleados.jbGuardar.doClick();
+                if (frmEmpleados.jbGuardar != null) {
+                    frmEmpleados.jbGuardar.doClick();
+                } else {
+                    frmregistrarSuperusuario.registrar.doClick();
+                }
             }
         }
 
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmEmpleados.jbCancelar.doClick();
+          if (frmEmpleados.jbCancelar != null) {
+                    frmEmpleados.jbCancelar.doClick();
+                } else {
+                    frmregistrarSuperusuario.salir.doClick();
+                }
 
         }
         if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
@@ -254,7 +260,11 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-            frmEmpleados.jbGuardar.doClick();
+            if (frmEmpleados.jbGuardar != null) {
+                frmEmpleados.jbGuardar.doClick();
+            } else {
+                frmregistrarSuperusuario.registrar.doClick();
+            }
             teclaunida = false;
         }
     }
@@ -367,7 +377,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         // setimo
         JPanel paneocupacion = new JPanel(new GridLayout(1, 2));
         jlocupacion = new JLabel("Tipo de Empleado:");
-        String[] tiposE = {"Administrador", "Vendedor"};
+        String[] tiposE = {"Administrador"};
         cbxtipodeempleado = new JComboBox(tiposE);
         cbxtipodeempleado.setPreferredSize(new Dimension(100, 5));
         paneocupacion.add(jlocupacion);

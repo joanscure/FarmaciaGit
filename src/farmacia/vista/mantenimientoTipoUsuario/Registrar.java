@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -33,7 +35,7 @@ import javax.swing.JTextField;
  *
  * @author fecyp
  */
-public class Registrar extends JPanel implements ActionListener, KeyListener {
+public class Registrar extends JPanel implements ActionListener, KeyListener, MouseListener {
 
     frmTipousuario regis;
 
@@ -51,6 +53,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         iniciar_componentes();
         setBackground(c);
         personalizartipoletra();
+
         txtdescripcion.addActionListener(this);
         txtdescripcion.addKeyListener(this);
         aventas.addKeyListener(this);
@@ -65,6 +68,19 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         aelmininartipotrabajor.addKeyListener(this);
         aeliminarusuario.addKeyListener(this);
         aeliminarclientes.addKeyListener(this);
+
+        aventas.addMouseListener(this);
+        aproductos.addMouseListener(this);
+        aclientes.addMouseListener(this);
+        aconsultas.addMouseListener(this);
+        aempleados.addMouseListener(this);
+        atiposusuario.addMouseListener(this);
+        acambioclave.addMouseListener(this);
+        aanularventas.addMouseListener(this);
+        aeliminarproducto.addMouseListener(this);
+        aelmininartipotrabajor.addMouseListener(this);
+        aeliminarusuario.addMouseListener(this);
+        aeliminarclientes.addMouseListener(this);
 
     }
 
@@ -120,7 +136,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         Object source = ke.getSource();
         if (source != txtdescripcion) {
             if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-                
+
                 ke.getComponent().transferFocusBackward();
             }
             if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -133,9 +149,43 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
             if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
                 JCheckBox cheaux = (JCheckBox) ke.getComponent();
                 cheaux.setSelected(!cheaux.isSelected());
+               
             }
         } else {
             txtdescripcion.setBackground(Color.white);
+        }
+         if (source == aclientes) {
+            if (aclientes.isSelected()) {
+                aeliminarclientes.setEnabled(true);
+
+            } else {
+                aeliminarclientes.setEnabled(false);
+                aeliminarclientes.setSelected(false);
+                return;
+
+            }
+        } else if (source == aproductos) {
+            if (aproductos.isSelected()) {
+                aeliminarproducto.setEnabled(true);
+
+            } else {
+                aeliminarproducto.setEnabled(false);
+                aeliminarproducto.setSelected(false);
+            }
+        } else if (source == aempleados) {
+            if (aempleados.isSelected()) {
+                aeliminarusuario.setEnabled(true);
+            } else {
+                aeliminarusuario.setEnabled(false);
+                aeliminarusuario.setSelected(false);
+            }
+        } else if (source == atiposusuario) {
+            if (atiposusuario.isSelected()) {
+                aelmininartipotrabajor.setEnabled(true);
+            } else {
+                aelmininartipotrabajor.setEnabled(false);
+                aelmininartipotrabajor.setSelected(false);
+            }
         }
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
             frmClientes.jbCancelar.doClick();
@@ -249,5 +299,60 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 
         }
         return resp;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Object source = e.getSource();
+
+        if (source == aclientes) {
+            if (aclientes.isSelected()) {
+                aeliminarclientes.setEnabled(true);
+
+            } else {
+                aeliminarclientes.setEnabled(false);
+                aeliminarclientes.setSelected(false);
+                return;
+
+            }
+        } else if (source == aproductos) {
+            if (aproductos.isSelected()) {
+                aeliminarproducto.setEnabled(true);
+
+            } else {
+                aeliminarproducto.setEnabled(false);
+                aeliminarproducto.setSelected(false);
+            }
+        } else if (source == aempleados) {
+            if (aempleados.isSelected()) {
+                aeliminarusuario.setEnabled(true);
+            } else {
+                aeliminarusuario.setEnabled(false);
+                aeliminarusuario.setSelected(false);
+            }
+        } else if (source == atiposusuario) {
+            if (atiposusuario.isSelected()) {
+                aelmininartipotrabajor.setEnabled(true);
+            } else {
+                aelmininartipotrabajor.setEnabled(false);
+                aelmininartipotrabajor.setSelected(false);
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }

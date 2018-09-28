@@ -154,10 +154,6 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
                 return false;
             }
         };
-        Object[] l1 = {"123", "caspirina", "calma dolor de corazon", "2", "10", "1.8", "11.8", "12", 1};
-        modelo.addRow(l1);
-         Object[] l2 = {"123", "caspirina", "calma dolor de corazon", "2", "10", "1.8", "11.8", "12", 1};
-        modelo.addRow(l2);
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);

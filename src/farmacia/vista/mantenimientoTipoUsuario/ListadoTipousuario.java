@@ -129,12 +129,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
                 return false;
             }
         };
-        Object[] a2 = {1, "Administrador",1,1,1,1,1,1,1,1,1,1,1,1,1};
-        Object[] a3 = {1, "vendedor",1,1,1,0,1,1,1,0,0,0,0,0,1};
-        Object[] a1 = {1, "almacenero",1,1,1,1,1,0,1,0,1,1,0,0,1};
-        modelo.addRow(a2);
-        modelo.addRow(a1);
-        modelo.addRow(a3);
+     
         JScrollPane pane = new JScrollPane(tabla);
         tabla.setModel(modelo);
         tabla.getTableHeader().setReorderingAllowed(false);

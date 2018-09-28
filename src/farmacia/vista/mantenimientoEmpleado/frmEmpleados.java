@@ -260,8 +260,8 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
 
     private void Iniciar_componentes() {
         pestañas = new JTabbedPane();
-        pane1 = new ListadoEmpleado(this);
-        pane2 = new Registrar(this);
+        pane1 = new ListadoEmpleado();
+        pane2 = new Registrar();
         pestañas.add("Buscar", pane1);
 
         pestañas.add("Registrar", pane2);

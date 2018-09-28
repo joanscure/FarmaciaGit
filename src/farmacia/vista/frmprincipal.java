@@ -30,7 +30,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
     public static JDesktopPane desktopPane;
     private JMenuBar barra;
-    public static String jlidpersona, jlnombre, jlapaterno, jlapmaterno, jlocupacion = "vendedor";
+    public static String jlidpersona, jlnombre, jlapaterno, jlapmaterno, jlocupacion;
     Font fontgeneral = new Font("Geneva", 1, 15);
     Font fontitem = new Font("Geneva", 1, 13);
     frmClientes frmclientes;

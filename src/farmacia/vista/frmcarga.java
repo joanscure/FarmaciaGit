@@ -18,6 +18,7 @@ import javax.swing.*;
 public class frmcarga extends JFrame implements Runnable{
 Thread tiempo;
 JLabel jlcarga;
+boolean verificar;
     frmcarga()
     {
         iniciar_componentes();
@@ -56,6 +57,10 @@ JLabel jlcarga;
         setUndecorated(true);
          setOpacity(0.8F);
          pack();
+    }
+    public void verificar()
+    {
+        //verifica los usuarios si existen si no sse manda para crear uno nuevo
     }
     public static void main(String args[]) {
         try {

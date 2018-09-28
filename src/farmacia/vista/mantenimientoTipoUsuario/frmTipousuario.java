@@ -269,11 +269,10 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         pane2.atiposusuario.setEnabled(true);
         pane2.acambioclave.setEnabled(true);
         pane2.aanularventas.setEnabled(true);
-        pane2.aeliminarproducto.setEnabled(true);
-        pane2.aelmininartipotrabajor.setEnabled(true);
-        pane2.aeliminarusuario.setEnabled(true);
-        pane2.aeliminarclientes.setEnabled(true);
-
+        pane2.aeliminarproducto.setEnabled(false);
+        pane2.aelmininartipotrabajor.setEnabled(false);
+        pane2.aeliminarusuario.setEnabled(false);
+        pane2.aeliminarclientes.setEnabled(false);
         jbNuevo.setEnabled(true);
         jbEliminar.setEnabled(false);
         jbModificar.setEnabled(false);
