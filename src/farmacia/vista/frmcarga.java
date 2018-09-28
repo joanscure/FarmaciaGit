@@ -7,8 +7,13 @@ package farmacia.vista;
 
 
 import com.sun.awt.AWTUtilities;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.DAOManager;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empleado;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -18,9 +23,10 @@ import javax.swing.*;
 public class frmcarga extends JFrame implements Runnable{
 Thread tiempo;
 JLabel jlcarga;
-boolean verificar;
-    frmcarga()
+boolean verificar=false;
+    frmcarga() throws DAOException
     {
+       verificar();
         iniciar_componentes();
         //verificar usuario
           setLocationRelativeTo(null);
@@ -37,8 +43,14 @@ boolean verificar;
             Thread.sleep(3000);
             tiempo=null;
             this.dispose();
+            if(verificar)//esta vacia
+            {
+                new frmregistrarSuperusuario().setVisible(true);
+            }
+            else //no esta vacia
+            {
              new frmusuariologin().setVisible(true);
-             
+            }
              
             
         } catch (Exception e) {
@@ -58,17 +70,34 @@ boolean verificar;
          setOpacity(0.8F);
          pack();
     }
-    public void verificar()
+    public void verificar() throws DAOException
     {
         //verifica los usuarios si existen si no sse manda para crear uno nuevo
+        DAOManagerSQL manager = null;
+        try
+        {
+           manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+           List<empleado> lista= manager.getEmpleadoDAO().obtenertodos();
+           
+          if(lista.isEmpty())
+          {
+              verificar=true;
+          }
+                manager.cerrarConexion();
+        }catch(DAOException ex)
+        {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
     }
     public static void main(String args[]) {
         try {
             javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+            
+             new frmcarga().setVisible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-                new frmcarga().setVisible(true);
+               
            
     }
 }

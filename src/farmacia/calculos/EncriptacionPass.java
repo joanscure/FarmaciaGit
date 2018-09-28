@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class EncriptacionPass {
     public static void main(String[] args) {
-        String contraseña1="hola";
+        String contraseña1="1234";
         String contraseña_encrip=cryptMD5(contraseña1);
         System.out.println("contraseña : "+ contraseña1);
         System.out.println("contraseña encriptada: "+contraseña_encrip);

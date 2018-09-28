@@ -30,7 +30,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
     public static JDesktopPane desktopPane;
     private JMenuBar barra;
-    public static String jlidpersona, jlnombre, jlapaterno, jlapmaterno, jlocupacion;
+    String jlidpersona, jlidempleado;
+    String jlocupacion;
     Font fontgeneral = new Font("Geneva", 1, 15);
     Font fontitem = new Font("Geneva", 1, 13);
     frmClientes frmclientes;
@@ -45,7 +46,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     public frmprincipal(frmusuariologin login) {
 
         this.login = login;
-         this.setResizable(false);
+        this.setResizable(false);
         inciar_componentes();
         frmtipousuario = new frmTipousuario();
         desktopPane.add(frmtipousuario);
@@ -64,6 +65,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         setVisible(true);
         perzonalizartipoletra();
+
     }
 
     public void perzonalizartipoletra() {

@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -38,12 +39,12 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
     JPanel pane;
     JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion, jledad;
     public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona, txtedad;
-    JTextField txtdireccion;
-    JPasswordField txtpassw;
+    public JTextField txtdireccion;
+    public JPasswordField txtpassw;
 //    JComboBox cbxtipodocumento;
 //    JLabel tipodocumento;
     public JComboBox cbxtipodeempleado;
-    JDateChooser fecharegistro;
+    public JDateChooser fecharegistro;
     configuracionImagenes iamgeConfig = new configuracionImagenes();
     Color c = new java.awt.Color(255, 255, 153);
     Font fontboton = new Font("Geneva", 1, 13);
@@ -347,7 +348,9 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         //quinto 
         JPanel panefecha = new JPanel(new GridLayout(1, 2));
         jlfecha = new JLabel("Fecha  Alta:");
+        
         fecharegistro = new JDateChooser();
+        fecharegistro.setDate(new Date());
         panefecha.add(jlfecha);
         panefecha.add(fecharegistro);
         panefecha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -377,7 +380,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         // setimo
         JPanel paneocupacion = new JPanel(new GridLayout(1, 2));
         jlocupacion = new JLabel("Tipo de Empleado:");
-        String[] tiposE = {"Administrador"};
+        String[] tiposE = {"ADMINISTRADOR"};
         cbxtipodeempleado = new JComboBox(tiposE);
         cbxtipodeempleado.setPreferredSize(new Dimension(100, 5));
         paneocupacion.add(jlocupacion);

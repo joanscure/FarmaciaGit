@@ -138,7 +138,7 @@ public class empleadoSQL implements empleadoDAO {
         ResultSet rs = null;
         List<empleado> lista = new ArrayList<>();
         try {
-            stat = conexion.prepareStatement(GETONE);
+            stat = conexion.prepareStatement(GETALL);
             rs = stat.executeQuery();
             while(rs.next()){
                 lista.add(convertir(rs));
