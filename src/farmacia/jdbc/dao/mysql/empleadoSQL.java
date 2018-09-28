@@ -2,12 +2,14 @@ package farmacia.jdbc.dao.mysql;
 
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.empleadoDAO;
+import farmacia.jdbc.dao.personaDAO;
 import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,7 +21,8 @@ public class empleadoSQL implements empleadoDAO {
 
     private final String INSERT = "INSERT INTO empleado(idpersona, login, password, fechaalta, idtipotrabajador, status) "
             + "VALUES (?, ?, ?, ?, ?, ?)";
-    private final String UPDATE = "UPDATE empleado SET idpersona = ?, login = ?, password = ?, fechaalta = ?, idtipotrabajador = ?, status = ?";
+    private final String UPDATE = "UPDATE empleado SET idpersona = ?, login = ?, password = ?, fechaalta = ?, idtipotrabajador = ?, status = ? "
+            + "WHERE idempleado = ?";
     private final String DELETE = "UPDATE empleado SET status = 0 WHERE idempleado = ?";
     private final String GETALL = "SELECT * FROM empleado WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM empleado WHERE idempleado = ?";
@@ -39,7 +42,7 @@ public class empleadoSQL implements empleadoDAO {
             stat.setLong(1, obj.getIdpersona());
             stat.setString(2, obj.getLogin());
             stat.setString(3, obj.getPassword());
-            stat.setDate(4, (java.sql.Date) obj.getFechaalta());
+            stat.setDate(4, new java.sql.Date (obj.getFechaalta().getTime()));
             stat.setLong(5, obj.getIdtipotrabajador());
             stat.setBoolean(6, obj.isStatus());
 
@@ -67,35 +70,16 @@ public class empleadoSQL implements empleadoDAO {
 
     @Override
     public void insertarNuevo(persona per, empleado emp) throws DAOException {
-
-        PreparedStatement stat = null;
-        ResultSet rs = null;
         try {
             conexion.setAutoCommit(false);
-            DAOManagerSQL man = new DAOManagerSQL(conexion);
-            per.setIdPersona(man.getPersonaDAO().insertar(per));//inserta la persona en primer lugar
-
-            stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
-            stat.setLong(1, per.getIdPersona());
-            stat.setString(2, emp.getLogin());
-            stat.setString(3, emp.getPassword());
-            stat.setDate(4, new java.sql.Date(emp.getFechaalta().getTime()));
-            stat.setLong(5, emp.getIdtipotrabajador());
-            stat.setBoolean(6, emp.isStatus());
-
-            if (man.getTipoTrabajadorDAO().obtener(emp.getIdtipotrabajador()) == null) {
+            personaSQL perSQL = new personaSQL(conexion);
+            tipotrabajadorSQL trabajadorSQL = new tipotrabajadorSQL(conexion);
+            
+            emp.setIdpersona(perSQL.insertar(per));//inserta la persona en primer lugar y modifica el idpersonadel empleado
+            insertar(emp);//inserta al empleado
+            
+            if (trabajadorSQL.obtener(emp.getIdtipotrabajador()) == null) {
                 throw new DAOException("Error al ingresar un registro. Clave foranea no existente.");
-            }
-
-            if (stat.executeUpdate() == 0) {
-                throw new DAOException("Error al ingresar un registro.");
-            }
-
-            rs = stat.getGeneratedKeys();
-            if (rs.next()) {
-                emp.setIdempleado(rs.getLong(1));
-            } else {
-                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
             }
             conexion.commit();
         } catch (SQLException ex) {
@@ -105,35 +89,86 @@ public class empleadoSQL implements empleadoDAO {
                 throw new DAOException("Error en transaccion.", ex1);
             }
             throw new DAOException("Error en SQL.", ex);
+        } 
+        //System.out.println(emp.getIdempleado() +", "+ per.getIdPersona());
+    }
+
+    @Override
+    public void modificar(empleado obj) throws DAOException {
+        PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(UPDATE);
+            stat.setString(2, obj.getLogin());
+            stat.setString(3, obj.getPassword());
+            stat.setDate(4, new java.sql.Date (obj.getFechaalta().getTime()));
+            stat.setLong(5, obj.getIdtipotrabajador());
+            stat.setBoolean(6, obj.isStatus());
+            stat.setLong(7, obj.getIdempleado());
+           
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al modificar un registro.");
+            }
+
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
+    }
+
+    @Override
+    public void eliminar(empleado obj) throws DAOException {
+        PreparedStatement stat = null;
+        try{
+            stat = conexion.prepareStatement(DELETE);
+            stat.setLong(1, obj.getIdempleado());
+            if(stat.executeUpdate() == 0){
+                throw new DAOException("Error al eliminar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error de SQL.", ex);
+        }finally{
+            UtilSQL.cerrar(stat);
+        }
+    }
+
+    @Override
+    public List<empleado> obtenertodos() throws DAOException{
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        List<empleado> lista = new ArrayList<>();
+        try {
+            stat = conexion.prepareStatement(GETONE);
+            rs = stat.executeQuery();
+            while(rs.next()){
+                lista.add(convertir(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
         } finally {
             UtilSQL.cerrar(stat, rs);
-            try {
-                conexion.setAutoCommit(true);
-            } catch (SQLException ex) {
-                throw new DAOException("Error en SQL.", ex);
+        }
+        return lista;
+    }
+
+    @Override
+    public empleado obtener(Long id) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        empleado emp = null;
+        try {
+            stat = conexion.prepareStatement(GETONE);
+            stat.setLong(1, id);
+            rs = stat.executeQuery();
+            if (rs.next()) {
+                emp = convertir(rs);
             }
-       }
-        System.out.println(emp.getIdempleado() +", "+ per.getIdPersona());
-    }
-
-    @Override
-    public void modificar(empleado obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void eliminar(empleado obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<empleado> obtenertodos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public empleado obtener(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return emp;
     }
 
     @Override
