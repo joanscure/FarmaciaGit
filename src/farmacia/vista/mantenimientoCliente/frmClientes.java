@@ -15,6 +15,7 @@ import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.personacliente;
 import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmpermiso;
+import farmacia.vista.frmprincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -94,9 +95,9 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         JPanel botones_principal = new JPanel(new BorderLayout());
         botones_principal.setBackground(c);
         JPanel botones = new JPanel(new GridLayout(6, 1));
-        jbNuevo = new JButton("Nuevo", config.obtenerIcono("nuevo.png"));
+        jbNuevo = new JButton("Nuevo(CTRL+N)", config.obtenerIcono("nuevo.png"));
 
-        jbGuardar = new JButton("Guardar", config.obtenerIcono("guardar.png"));
+        jbGuardar = new JButton("Guardar(CTRL+S)", config.obtenerIcono("guardar.png"));
         jbEliminar = new JButton("Eliminar", config.obtenerIcono("eliminar.png"));
         jbModificar = new JButton("Modificar", config.obtenerIcono("modificar.png"));
         jbCancelar = new JButton("Cancelar", config.obtenerIcono("cancelar.png"));
@@ -219,11 +220,10 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
                     String apmaterno = pane2.txtapellidom.getText();
                     String dni = pane2.txtdocumento.getText();
                     char[] numerodni = dni.toCharArray();
-                    int personaedad =0;
+                    int personaedad = 0;
                     try {
-                     personaedad = Integer.parseInt(pane2.txtedad.getText());
-                    }catch(NumberFormatException ne)
-                    {
+                        personaedad = Integer.parseInt(pane2.txtedad.getText());
+                    } catch (NumberFormatException ne) {
                     }
                     String direccion = pane2.txtdireccion.getText();
                     String telefono = pane2.txttelefono.getText();
@@ -242,7 +242,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
                 }
                 //mensaje de exito
                 JOptionPane.showMessageDialog(null, "Se Registro el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                 deshabilitar();
+                deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             } else if (action.equals("modificar")) {
@@ -277,7 +277,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
 
                 }
                 JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                 deshabilitar();
+                deshabilitar();
                 pestañas.setEnabledAt(0, true);
                 pestañas.setSelectedIndex(0);
             }
@@ -287,35 +287,40 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
             action = "nothing";
 
         } else if (source == jbEliminar) {
-            DAOManagerSQL manager = null;
-            try {
-                manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-                persona p;
-                int fila = pane1.tabla.getSelectedRow();
-                Long idp = new Long((long) pane1.tabla.getValueAt(fila, 1));
-                Long idc = new Long((long) pane1.tabla.getValueAt(fila, 0));
+            if (!frmprincipal.ecliente) {
+                frmpermiso permiso = new frmpermiso();
 
-                p = new persona();
-                p.setIdPersona(idp);
-                personacliente cliente;
+            } else {
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    persona p;
+                    int fila = pane1.tabla.getSelectedRow();
+                    Long idp = new Long((long) pane1.tabla.getValueAt(fila, 1));
+                    Long idc = new Long((long) pane1.tabla.getValueAt(fila, 0));
 
-                cliente = new personacliente();
-                cliente.setIdpersona(idp);
-                cliente.setIdpersonacliente(idc);
+                    p = new persona();
+                    p.setIdPersona(idp);
+                    personacliente cliente;
 
-                manager.getPersonaClienteDAO().eliminar(cliente);
-                manager.getPersonaDAO().eliminar(p);
-                manager.cerrarConexion();
-                pane1.actualizartabla();
-            } catch (DAOException ex) {
-                System.out.println(" errorr");
+                    cliente = new personacliente();
+                    cliente.setIdpersona(idp);
+                    cliente.setIdpersonacliente(idc);
 
+                    manager.getPersonaClienteDAO().eliminar(cliente);
+                    manager.getPersonaDAO().eliminar(p);
+                    manager.cerrarConexion();
+                    pane1.actualizartabla();
+                } catch (DAOException ex) {
+                    System.out.println(" errorr");
+
+                }
+                pane1.tabla.clearSelection();
+                jbEliminar.setEnabled(false);
+                jbModificar.setEnabled(false);
+                action = "nothing";
+                pane1.txtBuscar.requestFocus();
             }
-            pane1.tabla.clearSelection();
-            jbEliminar.setEnabled(false);
-            jbModificar.setEnabled(false);
-            action = "nothing";
-            pane1.txtBuscar.requestFocus();
 
         } else if (source == jbSalir) {
             deshabilitar();
@@ -469,5 +474,4 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
 
     }
 
-    
 }

@@ -7,7 +7,6 @@ package farmacia.calculos;
 
 import farmacia.vista.frmprincipal;
 import farmacia.vista.mantenimientoTipoUsuario.ListadoTipousuario;
-import farmacia.vista.mantenimientoTipoUsuario.frmTipousuario;
 
 /**
  *
@@ -15,7 +14,11 @@ import farmacia.vista.mantenimientoTipoUsuario.frmTipousuario;
  */
 public class Permisos {
 
-    public boolean verificarClienteEliminar() {
+    public boolean verificarEliminar( int index) {
+        //11 cliente
+        //10 productos
+        //12  empleados
+        //13 tipousuario
         int indexRow = 0;
         boolean valid = false;
         for (int i = 0; i < ListadoTipousuario.tabla.getRowCount(); i++) {
@@ -23,11 +26,11 @@ public class Permisos {
                 indexRow = i;
             }
         }
-       
-            if (ListadoTipousuario.tabla.getValueAt(indexRow, 11).equals(1)) {
-                valid=true;
-            }
-      
+        if ((boolean)ListadoTipousuario.tabla.getValueAt(indexRow, index)==true) {
+            valid = true;
+        }
         return valid;
     }
+    
+   
 }

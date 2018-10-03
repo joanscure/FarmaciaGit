@@ -41,7 +41,7 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
     JButton bnentrar, bncancelar;
     JTextField txtusuario;
     JPasswordField txtpassword;
-    JTable tabla;
+    public static JTable tabla;
     DefaultTableModel modelo;
     int index;
 

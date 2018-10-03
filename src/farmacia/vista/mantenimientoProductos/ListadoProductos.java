@@ -222,7 +222,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
 ////            control = true;
                 frmProducto.jbModificar.doClick();
 
-            } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                 frmProducto.jbEliminar.doClick();
             }
         } else if (source == txtBuscar) {

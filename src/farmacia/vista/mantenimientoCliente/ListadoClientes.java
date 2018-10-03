@@ -237,7 +237,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
 ////            control = true;
                 frmClientes.jbModificar.doClick();
 
-            } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                 frmClientes.jbEliminar.doClick();
             }
         } else if (source == txtBuscar) {

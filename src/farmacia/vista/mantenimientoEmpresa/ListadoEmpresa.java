@@ -231,7 +231,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
 ////            control = true;
                 frmEmpresa.jbModificar.doClick();
 
-            } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                 frmEmpresa.jbEliminar.doClick();
             }
         }

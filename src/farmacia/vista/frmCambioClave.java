@@ -23,7 +23,7 @@ public class frmCambioClave extends JDialog implements ActionListener {
     JButton cancelar, acceder;
     JLabel jluser, jlpassnueva, jlpassactual;
     JTextField user;
-    JPasswordField txtpassnueva, txtpassactual;
+    JPasswordField txtpassnueva, txtpasswordconfir;
     Font font = new Font("Geneva", 1, 13);
 //    Color c = new java.awt.Color(255, 255, 153);
     Color c = Color.WHITE;
@@ -31,11 +31,11 @@ public class frmCambioClave extends JDialog implements ActionListener {
     public frmCambioClave(frmprincipal frm) {
         super(frm, "Cambio de Clave", true);
         iniciarComponentes();
-
+        pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         cambiarletras();
-        pack();
+
 //        setPreferredSize(300,200);
         acceder.addActionListener(this);
         cancelar.addActionListener(this);
@@ -47,7 +47,7 @@ public class frmCambioClave extends JDialog implements ActionListener {
         jlpassnueva.setFont(font);
         jlpassactual.setFont(font);
         user.setFont(font);
-        txtpassactual.setFont(font);
+        txtpasswordconfir.setFont(font);
         txtpassnueva.setFont(font);
         cancelar.setFont(font);
         acceder.setFont(font);
@@ -59,8 +59,15 @@ public class frmCambioClave extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        dispose();
+        Object source = e.getSource();
+        if (source == acceder) {
+            String usuario = (user.getText());
+            String contraseña = (String.valueOf(txtpasswordconfir.getPassword()));
+            
 
+        } else if (source == cancelar) {
+            dispose();
+        }
     }
 
     private void iniciarComponentes() {
@@ -74,14 +81,14 @@ public class frmCambioClave extends JDialog implements ActionListener {
         paneuser.setBackground(c);
 
         JPanel panelpassA = new JPanel(new GridLayout(1, 2));
-        jlpassactual = new JLabel("Contraseña Actual:");
-        txtpassactual = new JPasswordField(10);
+        jlpassactual = new JLabel("Contraseña Nueva:");
+        txtpasswordconfir = new JPasswordField(10);
         panelpassA.add(jlpassactual);
-        panelpassA.add(txtpassactual);
+        panelpassA.add(txtpasswordconfir);
         panelpassA.setBackground(c);
 
         JPanel panelpassN = new JPanel(new GridLayout(1, 2));
-        jlpassnueva = new JLabel("Contraseña Nueva:");
+        jlpassnueva = new JLabel("Confirmar contraseña:");
         txtpassnueva = new JPasswordField(10);
         panelpassN.add(jlpassnueva);
         panelpassN.add(txtpassnueva);

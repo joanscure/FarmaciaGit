@@ -232,7 +232,7 @@ tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKe
 ////            control = true;
                 frmTipousuario.jbModificar.doClick();
 
-            } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                 frmTipousuario.jbEliminar.doClick();
             }
         } else if (source == txtBuscar) {

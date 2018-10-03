@@ -239,7 +239,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
 ////            control = true;
                 frmEmpleados.jbModificar.doClick();
 
-            } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
                 frmEmpleados.jbEliminar.doClick();
             }
         }

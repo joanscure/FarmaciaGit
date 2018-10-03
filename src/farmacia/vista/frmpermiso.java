@@ -5,6 +5,7 @@
  */
 package farmacia.vista;
 
+import farmacia.vista.mantenimientoCliente.frmClientes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -28,14 +29,16 @@ public class frmpermiso extends JDialog implements ActionListener {
 //    Color c = new java.awt.Color(255, 255, 153);
     Color c = Color.WHITE;
 
-    public frmpermiso(frmprincipal frm) {
-        super(frm, "Conceder Permiso", true);
+    public frmpermiso() {
+//        super(frm, "Conceder Permiso", true);
+        setTitle("Conceder Permiso");
+        
         iniciarComponentes();
-
+        pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         cambiarletras();
-        pack();
+
         acceder.addActionListener(this);
         cancelar.addActionListener(this);
     }
