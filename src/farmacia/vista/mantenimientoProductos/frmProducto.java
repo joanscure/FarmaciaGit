@@ -11,6 +11,8 @@ import farmacia.jdbc.dao.DAOManager;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmVentas;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -168,6 +170,8 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
             pestañas.setSelectedIndex(0);
             pane1.control = true;
             action = "nothing";
+            jbModificar.setEnabled(false);
+            jbEliminar.setEnabled(false);
             pane1.txtBuscar.requestFocus();
 
         } else if (source == jbGuardar) {

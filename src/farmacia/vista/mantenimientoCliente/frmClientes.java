@@ -172,6 +172,8 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
+            jbModificar.setEnabled(false);
+            jbEliminar.setEnabled(false);
             pane1.control = true;
             action = "nothing";
             pane1.txtBuscar.requestFocus();

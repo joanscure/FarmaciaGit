@@ -14,6 +14,8 @@ import farmacia.jdbc.modelado.empresa;
 import farmacia.jdbc.modelado.empresacliente;
 import farmacia.jdbc.modelado.persona;
 import farmacia.vista.frmpermiso;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -168,6 +170,8 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
             pane1.control = true;
+            jbModificar.setEnabled(false);
+            jbEliminar.setEnabled(false);
             action = "nothing";
             pane1.txtBuscar.requestFocus();
 

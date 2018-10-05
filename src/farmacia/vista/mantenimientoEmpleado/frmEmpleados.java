@@ -13,6 +13,8 @@ import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -173,6 +175,8 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
             pane1.control = true;
+            jbModificar.setEnabled(false);
+            jbEliminar.setEnabled(false);
             action = "nothing";
             pane1.txtBuscar.requestFocus();
 

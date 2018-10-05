@@ -11,6 +11,8 @@ import farmacia.calculos.configuracionImagenes;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.tipotrabajador;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
+import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbNuevo;
 import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
 import java.awt.BorderLayout;
@@ -174,6 +176,8 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
             pestañas.setSelectedIndex(0);
             pane1.control = true;
             action = "nothing";
+            jbModificar.setEnabled(false);
+            jbEliminar.setEnabled(false);
             pane1.txtBuscar.requestFocus();
 
         } else if (source == jbGuardar) {
