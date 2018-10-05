@@ -259,8 +259,10 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
 
     private boolean validarpass() {
         String passw = EncriptacionPass.cryptMD5(txtpassword.getText());
+        String user=txtusuario.getText();
+        
         for (int i = 0; i < modelo.getRowCount(); i++) {
-            if (passw.equals(tabla.getValueAt(i, 3))) {
+            if (passw.equals(tabla.getValueAt(i, 3))&& user.equals(tabla.getValueAt(i, 2))) {
                 index = i;
                 return true;
             }
