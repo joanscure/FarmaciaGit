@@ -48,7 +48,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
     JPanel principal;
     JPanel pane1;
     JButton buscar;
-    public JCTextField txtBuscar;
+    public JTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
     frmProducto regis;
@@ -110,8 +110,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         buscarPor = new JComboBox();
         buscarPor.addItem("Por Codigo");
         buscarPor.addItem("Por Nombre");
-        txtBuscar = new JCTextField();
-        txtBuscar.setPlaceholder(" Buscar");
+        txtBuscar = new JTextField(10);
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);

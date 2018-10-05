@@ -26,6 +26,8 @@ public class empleadoSQL implements empleadoDAO {
     private final String DELETE = "UPDATE empleado SET status = 0 WHERE idempleado = ?";
     private final String GETALL = "SELECT * FROM empleado WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM empleado WHERE idempleado = ?";
+    private final String CHANGEPASS="UPDATE empleado set password=? "
+            + "WHERE login=?";
 
     public empleadoSQL(Connection con) {
         this.conexion = con;
@@ -183,9 +185,24 @@ public class empleadoSQL implements empleadoDAO {
         return emp;
     }
 
+   
+
     @Override
-    public void modificarpassword(empleado emp) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void actualizarpassword(empleado emp) throws DAOException {
+       PreparedStatement stat = null;
+        try{
+            stat = conexion.prepareStatement(CHANGEPASS);
+            stat.setString(1, emp.getPassword());
+            stat.setString(2, emp.getLogin());
+            
+            if(stat.executeUpdate() == 0){
+                throw new DAOException("Error al eliminar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error de SQL.", ex);
+        }finally{
+            UtilSQL.cerrar(stat);
+        }
     }
 
 }
