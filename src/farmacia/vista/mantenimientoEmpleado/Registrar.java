@@ -351,6 +351,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         
         fecharegistro = new JDateChooser();
         fecharegistro.setDate(new Date());
+        fecharegistro.setPreferredSize(new Dimension(122, 5));
         panefecha.add(jlfecha);
         panefecha.add(fecharegistro);
         panefecha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
