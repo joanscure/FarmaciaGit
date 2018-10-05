@@ -50,7 +50,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
     JPanel principal;
     JPanel pane1;
     JButton buscar;
-    public JCTextField txtBuscar;
+    public JTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
     frmEmpresa regis;
@@ -119,8 +119,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
         buscarPor = new JComboBox();
         buscarPor.addItem("Por Razon social");
         buscarPor.addItem("Por RUC");
-        txtBuscar = new JCTextField();
-        txtBuscar.setPlaceholder(" Buscar");
+        txtBuscar = new JTextField();
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);
