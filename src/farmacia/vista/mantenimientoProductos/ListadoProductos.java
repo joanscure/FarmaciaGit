@@ -111,7 +111,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         buscarPor.addItem("Por Codigo");
         buscarPor.addItem("Por Nombre");
         txtBuscar = new JCTextField();
-        txtBuscar.setPlaceholder("Buscar");
+        txtBuscar.setPlaceholder(" Buscar");
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);
