@@ -104,7 +104,7 @@ public class frmCambioClave extends JDialog implements ActionListener,KeyListene
                     JOptionPane.showMessageDialog(null, "Clave actualizada correctamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
                 }catch (DAOException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                    JOptionPane.showMessageDialog(null, ex.getMessage(),"Error SQL", JOptionPane.ERROR_MESSAGE);
                 }
                 
         } else if (source == cancelar) {
@@ -113,12 +113,11 @@ public class frmCambioClave extends JDialog implements ActionListener,KeyListene
         {
             user.transferFocus();
         }
-        else if(source==txtpassnueva)
-            
+        else if(source==txtpasswordconfir)
         {
-            txtpassnueva.transferFocus();
+            txtpasswordconfir.transferFocus();
         }
-        else if(source== txtpasswordconfir)
+        else if(source== txtpassnueva)
         {
             acceder.doClick();
         }
