@@ -102,7 +102,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
                 }
 
             }
-
+            contador.setText("Existen "+modelo.getRowCount()+" empleados");
             manager.cerrarConexion();
         } catch (DAOException ex) {
             throw new DAOException("error al buscar" + ex.getMessage());

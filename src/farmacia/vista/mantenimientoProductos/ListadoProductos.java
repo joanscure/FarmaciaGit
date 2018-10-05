@@ -81,7 +81,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
                 modelo.addRow(obj);
 
             }
-
+            contador.setText("Existen "+modelo.getRowCount()+" productos");
             manager.cerrarConexion();
         } catch (DAOException ex) {
             throw new DAOException("error al buscar" + ex.getMessage());

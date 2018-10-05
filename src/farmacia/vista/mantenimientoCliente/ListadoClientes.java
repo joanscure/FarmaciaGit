@@ -101,7 +101,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
                 }
 
             }
-
+            contador.setText("Existen "+modelo.getRowCount()+" clientes");
             manager.cerrarConexion();
         } catch (DAOException ex) {
             throw new DAOException("error al buscar" + ex.getMessage());

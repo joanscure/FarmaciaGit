@@ -98,7 +98,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
                 modelo.addRow(obj);
 
             }
-
+            contador.setText("Existen "+modelo.getRowCount()+" usuarios");
             manager.cerrarConexion();
         } catch (DAOException ex) {
             throw new DAOException("error al buscar" + ex.getMessage());

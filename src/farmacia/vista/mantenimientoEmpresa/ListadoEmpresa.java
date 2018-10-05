@@ -101,7 +101,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
                 }
 
             }
-
+            contador.setText("Existen "+modelo.getRowCount()+" empresas");
             manager.cerrarConexion();
         } catch (DAOException ex) {
             throw new DAOException("error al buscar" + ex.getMessage());
