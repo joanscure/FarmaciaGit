@@ -124,7 +124,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
         buscarPor.addItem("Por Documento");
         buscarPor.addItem("Por Edad");
         txtBuscar = new JCTextField();
-        txtBuscar.setPlaceholder("Buscar");
+        txtBuscar.setPlaceholder(" Buscar");
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);
