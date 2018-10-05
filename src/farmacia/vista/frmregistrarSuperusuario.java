@@ -6,10 +6,8 @@
 package farmacia.vista;
 
 import static farmacia.calculos.EncriptacionPass.cryptMD5;
-import farmacia.calculos.calculosTipousuario;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
-import farmacia.jdbc.dao.mysql.UtilSQL;
 import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.tipotrabajador;
@@ -17,18 +15,14 @@ import farmacia.vista.mantenimientoEmpleado.Registrar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 
 /**
  *
@@ -163,7 +157,5 @@ Color c = new java.awt.Color(255, 255, 153);
 
     }
 
-    public static void main(String[] args) {
-        new frmregistrarSuperusuario().setVisible(true);
-    }
+    
 }
