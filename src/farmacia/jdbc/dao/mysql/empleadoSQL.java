@@ -196,7 +196,7 @@ public class empleadoSQL implements empleadoDAO {
             stat.setString(2, emp.getLogin());
             
             if(stat.executeUpdate() == 0){
-                throw new DAOException("Error al eliminar un registro.");
+                throw new DAOException("No se encontró el usuario");
             }
         } catch (SQLException ex) {
             throw new DAOException("Error de SQL.", ex);
