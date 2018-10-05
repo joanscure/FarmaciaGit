@@ -129,7 +129,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(clientes_tabla(), BorderLayout.CENTER);
+        pane1.add(empresas_tabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
@@ -151,7 +151,7 @@ public class ListadoEmpresa extends JPanel implements ActionListener, KeyListene
 
     }
 
-    public JScrollPane clientes_tabla() {
+    public JScrollPane empresas_tabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"idclienteEmpresa", "idEmpresa", "Razon Social", "Numero de RUC", "Direccion", "Telefono", "Fecha Registro","estado"};
