@@ -15,13 +15,15 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.*;
 
 /**
  *
  * @author fecyp
  */
-public class frmCambioClave extends JDialog implements ActionListener {
+public class frmCambioClave extends JDialog implements ActionListener,KeyListener {
 
     JPanel panelprincipal;
     JButton cancelar, acceder;
@@ -42,6 +44,9 @@ public class frmCambioClave extends JDialog implements ActionListener {
 
 //        setPreferredSize(300,200);
         acceder.addActionListener(this);
+        user.addActionListener(this);
+        txtpassnueva.addActionListener(this);
+        txtpasswordconfir.addActionListener(this);
         cancelar.addActionListener(this);
 
     }
@@ -166,6 +171,18 @@ public class frmCambioClave extends JDialog implements ActionListener {
         setSize(400, 215);
         setResizable(false);
         
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 
 }
