@@ -5,6 +5,7 @@
  */
 package farmacia.vista.mantenimientoCliente;
 
+import app.bolivia.swing.JCTextField;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
@@ -48,7 +49,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
     JPanel principal;
     JPanel pane1;
     JButton buscar;
-    public JTextField txtBuscar;
+    public JCTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
     frmClientes regis;
@@ -121,7 +122,8 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         buscarPor.addItem("Por Apellido");
         buscarPor.addItem("Por DNI");
         buscarPor.addItem("Por Edad");
-        txtBuscar = new JTextField(10);
+        txtBuscar = new JCTextField();
+        txtBuscar.setPlaceholder("Buscar");
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);

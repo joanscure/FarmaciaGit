@@ -5,6 +5,7 @@
  */
 package farmacia.vista.mantenimientoTipoUsuario;
 
+import app.bolivia.swing.JCTextField;
 import farmacia.vista.mantenimientoProductos.*;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
@@ -49,7 +50,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
     JPanel principal;
     JPanel pane1;
     JButton buscar;
-    public JTextField txtBuscar;
+    public JCTextField txtBuscar;
     JComboBox buscarPor;
     JLabel contador;
     frmTipousuario regis;
@@ -117,7 +118,8 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
         buscarPor.addItem("Por Nombre");
         buscarPor.addItem("Por Descripcion");
         buscarPor.addItem("Por Codigo");
-        txtBuscar = new JTextField(10);
+        txtBuscar = new JCTextField();
+        txtBuscar.setPlaceholder("Buscar");
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);
