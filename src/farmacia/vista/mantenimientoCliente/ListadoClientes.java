@@ -122,7 +122,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         buscarPor.addItem("Por Apellido");
         buscarPor.addItem("Por DNI");
         buscarPor.addItem("Por Edad");
-        txtBuscar = new JTextField();
+        txtBuscar = new JTextField(10);
 
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);

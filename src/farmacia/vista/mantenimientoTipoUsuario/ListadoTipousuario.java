@@ -118,7 +118,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
         buscarPor.addItem("Por Nombre");
         buscarPor.addItem("Por Descripcion");
         buscarPor.addItem("Por Codigo");
-        txtBuscar = new JTextField();
+        txtBuscar = new JTextField(10);
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);

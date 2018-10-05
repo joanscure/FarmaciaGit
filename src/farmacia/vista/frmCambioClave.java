@@ -86,6 +86,18 @@ public class frmCambioClave extends JDialog implements ActionListener {
                 }    
         } else if (source == cancelar) {
             dispose();
+        }else if(source== user)
+        {
+            user.transferFocus();
+        }
+        else if(source==txtpassnueva)
+            
+        {
+            txtpassnueva.transferFocus();
+        }
+        else if(source== txtpasswordconfir)
+        {
+            acceder.doClick();
         }
     }
 
