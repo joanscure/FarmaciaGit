@@ -119,7 +119,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(clientes_tabla(), BorderLayout.CENTER);
+        pane1.add(productos_tabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
@@ -142,7 +142,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
 
     }
 
-    public JScrollPane clientes_tabla() {
+    public JScrollPane productos_tabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"Codigo", "Nombre", "Descripcion", "Dosis", "Precio Venta", "IGV", "Precio Total", "Stock", "estado"};

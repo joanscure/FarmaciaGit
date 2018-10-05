@@ -5,6 +5,10 @@
  */
 package farmacia.vista;
 
+import static farmacia.calculos.EncriptacionPass.cryptMD5;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empleado;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -63,8 +67,23 @@ public class frmCambioClave extends JDialog implements ActionListener {
         if (source == acceder) {
             String usuario = (user.getText());
             String contraseña = (String.valueOf(txtpasswordconfir.getPassword()));
-            
-
+            String contraseñaEcriptada = cryptMD5(contraseña);
+            String contraseñaConfirmar = (String.valueOf(txtpassnueva.getPassword()));
+            if (!contraseña.equals(contraseñaConfirmar)) {
+                JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden", "Advertencia ", JOptionPane.ERROR_MESSAGE);
+            }
+            DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    empleado emp= new empleado();
+                    emp.setLogin(usuario);
+                    emp.setPassword(contraseñaEcriptada);
+                    manager.getEmpleadoDAO().actualizarpassword(emp);
+                    manager.cerrarConexion();
+                    JOptionPane.showMessageDialog(null, "Clave actualizada correctamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+                }catch (DAOException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }    
         } else if (source == cancelar) {
             dispose();
         }

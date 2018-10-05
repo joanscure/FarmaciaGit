@@ -13,7 +13,6 @@ import farmacia.vista.mantenimientoEmpresa.frmEmpresa;
 import farmacia.vista.mantenimientoProductos.frmProducto;
 import farmacia.vista.mantenimientoTipoUsuario.frmTipousuario;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

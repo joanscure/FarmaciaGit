@@ -126,7 +126,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(clientes_tabla(), BorderLayout.CENTER);
+        pane1.add(tipoUsuario_tabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
@@ -148,7 +148,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
 
     }
 
-    public JScrollPane clientes_tabla() {
+    public JScrollPane tipoUsuario_tabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"idtipo", "Descripcion", "Acc.ventas(2)", "Acc.produto(3)", "Acc.Clientes(4)", "Acc.Consultas(5)",
