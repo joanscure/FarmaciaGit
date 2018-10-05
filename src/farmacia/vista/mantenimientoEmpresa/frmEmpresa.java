@@ -93,9 +93,9 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
         JPanel botones_principal = new JPanel(new BorderLayout());
         botones_principal.setBackground(c);
         JPanel botones = new JPanel(new GridLayout(6, 1));
-        jbNuevo = new JButton("Nuevo", config.obtenerIcono("nuevo.png"));
+        jbNuevo = new JButton("Nuevo(CTRL +N)", config.obtenerIcono("nuevo.png"));
 
-        jbGuardar = new JButton("Guardar", config.obtenerIcono("guardar.png"));
+        jbGuardar = new JButton("Guardar(CTRL+S)", config.obtenerIcono("guardar.png"));
         jbEliminar = new JButton("Eliminar", config.obtenerIcono("eliminar.png"));
         jbModificar = new JButton("Modificar", config.obtenerIcono("modificar.png"));
         jbCancelar = new JButton("Cancelar", config.obtenerIcono("cancelar.png"));
