@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-09-2018 a las 15:08:33
+-- Tiempo de generación: 05-10-2018 a las 05:16:46
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -44,7 +44,11 @@ CREATE TABLE `boletacabecera` (
 
 INSERT INTO `boletacabecera` (`idboletacabecera`, `correlativoboleta`, `numeroboleta`, `fechaemisionboleta`, `idpersonacliente`, `idempleado`, `status`) VALUES
 (1, 'B001', '00000001', '2018-09-28', 1, 1, 1),
-(2, 'B001', '00000002', '2018-09-28', 1, 1, 1);
+(2, 'B001', '00000002', '2018-09-28', 1, 1, 1),
+(3, 'B001', '00000003', '2018-09-28', 1, 1, 1),
+(4, 'B001', '00000004', '2018-09-28', 1, 1, 1),
+(5, 'B001', '00000005', '2018-09-28', 1, 1, 1),
+(6, 'B001', '00000006', '2018-09-28', 1, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -69,7 +73,12 @@ INSERT INTO `boletadetalle` (`idboletadetalle`, `idboletacabecera`, `idproducto`
 (1, 1, 1, 6.00, 8.34, 1),
 (2, 1, 2, 8.00, 18.88, 1),
 (3, 2, 1, 12.00, 16.68, 1),
-(4, 2, 2, 5.00, 11.80, 1);
+(4, 2, 2, 5.00, 11.80, 1),
+(5, 3, 1, 4.00, 5.56, 1),
+(6, 3, 2, 5.00, 11.80, 1),
+(7, 4, 1, 5.00, 6.95, 1),
+(8, 5, 1, 3.00, 4.17, 1),
+(9, 6, 1, 15.00, 20.85, 1);
 
 -- --------------------------------------------------------
 
@@ -108,7 +117,9 @@ CREATE TABLE `empleado` (
 
 INSERT INTO `empleado` (`idempleado`, `idpersona`, `login`, `password`, `fechaalta`, `idtipotrabajador`, `status`) VALUES
 (1, 1, 'admin', '81dc9bdb52d04dc20036dbd8313ed055', '2018-09-27', 1, 1),
-(3, 5, 'vender', '1a19b39699d9a03071c1478b3f425ea0', '2018-09-28', 2, 1);
+(3, 5, 'vender', '1a19b39699d9a03071c1478b3f425ea0', '2018-09-28', 2, 1),
+(4, 6, 'practica', 'afc0a762ff45348639901afc1ac3701c', '2018-09-28', 7, 1),
+(5, 7, 'PROBANDO', '81dc9bdb52d04dc20036dbd8313ed055', '2018-10-01', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -131,7 +142,8 @@ CREATE TABLE `empresa` (
 
 INSERT INTO `empresa` (`idempresa`, `rucempresa`, `razonsocial`, `telefono`, `direccion`, `status`) VALUES
 (9, '12332323212', 'EMPRESASS', '121231231', '121231231', 1),
-(10, '12312835467', 'EJEMPLO', '123128381', 'ASJDAJSDJAJSD', 0);
+(10, '12312835467', 'EJEMPLO', '123128381', 'ASJDAJSDJAJSD', 0),
+(11, '23498239848', 'EMPRESASA', '231912932', 'SJAJSDJASDASDAS', 1);
 
 -- --------------------------------------------------------
 
@@ -152,7 +164,8 @@ CREATE TABLE `empresacliente` (
 
 INSERT INTO `empresacliente` (`idempresacliente`, `idempresa`, `fecharegistro`, `status`) VALUES
 (1, 9, '2018-09-28', 1),
-(2, 10, '2018-09-28', 1);
+(2, 10, '2018-09-28', 1),
+(3, 11, '2018-09-28', 1);
 
 -- --------------------------------------------------------
 
@@ -216,9 +229,11 @@ CREATE TABLE `persona` (
 
 INSERT INTO `persona` (`idpersona`, `nombre`, `appaterno`, `apmaterno`, `numerodni`, `personaedad`, `direccion`, `telefono`, `status`) VALUES
 (1, 'JOAN', 'LEYTON', 'CARRILLO', '76354201', 19, 'PIURA', '943542521', 1),
-(2, 'JUNIOR', 'HOLGUIN', 'RUIZ', '12312131', 21, 'PIURA', '458948484', 1),
+(2, 'JUNIOR', 'HOLGUIN', 'RUIZ', '12312131', 21, 'PIURA', '458948484', 0),
 (3, 'CLIENTE', 'GENERICO', 'GENERICO', '00000000', 0, '', '', 1),
-(5, 'POL', 'LE', 'AC', '12313123', 12, 'TALARA', '1231321', 1);
+(5, 'POL', 'LE', 'AC', '12313123', 12, 'TALARA', '1231321', 1),
+(6, 'PRAC', 'APE', 'APE', '12812831', 18, 'UNP', '182182812', 1),
+(7, 'PRUEBA', 'APEPRIE', 'APPRUEBB', '12132313', 14, 'SDASDASDASD', '123213123', 1);
 
 -- --------------------------------------------------------
 
@@ -237,7 +252,7 @@ CREATE TABLE `personacliente` (
 --
 
 INSERT INTO `personacliente` (`idpersonacliente`, `idpersona`, `status`) VALUES
-(1, 2, 1),
+(1, 2, 0),
 (2, 3, 1);
 
 -- --------------------------------------------------------
@@ -264,7 +279,9 @@ CREATE TABLE `producto` (
 
 INSERT INTO `producto` (`idproducto`, `nombreproducto`, `descripcionproducto`, `dosisproducto`, `precioventa`, `igv`, `preciofinal`, `stock`, `status`) VALUES
 (1, 'PRUEBA', 'EJEMPLO', '500 MG', 1.39, 18.00, 1.39, 100, 1),
-(2, 'IBUPROFENO', 'CALMAR DOLOR', '200 MG', 2.36, 18.00, 2.36, 100, 1);
+(2, 'IBUPROFENO', 'CALMAR DOLOR', '200 MG', 2.36, 18.00, 2.36, 100, 1),
+(3, 'NUEVO', 'PRODUCTO', '100MG', 4.72, 18.00, 4.72, 100, 0),
+(4, 'PRUEBA', 'DESCR', '200 MG', 2.36, 18.00, 2.36, 150, 0);
 
 -- --------------------------------------------------------
 
@@ -310,7 +327,9 @@ CREATE TABLE `tipotrabajador` (
 INSERT INTO `tipotrabajador` (`idtipotrabajador`, `nombretipotrabajador`, `accederventas`, `accederproductos`, `accederclientes`, `accederconsultas`, `accederempleados`, `accedertipousuario`, `accedercambioclave`, `accederanulaciones`, `accedereliminarproducto`, `accedereliminarcliente`, `accedereliminarempleado`, `accedereliminartipoempleado`, `status`) VALUES
 (1, 'ADMINISTRADOR', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 (2, 'VENDEDOR', 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1),
-(5, 'REGISTRADOR', 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1);
+(5, 'REGISTRADOR', 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0),
+(6, 'ELIMINACION', 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1),
+(7, 'PRACTICANTE', 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 --
 -- Índices para tablas volcadas
@@ -416,13 +435,13 @@ ALTER TABLE `tipotrabajador`
 -- AUTO_INCREMENT de la tabla `boletacabecera`
 --
 ALTER TABLE `boletacabecera`
-  MODIFY `idboletacabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idboletacabecera` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `boletadetalle`
 --
 ALTER TABLE `boletadetalle`
-  MODIFY `idboletadetalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idboletadetalle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `descuento`
@@ -434,19 +453,19 @@ ALTER TABLE `descuento`
 -- AUTO_INCREMENT de la tabla `empleado`
 --
 ALTER TABLE `empleado`
-  MODIFY `idempleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idempleado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `idempresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `idempresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `empresacliente`
 --
 ALTER TABLE `empresacliente`
-  MODIFY `idempresacliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idempresacliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `facturacabecera`
@@ -464,7 +483,7 @@ ALTER TABLE `facturadetalle`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idpersona` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `personacliente`
@@ -476,7 +495,7 @@ ALTER TABLE `personacliente`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idproducto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `productodescuento`
@@ -488,7 +507,7 @@ ALTER TABLE `productodescuento`
 -- AUTO_INCREMENT de la tabla `tipotrabajador`
 --
 ALTER TABLE `tipotrabajador`
-  MODIFY `idtipotrabajador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idtipotrabajador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas
