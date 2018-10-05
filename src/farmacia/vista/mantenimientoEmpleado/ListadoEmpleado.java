@@ -131,7 +131,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(clientes_tabla(), BorderLayout.CENTER);
+        pane1.add(empleados_tabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
@@ -153,7 +153,7 @@ public class ListadoEmpleado extends JPanel implements ActionListener, KeyListen
 
     }
 
-    public JScrollPane clientes_tabla() {
+    public JScrollPane empleados_tabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"idempleado", "idpersona" ,"Nombre", "Apellido Paterno",

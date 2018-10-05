@@ -220,6 +220,12 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
                     pane2.txtuser.setBackground(Color.yellow);
                     return;
                 }
+                if (validarUsuario(pane2.txtuser.getText())) {
+                    JOptionPane.showMessageDialog(null, "El nombre de usuario ya existe","Error",JOptionPane.ERROR_MESSAGE);
+                    pane2.txtuser.requestFocus();
+                    pane2.txtuser.setBackground(Color.yellow);
+                    return;
+                }
                 if (pane2.txtpassw.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Debe ingresar una contraseña  para el Poder registrarse", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                     pane2.txtpassw.requestFocus();
@@ -518,6 +524,15 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
             pane2.cbxtipodeempleado.addItem(lista[i]);
 
         }
-
+    }
+    
+    public boolean validarUsuario(String usuario){
+        boolean validar=false;
+        for (int i = 0; i < pane1.tabla.getRowCount(); i++) {
+            if (usuario.equals(pane1.tabla.getValueAt(i, 9))) {
+                validar=true;
+            }
+        }
+        return validar;
     }
 }

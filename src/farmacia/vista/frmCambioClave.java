@@ -31,7 +31,7 @@ public class frmCambioClave extends JDialog implements ActionListener {
     public frmCambioClave(frmprincipal frm) {
         super(frm, "Cambio de Clave", true);
         iniciarComponentes();
-        pack();
+        //pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         cambiarletras();
@@ -88,7 +88,7 @@ public class frmCambioClave extends JDialog implements ActionListener {
         panelpassA.setBackground(c);
 
         JPanel panelpassN = new JPanel(new GridLayout(1, 2));
-        jlpassnueva = new JLabel("Confirmar contraseña:");
+        jlpassnueva = new JLabel("Confirmar Contraseña:");
         txtpassnueva = new JPasswordField(10);
         panelpassN.add(jlpassnueva);
         panelpassN.add(txtpassnueva);
@@ -114,6 +114,9 @@ public class frmCambioClave extends JDialog implements ActionListener {
         panelprincipal.add(todo, BorderLayout.NORTH);
         panelprincipal.add(botones, BorderLayout.SOUTH);
         add(panelprincipal);
+        setSize(400, 215);
+        setResizable(false);
+        
     }
 
 }
