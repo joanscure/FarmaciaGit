@@ -17,7 +17,8 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
 
     private final String INSERT = "INSERT INTO facturacabecera(correlativofactura, numerofactura, fechaemisionfactura, idempresacliente, idempleado, status) "
             + "VALUES (?, ?, ?, ?, ?, ?) ";
-    private final String UPDATE = "UPDATE facturacabecera SET correlativofactura = ?, numerofactura = ?, fechaemisionfactura = ?, idempresacliente = ?, idempleado = ?, status = ?";
+    private final String UPDATE = "UPDATE facturacabecera SET correlativofactura = ?, numerofactura = ?, fechaemisionfactura = ?, idempresacliente = ?, idempleado = ?, status = ? "
+            + "WHERE idfacturacabecera = ?";
     private final String DELETE = "UPDATE facturacabecera SET status = 0 WHERE idfacturacabecera = ?";
     private final String GETALL = "SELECT * FROM facturacabecera WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM facturacabecera WHERE idfacturacabecera = ?";
@@ -31,7 +32,7 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
         PreparedStatement stat = null;
         ResultSet rs = null;
         try {
-            stat = conexion.prepareStatement(INSERT,1);
+            stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
             stat.setString(1, obj.getCorrelativofactura());
             stat.setString(2, obj.getNumerofactura());
@@ -44,10 +45,10 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
                 throw new DAOException("Error al ingresar un registro.");
             }
 
-//            rs = stat.getGeneratedKeys();
-//            if (rs.next()) {
-//                obj.setIdfacturacabecera(rs.getLong(1));
-//            }
+            rs = stat.getGeneratedKeys();
+            if (rs.next()) {
+                obj.setIdfacturacabecera(rs.getLong(1));
+            }
         } catch (SQLException ex) {
             throw new DAOException("Error de sql."+ ex.getMessage());
         } finally {
@@ -58,7 +59,27 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
 
     @Override
     public void modificar(facturacabecera obj) throws DAOException {
-        throw new DAOException("No se puede modificar este registro");
+        PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(UPDATE);
+
+            stat.setString(1, obj.getCorrelativofactura());
+            stat.setString(2, obj.getNumerofactura());
+            stat.setDate(3, new Date(obj.getFechaemisionfactura().getTime()));
+            stat.setLong(4, obj.getIdempresacliente());
+            stat.setLong(5, obj.getIdempleado());
+            stat.setBoolean(6, (boolean) obj.isStatus());
+            stat.setLong(7, obj.getIdfacturacabecera());
+            
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al ingresar un registro.");
+            }
+
+        } catch (SQLException ex) {
+            throw new DAOException("Error de sql."+ ex.getMessage());
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
     @Override

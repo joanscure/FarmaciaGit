@@ -187,7 +187,9 @@ public class boletadetalleSQL implements boletadetalleDAO {
         PreparedStatement stat = null;
         ResultSet rs = null;
         try {
-            stat = conexion.prepareStatement(GETALL);
+            stat = conexion.prepareStatement(GETDETAILS);
+            stat.setLong(1, idboletacabecera);
+            
             rs = stat.executeQuery();
             while (rs.next()) {
                 lista.add(convertir(rs));

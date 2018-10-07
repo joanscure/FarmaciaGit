@@ -87,6 +87,7 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
 
     @Override
     public void eliminar(boletacabecera obj) throws DAOException {
+        //REVISAR CLAVE REFERENCIADA AL MOMENTO DE ELIMINAR
         PreparedStatement stat = null;
         try {
             stat = conexion.prepareStatement(DELETE);

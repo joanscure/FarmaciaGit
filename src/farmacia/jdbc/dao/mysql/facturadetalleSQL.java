@@ -2,6 +2,7 @@ package farmacia.jdbc.dao.mysql;
 
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.facturadetalleDAO;
+import farmacia.jdbc.modelado.boletadetalle;
 import farmacia.jdbc.modelado.facturadetalle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,11 +16,14 @@ public class facturadetalleSQL implements facturadetalleDAO {
     private Connection conexion;
 
     private final String INSERT = "INSERT INTO facturadetalle(idfacturacabecera, idproducto, cantidad, subtotal, status) "
-            + "VALUES (( SELECT idfacturacabecera from facturacabecera order by idfacturacabecera desc limit 1), ?, ?, ?, ?) ";
-    private final String UPDATE = "UPDATE facturadetalle SET idfacturacabecera = ?, idproducto = ?, cantidad = ?, subtotal = ?, status = ?";
-    private final String DELETE = "UPDATE facturadetalle SET status = 0 WHERE idfacturacabecera = ?";
+            + "VALUES (?, ?, ?, ?, ?) ";
+    private final String UPDATE = "UPDATE facturadetalle SET idfacturacabecera = ?, idproducto = ?, cantidad = ?, subtotal = ?, status = ? "
+            + "WHERE idfacturadetalle = ?";
+    private final String DELETE = "UPDATE facturadetalle SET status = 0 WHERE idfacturadetalle = ?";
+    private final String DELETEALL = "UPDATE facturadetalle SET status = 0 WHERE idfacturacabecera = ?";
     private final String GETALL = "SELECT * FROM facturadetalle WHERE status = 1";
     private final String GETONE = "SELECT * FROM facturadetalle WHERE idfacturadetalle = ?";
+    private final String GETDEAILS = "SELECT * FROM facturadetalle WHERE idfacturacabecera = ?";
 
     public facturadetalleSQL(Connection conexion) {
         this.conexion = conexion;
@@ -30,12 +34,13 @@ public class facturadetalleSQL implements facturadetalleDAO {
         PreparedStatement stat = null;
         ResultSet rs = null;
         try {
-            stat = conexion.prepareStatement(INSERT, 1);
+            stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
 
-            stat.setLong(1, obj.getIdproducto());
-            stat.setDouble(2, obj.getCantidad());
-            stat.setDouble(3, obj.getSubtotal());
-            stat.setBoolean(4, (boolean) obj.isStatus());
+            stat.setLong(1, obj.getIdfacturacabecera());
+            stat.setLong(2, obj.getIdproducto());
+            stat.setDouble(3, obj.getCantidad());
+            stat.setDouble(4, obj.getSubtotal());
+            stat.setBoolean(5, (boolean) obj.isStatus());
 
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
@@ -56,8 +61,30 @@ public class facturadetalleSQL implements facturadetalleDAO {
     }
 
     @Override
-    public void modificar(facturadetalle obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(facturadetalle obj) throws DAOException {
+        PreparedStatement stat = null;
+
+        try {
+            stat = conexion.prepareStatement(UPDATE);
+
+            stat.setLong(1, obj.getIdfacturacabecera());
+            stat.setLong(2, obj.getIdproducto());
+            stat.setDouble(3, obj.getCantidad());
+            stat.setDouble(4, obj.getSubtotal());
+            stat.setBoolean(5, (boolean) obj.isStatus());
+            stat.setLong(6, obj.getIdfacturadetalle());
+            
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al modificar un registro.");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
+
     }
 
     @Override
@@ -65,7 +92,7 @@ public class facturadetalleSQL implements facturadetalleDAO {
         PreparedStatement stat = null;
         try {
             stat = conexion.prepareStatement(DELETE);
-            stat.setLong(1, obj.getIdfacturacabecera());
+            stat.setLong(1, obj.getIdfacturadetalle());
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al eliminar un registro.");
             }
@@ -135,6 +162,42 @@ public class facturadetalleSQL implements facturadetalleDAO {
             throw new DAOException("Error en SQL.", ex);
         }
         return f;
+    }
+
+    @Override
+    public void eliminarDetallesFactura(Long idfacturacabecera) throws DAOException {
+        PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(DELETEALL);
+            stat.setLong(1, idfacturacabecera);
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al eliminar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
+    }
+
+    @Override
+    public List<facturadetalle> obtenerDetallesFactura(Long idfacturacabecera) throws DAOException {
+        List<facturadetalle> lista = new ArrayList<>();
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        try {
+            stat = conexion.prepareStatement(GETDEAILS);
+            stat.setLong(1, idfacturacabecera);
+            rs = stat.executeQuery();
+            while (rs.next()) {
+                lista.add(convertir(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return lista;
     }
 
 }

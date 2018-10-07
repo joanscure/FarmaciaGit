@@ -5,12 +5,11 @@
  */
 package farmacia.jdbc.dao;
 
+import farmacia.jdbc.modelado.boletadetalle;
 import farmacia.jdbc.modelado.factura;
+import java.util.List;
 
-/**
- *
- * @author fecyp
- */
-public interface facturaDAO extends DAO<factura, Long>{
+public interface facturaDAO extends DAO<factura, Long> {
+
     
 }
