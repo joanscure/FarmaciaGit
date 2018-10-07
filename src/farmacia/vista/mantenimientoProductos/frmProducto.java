@@ -287,6 +287,7 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
         } else if (source == jbSalir) {
             deshabilitar();
             pane1.tabla.clearSelection();
+            
             pane1.txtBuscar.setText("");
             pane1.elQueOrdena.setRowFilter(RowFilter.regexFilter("", 0));
             jbModificar.setEnabled(false);
