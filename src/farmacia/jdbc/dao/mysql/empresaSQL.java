@@ -133,8 +133,9 @@ public class empresaSQL implements empresaDAO {
     }
 
     @Override
-    public empresa convertir(ResultSet rs) throws SQLException {
+    public empresa convertir(ResultSet rs) throws DAOException {
         empresa emp = null;
+        try{
         String ruc = rs.getString("rucempresa");
         char[] rucempresa = ruc.toCharArray();
         String razonsocial = rs.getString("razonsocial");
@@ -143,6 +144,10 @@ public class empresaSQL implements empresaDAO {
         emp = new empresa(rucempresa, razonsocial, telefoo, direccion);
         emp.setIdempresa(rs.getLong("idempresa"));
         emp.setStatus(rs.getBoolean("status"));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return emp;
     }
 

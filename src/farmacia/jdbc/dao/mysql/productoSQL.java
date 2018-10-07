@@ -141,8 +141,9 @@ public class productoSQL implements productoDAO {
     }
 
     @Override
-    public producto convertir(ResultSet rs) throws SQLException {
+    public producto convertir(ResultSet rs) throws DAOException {
         producto pro = null;
+        try{
         String nombreproducto = rs.getString("nombreproducto");
         String descipcionproducto = rs.getString("descripcionproducto");
         String dosisproducto = rs.getString("dosisproducto");
@@ -153,6 +154,10 @@ public class productoSQL implements productoDAO {
         pro = new producto(nombreproducto, descipcionproducto, dosisproducto, precioventa, igv, preciofinal, stock);
         pro.setIdproducto(rs.getLong("idproducto"));
         pro.setStatus(rs.getBoolean("status"));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return pro;
 
     }

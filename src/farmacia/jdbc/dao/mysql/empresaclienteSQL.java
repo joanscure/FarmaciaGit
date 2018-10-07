@@ -131,8 +131,9 @@ public class empresaclienteSQL implements empresaclienteDAO {
     }
 
     @Override
-    public empresacliente convertir(ResultSet rs) throws SQLException {
+    public empresacliente convertir(ResultSet rs) throws DAOException {
         empresacliente emp = null;
+        try{
         Long idempresacliente = rs.getLong("idempresacliente");//PK
         Long idempresa = rs.getLong("idempresa");
         Long fecha = rs.getDate("fecharegistro").getTime();
@@ -141,7 +142,12 @@ public class empresaclienteSQL implements empresaclienteDAO {
         emp = new empresacliente(idempresa, fecharegistro);
         emp.setIdempresacliente(idempresacliente);
         emp.setStatus(status);
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return emp;
+        
     }
 
     @Override

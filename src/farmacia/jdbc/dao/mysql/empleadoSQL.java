@@ -172,8 +172,9 @@ public class empleadoSQL implements empleadoDAO {
     }
 
     @Override
-    public empleado convertir(ResultSet rs) throws SQLException {
+    public empleado convertir(ResultSet rs) throws DAOException {
         empleado emp = null;
+        try{
         Long idpersona = rs.getLong("idpersona"); //indice
         Long idtipotrabajador = rs.getLong("idtipotrabajador");//indice
         String login = rs.getString("login");//32
@@ -182,6 +183,10 @@ public class empleadoSQL implements empleadoDAO {
         emp = new empleado(idpersona, idtipotrabajador, login, password, fechaalta);
         emp.setStatus(rs.getBoolean("status"));
         emp.setIdempleado(rs.getLong("idempleado"));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return emp;
     }
 

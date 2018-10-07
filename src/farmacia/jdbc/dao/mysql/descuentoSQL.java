@@ -134,8 +134,9 @@ public class descuentoSQL implements descuentoDAO {
     }
 
     @Override
-    public descuento convertir(ResultSet rs) throws SQLException {
+    public descuento convertir(ResultSet rs) throws DAOException {
         descuento des = null;
+        try{
         String nombredescuento = rs.getString("nombredescuento");
         String condicion = rs.getString("condicion");
         double porecntaje = rs.getDouble("porcentaje");
@@ -144,7 +145,12 @@ public class descuentoSQL implements descuentoDAO {
         des = new descuento(nombredescuento, condicion, porecntaje, descripciondescuento);
         des.setIddescuento(rs.getLong("iddescuento"));
         des.setStatus(rs.getBoolean("status"));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return des;
+        
     }
 
 }

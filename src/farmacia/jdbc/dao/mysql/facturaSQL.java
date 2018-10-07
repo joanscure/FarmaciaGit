@@ -96,7 +96,7 @@ public class facturaSQL implements facturaDAO {
     }
 
     @Override
-    public factura convertir(ResultSet rs) throws SQLException {
+    public factura convertir(ResultSet rs) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

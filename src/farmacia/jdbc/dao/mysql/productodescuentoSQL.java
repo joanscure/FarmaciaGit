@@ -130,8 +130,9 @@ public class productodescuentoSQL implements productodescuentoDAO {
     }
 
     @Override
-    public productodescuento convertir(ResultSet rs) throws SQLException {
+    public productodescuento convertir(ResultSet rs) throws DAOException {
         productodescuento prodes = null;
+        try{
         Long idproductodescuento = rs.getLong("idproductodescuento");//PK
         Long idproducto = rs.getLong("idproducto");//indice
         Long iddescuento = rs.getLong("iddescuento"); //indice
@@ -139,6 +140,10 @@ public class productodescuentoSQL implements productodescuentoDAO {
         prodes = new productodescuento(idproducto, iddescuento);
         prodes.setIdproductodescuento(idproductodescuento);
         prodes.setStatus(status);
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return prodes;
     }
 

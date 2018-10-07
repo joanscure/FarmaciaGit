@@ -133,14 +133,19 @@ public class personaclienteSQL implements personaclienteDAO{
     }
 
     @Override
-    public personacliente convertir(ResultSet rs) throws SQLException {
+    public personacliente convertir(ResultSet rs) throws DAOException {
         personacliente per = null;
+        try{
         Long idpersonacliente = rs.getLong("idpersonacliente");
         Long idpersona = rs.getLong("idpersona");
         boolean status = rs.getBoolean("status");
         per = new personacliente(idpersona);
         per.setStatus(status);
         per.setIdpersonacliente(idpersonacliente);
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return per;
     }
 

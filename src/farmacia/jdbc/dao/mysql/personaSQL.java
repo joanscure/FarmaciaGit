@@ -30,8 +30,9 @@ public class personaSQL implements personaDAO {
     }
 
     @Override
-    public persona convertir(ResultSet rs) throws SQLException {
+    public persona convertir(ResultSet rs) throws DAOException {
         persona p = null;
+        try{
         String nombre = rs.getString("nombre");
         String appaterno = rs.getString("appaterno");
         String apmaterno = rs.getString("apmaterno");
@@ -43,6 +44,10 @@ public class personaSQL implements personaDAO {
         p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
         p.setIdPersona(rs.getLong("idpersona"));
         p.setStatus(rs.getBoolean("status"));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return p;
     }
 

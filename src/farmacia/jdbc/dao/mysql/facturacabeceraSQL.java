@@ -119,8 +119,9 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
     }
 
     @Override
-    public facturacabecera convertir(ResultSet rs) throws SQLException {
+    public facturacabecera convertir(ResultSet rs) throws DAOException {
         facturacabecera f = null;
+        try{
         String correlativofactura = rs.getString("correlativofactura");
         String numerofactura = rs.getString("numeroboleta");
         Date fechaemisionfactura = rs.getDate("fechaemisionfactura");
@@ -129,6 +130,10 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
         f = new facturacabecera(idempresacliente, idempleado, correlativofactura, numerofactura, fechaemisionfactura);
         f.setIdfacturacabecera(rs.getLong("idfacturacabecera"));
         f.setStatus(rs.getBoolean("status"));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return f;
     }
 

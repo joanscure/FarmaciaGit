@@ -151,9 +151,9 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO {
     }
 
     @Override
-    public tipotrabajador convertir(ResultSet rs) throws SQLException {
-        tipotrabajador tipo;
-
+    public tipotrabajador convertir(ResultSet rs) throws DAOException {
+        tipotrabajador tipo = null;
+        try{
         String nombretipotrabajador = rs.getString("nombretipotrabajador");//32 NULO
         boolean accederventas = rs.getBoolean("accederventas");
         boolean accederproductos = rs.getBoolean("accederproductos");
@@ -171,7 +171,10 @@ public class tipotrabajadorSQL implements tipotrabajadorDAO {
         tipo = new tipotrabajador(nombretipotrabajador, accederventas, accederproductos, accederclientes, accederconsultas, accederempleados, accedertipousuario, accedercambioclave, accederanulaciones, accedereliminarproducto, accedereliminarcliente, accedereliminarempleado, accedereliminartipoempleado);
         tipo.setIdtipotrabajador(rs.getLong("idtipotrabajador"));
         tipo.setStatus(rs.getBoolean("status"));
-
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return tipo;
     }
 

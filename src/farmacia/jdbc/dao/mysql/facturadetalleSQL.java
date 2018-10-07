@@ -24,26 +24,26 @@ public class facturadetalleSQL implements facturadetalleDAO {
     public facturadetalleSQL(Connection conexion) {
         this.conexion = conexion;
     }
-    
+
     @Override
     public Long insertar(facturadetalle obj) throws DAOException {
-         PreparedStatement stat = null;
+        PreparedStatement stat = null;
         ResultSet rs = null;
-         try {
-            stat = conexion.prepareStatement(INSERT,1);
+        try {
+            stat = conexion.prepareStatement(INSERT, 1);
 
             stat.setLong(1, obj.getIdproducto());
             stat.setDouble(2, obj.getCantidad());
             stat.setDouble(3, obj.getSubtotal());
             stat.setBoolean(4, (boolean) obj.isStatus());
 
-            if (stat.executeUpdate() == 0){
+            if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
             rs = stat.getGeneratedKeys();
-            if (rs.next()){
+            if (rs.next()) {
                 obj.setIdfacturadetalle(rs.getLong(1));
-            }else{
+            } else {
                 throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
             }
 
@@ -52,7 +52,7 @@ public class facturadetalleSQL implements facturadetalleDAO {
         } finally {
             UtilSQL.cerrar(stat, rs);
         }
-          return obj.getIdfacturadetalle();
+        return obj.getIdfacturadetalle();
     }
 
     @Override
@@ -76,12 +76,11 @@ public class facturadetalleSQL implements facturadetalleDAO {
         }
     }
 
-
     @Override
     public List<facturadetalle> obtenertodos() throws DAOException {
-         List<facturadetalle> lista =new  ArrayList<>();
-        PreparedStatement stat=null;
-        ResultSet rs=null;
+        List<facturadetalle> lista = new ArrayList<>();
+        PreparedStatement stat = null;
+        ResultSet rs = null;
         try {
             stat = conexion.prepareStatement(GETALL);
             rs = stat.executeQuery();
@@ -90,7 +89,7 @@ public class facturadetalleSQL implements facturadetalleDAO {
             }
         } catch (SQLException ex) {
             throw new DAOException("Error en SQL.", ex);
-        } finally {        
+        } finally {
             UtilSQL.cerrar(stat, rs);
         }
         return lista;
@@ -98,10 +97,10 @@ public class facturadetalleSQL implements facturadetalleDAO {
 
     @Override
     public facturadetalle obtener(Long id) throws DAOException {
-       facturadetalle f=null;
-        PreparedStatement stat=null;
-        ResultSet rs=null;
-        
+        facturadetalle f = null;
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+
         try {
             stat = conexion.prepareStatement(GETONE);
             stat.setLong(1, id);
@@ -120,19 +119,22 @@ public class facturadetalleSQL implements facturadetalleDAO {
     }
 
     @Override
-    public facturadetalle convertir(ResultSet rs) throws SQLException {
-        facturadetalle f=null;
-        Long idfacturacabecera=rs.getLong("idfacturacabecera");
-        Long idproducto=rs.getLong("idproducto");
-        double cantidad=rs.getDouble("cantidad");
-        double subtotal=rs.getDouble("subtotal");
-        f=new facturadetalle(idproducto, cantidad, subtotal);
+    public facturadetalle convertir(ResultSet rs) throws DAOException {
+        facturadetalle f = null;
+        try{
+        Long idfacturacabecera = rs.getLong("idfacturacabecera");
+        Long idproducto = rs.getLong("idproducto");
+        double cantidad = rs.getDouble("cantidad");
+        double subtotal = rs.getDouble("subtotal");
+        f = new facturadetalle(idproducto, cantidad, subtotal);
         f.setIdfacturacabecera(idfacturacabecera);
         f.setIdfacturadetalle(rs.getLong("idboletadetalle"));
         f.setStatus(rs.getBoolean("status"));
+        }catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            throw new DAOException("Error en SQL.", ex);
+        }
         return f;
     }
-
-
 
 }
