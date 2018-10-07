@@ -5,8 +5,6 @@
  */
 package farmacia.vista.mantenimientoEmpleado;
 
-import app.bolivia.swing.JCTextField;
-import farmacia.vista.mantenimientoCliente.*;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
@@ -16,10 +14,6 @@ import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
-import farmacia.jdbc.modelado.personacliente;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
