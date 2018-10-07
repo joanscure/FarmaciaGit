@@ -16,5 +16,5 @@ public interface DAO<O, K> {
 
     O obtener(K id) throws DAOException;//obtiene un registro con su identidicador 
 
-    O convertir(ResultSet rs) throws SQLException;
+    O convertir(ResultSet rs) throws DAOException;
 }
