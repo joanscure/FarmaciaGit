@@ -9,33 +9,26 @@ import static farmacia.calculos.EncriptacionPass.cryptMD5;
 import farmacia.calculos.Permisos;
 import farmacia.calculos.calculosTipousuario;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.DiseñoFormulario;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
@@ -46,7 +39,7 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmEmpleados extends JInternalFrame implements ActionListener, KeyListener {
+public class frmEmpleados extends JInternalFrame implements ActionListener, KeyListener,DiseñoFormulario {
 
     public JTabbedPane pestañas;
     public ListadoEmpleado pane1;
@@ -86,7 +79,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
 
     }
 
-    private JPanel getToolBar() {
+    public JPanel getBotones() {
 //        JToolBar barraBotones = new JToolBar();
 //        barraBotones.setBackground(c);
 //        barraBotones.setFloatable(false);// deja estatica el JToolBar
@@ -389,7 +382,7 @@ public class frmEmpleados extends JInternalFrame implements ActionListener, KeyL
         principal.setBackground(c);
         principal.add(pestañas, BorderLayout.CENTER);
         add(principal, BorderLayout.WEST);
-        add(getToolBar(), BorderLayout.EAST);
+        add(getBotones(), BorderLayout.EAST);
 
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);

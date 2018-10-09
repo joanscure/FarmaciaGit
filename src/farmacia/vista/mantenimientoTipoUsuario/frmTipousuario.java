@@ -5,30 +5,21 @@
  */
 package farmacia.vista.mantenimientoTipoUsuario;
 
-import farmacia.vista.mantenimientoProductos.*;
-import farmacia.vista.mantenimientoCliente.*;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.DiseñoFormulario;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.tipotrabajador;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbNuevo;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbSalir;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -45,7 +36,7 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmTipousuario extends JInternalFrame implements ActionListener, KeyListener {
+public class frmTipousuario extends JInternalFrame implements ActionListener, KeyListener,DiseñoFormulario {
 
     public JTabbedPane pestañas;
     public ListadoTipousuario pane1;
@@ -82,11 +73,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
 
     }
 
-    private JPanel getToolBar() {
-//        JToolBar barraBotones = new JToolBar();
-//        barraBotones.setBackground(c);
-//        barraBotones.setFloatable(false);// deja estatica el JToolBar
-//        barraBotones.addSeparator();// agrega lines divisoras entere los botones
+    public JPanel getBotones() {
         JPanel botones_principal = new JPanel(new BorderLayout());
         botones_principal.setBackground(c);
         JPanel botones = new JPanel(new GridLayout(6, 1));
@@ -326,7 +313,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         principal.setBackground(c);
         principal.add(pestañas, BorderLayout.CENTER);
         add(principal, BorderLayout.WEST);
-        add(getToolBar(), BorderLayout.EAST);
+        add(getBotones(), BorderLayout.EAST);
 
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);

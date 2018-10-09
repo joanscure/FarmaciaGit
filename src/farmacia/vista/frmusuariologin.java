@@ -100,9 +100,12 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
             sistem.jlidpersona = new Long((Long) tabla.getValueAt(index, 1)+"") ;
             sistem.jlocupacion = new Long((Long) tabla.getValueAt(index, 5)+"") ;
             sistem.permisos();
+            sistem.getMicono().doClick();
+            
             } catch (DAOException ex) {
                 Logger.getLogger(frmusuariologin.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
            
 
 

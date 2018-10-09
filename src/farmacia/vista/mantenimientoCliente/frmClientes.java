@@ -5,38 +5,29 @@
  */
 package farmacia.vista.mantenimientoCliente;
 
-import static farmacia.calculos.EncriptacionPass.cryptMD5;
 import farmacia.calculos.Permisos;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.DiseñoFormulario;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
-import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.personacliente;
-import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Date;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
@@ -47,7 +38,7 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmClientes extends JInternalFrame implements ActionListener, KeyListener {
+public class frmClientes extends JInternalFrame implements ActionListener, KeyListener, DiseñoFormulario{
 
     public JTabbedPane pestañas;
     public ListadoClientes pane1;
@@ -61,6 +52,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
     configuracionImagenes config = new configuracionImagenes();
     public static String action = "nothing";
     Permisos acceso = new Permisos();
+    
 
     public frmClientes() throws DAOException {
         super("Formulario Clientes", false, true, false, true);
@@ -87,11 +79,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
 
     }
 
-    private JPanel getToolBar() {
-//        JToolBar barraBotones = new JToolBar();
-//        barraBotones.setBackground(c);
-//        barraBotones.setFloatable(false);// deja estatica el JToolBar
-//        barraBotones.addSeparator();// agrega lines divisoras entere los botones
+    public JPanel getBotones() {
         JPanel botones_principal = new JPanel(new BorderLayout());
         botones_principal.setBackground(c);
         JPanel botones = new JPanel(new GridLayout(6, 1));
@@ -335,7 +323,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
             jbEliminar.setEnabled(false);
             jbGuardar.setEnabled(false);
             pane1.control = true;
-
+            
             setVisible(false);
         } else if (source == jbNuevo) {
             habilitar();
@@ -364,7 +352,7 @@ public class frmClientes extends JInternalFrame implements ActionListener, KeyLi
         principal.setBackground(c);
         principal.add(pestañas, BorderLayout.CENTER);
         add(principal, BorderLayout.WEST);
-        add(getToolBar(), BorderLayout.EAST);
+        add(getBotones(), BorderLayout.EAST);
 
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);

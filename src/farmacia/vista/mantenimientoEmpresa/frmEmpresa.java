@@ -5,32 +5,24 @@
  */
 package farmacia.vista.mantenimientoEmpresa;
 
-import farmacia.vista.mantenimientoCliente.*;
 import farmacia.calculos.Permisos;
 import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.DiseñoFormulario;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empresa;
 import farmacia.jdbc.modelado.empresacliente;
-import farmacia.jdbc.modelado.persona;
-import farmacia.vista.frmpermiso;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -47,7 +39,7 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmEmpresa extends JInternalFrame implements ActionListener, KeyListener {
+public class frmEmpresa extends JInternalFrame implements ActionListener, KeyListener,DiseñoFormulario {
 
     public JTabbedPane pestañas;
     public ListadoEmpresa pane1;
@@ -87,7 +79,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
 
     }
 
-    private JPanel getToolBar() {
+    public JPanel getBotones() {
 //        JToolBar barraBotones = new JToolBar();
 //        barraBotones.setBackground(c);
 //        barraBotones.setFloatable(false);// deja estatica el JToolBar
@@ -337,7 +329,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
         principal.setBackground(c);
         principal.add(pestañas, BorderLayout.CENTER);
         add(principal, BorderLayout.WEST);
-        add(getToolBar(), BorderLayout.EAST);
+        add(getBotones(), BorderLayout.EAST);
 
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);

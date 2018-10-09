@@ -6,13 +6,10 @@
 package farmacia.vista.mantenimientoProductos;
 
 import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.DiseñoFormulario;
 import farmacia.jdbc.dao.DAOException;
-import farmacia.jdbc.dao.DAOManager;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
-import farmacia.vista.frmVentas;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbEliminar;
-import static farmacia.vista.mantenimientoCliente.frmClientes.jbModificar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -21,12 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.sql.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -45,7 +36,7 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmProducto extends JInternalFrame implements ActionListener, KeyListener{
+public class frmProducto extends JInternalFrame implements ActionListener, KeyListener,DiseñoFormulario{
 
     public JTabbedPane pestañas;
     public ListadoProductos pane1;
@@ -84,11 +75,7 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
 
     }
 
-    private JPanel getToolBar() {
-//        JToolBar barraBotones = new JToolBar();
-//        barraBotones.setBackground(c);
-//        barraBotones.setFloatable(false);// deja estatica el JToolBar
-//        barraBotones.addSeparator();// agrega lines divisoras entere los botones
+    public JPanel getBotones() {
         JPanel botones_principal = new JPanel(new BorderLayout());
         botones_principal.setBackground(c);
         JPanel botones = new JPanel(new GridLayout(6, 1));
@@ -323,7 +310,7 @@ public class frmProducto extends JInternalFrame implements ActionListener, KeyLi
         principal.setBackground(c);
         principal.add(pestañas, BorderLayout.CENTER);
         add(principal, BorderLayout.WEST);
-        add(getToolBar(), BorderLayout.EAST);
+        add(getBotones(), BorderLayout.EAST);
 
         jbNuevo.setEnabled(true);
         jbGuardar.setEnabled(false);

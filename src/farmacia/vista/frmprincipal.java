@@ -29,7 +29,7 @@ import javax.swing.*;
  */
 public class frmprincipal extends JFrame implements ActionListener, MouseListener {
 
-    private JMenu malmacen, mconsultas, mherramientas, mayuda, marchivo, mventas, mmantenimiento, manulaciones;
+    private JMenu micono,malmacen, mconsultas, mherramientas, mayuda, marchivo, mventas, mmantenimiento, manulaciones;
     private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
     public  JDesktopPane desktopPane;
     private JMenuBar barra;
@@ -70,6 +70,170 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         setVisible(true);
         perzonalizartipoletra();
 
+    }
+
+    public JMenu getMicono() {
+        return micono;
+    }
+
+    public JMenu getMalmacen() {
+        return malmacen;
+    }
+
+    public void setMalmacen(JMenu malmacen) {
+        this.malmacen = malmacen;
+    }
+
+    public JMenu getMconsultas() {
+        return mconsultas;
+    }
+
+    public void setMconsultas(JMenu mconsultas) {
+        this.mconsultas = mconsultas;
+    }
+
+    public JMenu getMherramientas() {
+        return mherramientas;
+    }
+
+    public void setMherramientas(JMenu mherramientas) {
+        this.mherramientas = mherramientas;
+    }
+
+    public JMenu getMayuda() {
+        return mayuda;
+    }
+
+    public void setMayuda(JMenu mayuda) {
+        this.mayuda = mayuda;
+    }
+
+    public JMenu getMarchivo() {
+        return marchivo;
+    }
+
+    public void setMarchivo(JMenu marchivo) {
+        this.marchivo = marchivo;
+    }
+
+    public JMenu getMventas() {
+        return mventas;
+    }
+
+    public void setMventas(JMenu mventas) {
+        this.mventas = mventas;
+    }
+
+    public JMenu getMmantenimiento() {
+        return mmantenimiento;
+    }
+
+    public void setMmantenimiento(JMenu mmantenimiento) {
+        this.mmantenimiento = mmantenimiento;
+    }
+
+    public JMenu getManulaciones() {
+        return manulaciones;
+    }
+
+    public void setManulaciones(JMenu manulaciones) {
+        this.manulaciones = manulaciones;
+    }
+
+    public JMenuItem getIempresa() {
+        return iempresa;
+    }
+
+    public void setIempresa(JMenuItem iempresa) {
+        this.iempresa = iempresa;
+    }
+
+    public JMenuItem getIproductos() {
+        return iproductos;
+    }
+
+    public void setIproductos(JMenuItem iproductos) {
+        this.iproductos = iproductos;
+    }
+
+    public JMenuItem getIsalir() {
+        return isalir;
+    }
+
+    public void setIsalir(JMenuItem isalir) {
+        this.isalir = isalir;
+    }
+
+    public JMenuItem getIcerrarsesion() {
+        return icerrarsesion;
+    }
+
+    public void setIcerrarsesion(JMenuItem icerrarsesion) {
+        this.icerrarsesion = icerrarsesion;
+    }
+
+    public JMenuItem getIventas() {
+        return iventas;
+    }
+
+    public void setIventas(JMenuItem iventas) {
+        this.iventas = iventas;
+    }
+
+    public JMenuItem getIusuarios_accesos() {
+        return iusuarios_accesos;
+    }
+
+    public void setIusuarios_accesos(JMenuItem iusuarios_accesos) {
+        this.iusuarios_accesos = iusuarios_accesos;
+    }
+
+    public JMenuItem getItipousuario() {
+        return itipousuario;
+    }
+
+    public void setItipousuario(JMenuItem itipousuario) {
+        this.itipousuario = itipousuario;
+    }
+
+    public JMenuItem getIcambiarPass() {
+        return icambiarPass;
+    }
+
+    public void setIcambiarPass(JMenuItem icambiarPass) {
+        this.icambiarPass = icambiarPass;
+    }
+
+    public JMenuItem getIclientes() {
+        return iclientes;
+    }
+
+    public void setIclientes(JMenuItem iclientes) {
+        this.iclientes = iclientes;
+    }
+
+    public JMenuItem getIacercade() {
+        return iacercade;
+    }
+
+    public void setIacercade(JMenuItem iacercade) {
+        this.iacercade = iacercade;
+    }
+
+    public JMenuItem getIayuda() {
+        return iayuda;
+    }
+
+    public void setIayuda(JMenuItem iayuda) {
+        this.iayuda = iayuda;
+    }
+
+    public configuracionImagenes getImageconfig() {
+        return imageconfig;
+    }
+
+    public void setImageconfig(configuracionImagenes imageconfig) {
+        this.imageconfig = imageconfig;
     }
 
     public void permisos() {
@@ -143,7 +307,9 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         desktopPane = new JDesktopPane();
 
         barra = new JMenuBar();
-
+        micono=new JMenu("");
+        micono.setIcon(imageconfig.obtenerIcono("caduceo.png",32));
+        micono.setSelected(false);
         mventas = new JMenu("Ventas");
         mventas.setIcon(imageconfig.obtenerIcono("mventa.png", 32));
 
@@ -232,7 +398,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         mayuda.add(iacercade);
         mayuda.add(iayuda);
-
+        barra.add(micono);
         barra.add(marchivo);
         barra.add(malmacen);
         barra.add(mventas);
