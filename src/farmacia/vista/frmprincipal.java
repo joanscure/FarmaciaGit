@@ -52,7 +52,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         this.login = login;
 //        this.setResizable(false);
         inciar_componentes();
-        frmtipousuario = new frmTipousuario();
+        frmtipousuario = new frmTipousuario("Tipo de Usuario");
         desktopPane.add(frmtipousuario);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -419,7 +419,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         if (source == iclientes) {
             if (frmclientes == null) {
                 try {
-                    frmclientes = new frmClientes();
+                    frmclientes = new frmClientes("Cliente");
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
                 }
@@ -469,7 +469,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         } else if (source == iproductos) {
             if (frmproducto == null) {
                 try {
-                    frmproducto = new frmProducto();
+                    frmproducto = new frmProducto("Producto");
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
                 }
@@ -489,7 +489,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         } else if (source == iusuarios_accesos) {
             if (frmempleados == null) {
                 try {
-                    frmempleados = new frmEmpleados();
+                    frmempleados = new frmEmpleados("Empleado");
                     desktopPane.add(frmempleados);
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
@@ -516,7 +516,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
             if (frmempresa == null) {
                 try {
-                    frmempresa = new frmEmpresa();
+                    frmempresa = new frmEmpresa("Empresa");
                     desktopPane.add(frmempresa);
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());

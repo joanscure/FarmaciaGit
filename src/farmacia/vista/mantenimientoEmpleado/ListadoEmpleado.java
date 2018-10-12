@@ -40,7 +40,7 @@ import javax.swing.table.TableRowSorter;
  */
 public class ListadoEmpleado extends JPanel implements ActionListener, KeyListener {
 
-    JTable tabla;
+    public JTable tabla;
     DefaultTableModel modelo;
     JPanel principal;
     JPanel pane1;

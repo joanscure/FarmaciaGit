@@ -5,110 +5,38 @@
  */
 package farmacia.vista.mantenimientoEmpresa;
 
-import farmacia.calculos.Permisos;
-import farmacia.calculos.configuracionImagenes;
-import farmacia.diseño.DiseñoFormulario;
+import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empresa;
 import farmacia.jdbc.modelado.empresacliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Date;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 /**
  *
  * @author fecyp
  */
-public class frmEmpresa extends JInternalFrame implements ActionListener, KeyListener,DiseñoFormulario {
+public class frmEmpresa extends EstrategiaIFrame implements ActionListener, KeyListener {
 
-    public JTabbedPane pestañas;
     public ListadoEmpresa pane1;
     public Registrar pane2;
-    public static JButton jbNuevo, jbEliminar, jbGuardar, jbModificar, jbSalir, jbCancelar;
-    JToolBar toolBar;
 
-    public String nombreAlm, telefonoAlm, direccionAlm;
-    private Color c = Color.white;
-    Font fontboton = new Font("Geneva", 1, 14);
-    configuracionImagenes config = new configuracionImagenes();
-    public static String action = "nothing";
-    Permisos acceso = new Permisos();
-
-    public frmEmpresa() throws DAOException {
-        super("Formulario Empresas", false, true, false, true);
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        Iniciar_componentes();
-        pestañas.setSelectedIndex(0);
-        perzonalizacionfondocolor();
-        deshabilitar();
-        perzonalizartipoletra();
-        personalizarboton();
-        pack();
+    public frmEmpresa(String titulo) throws DAOException {
+        super(titulo);
         pane1.actualizartabla();
-        addInternalFrameListener(new InternalFrameAdapter() {
-            @Override
-            public void internalFrameClosing(InternalFrameEvent e) {
-                if (!action.equals("nothing")) {
-                    JOptionPane.showMessageDialog(null, "Se esta ejecutando una Accion\n para cerrar la ventana debe cancelar o terminar con dicha acción", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    jbSalir.doClick();
-                }
-            }
-
-        });
-
-    }
-
-    public JPanel getBotones() {
-//        JToolBar barraBotones = new JToolBar();
-//        barraBotones.setBackground(c);
-//        barraBotones.setFloatable(false);// deja estatica el JToolBar
-//        barraBotones.addSeparator();// agrega lines divisoras entere los botones
-        JPanel botones_principal = new JPanel(new BorderLayout());
-        botones_principal.setBackground(c);
-        JPanel botones = new JPanel(new GridLayout(6, 1));
-        jbNuevo = new JButton("Nuevo(CTRL +N)", config.obtenerIcono("nuevo.png"));
-
-        jbGuardar = new JButton("Guardar(CTRL+S)", config.obtenerIcono("guardar.png"));
-        jbEliminar = new JButton("Eliminar", config.obtenerIcono("eliminar.png"));
-        jbModificar = new JButton("Modificar", config.obtenerIcono("modificar.png"));
-        jbCancelar = new JButton("Cancelar", config.obtenerIcono("cancelar.png"));
-        botones.setBackground(c);
-        jbSalir = new JButton("Salir", config.obtenerIcono("salir.png"));
-        botones.add(jbNuevo);
-        botones.add(jbGuardar);
-        botones.add(jbEliminar);
-        botones.add(jbModificar);
-        botones.add(jbCancelar);
-        botones.add(jbSalir);
-        botones_principal.add(botones, BorderLayout.WEST);
-        botones_principal.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createTitledBorder("Mantenimiento")));
-
-//        barraBotones.add(botones_principal);
-//        barraBotones.setOrientation(JToolBar.HORIZONTAL);
-        return botones_principal;
     }
 
     public void perzonalizacionfondocolor() {
@@ -214,7 +142,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
                     pestañas.setEnabledAt(0, true);
                     pestañas.setSelectedIndex(0);
                 } catch (DAOException ex) {
-                    System.out.println(" errorr"+ ex.getMessage());
+                    System.out.println(" errorr" + ex.getMessage());
 
                 }
                 //mensaje de exito
@@ -292,7 +220,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
         } else if (source == jbSalir) {
             deshabilitar();
             pane1.tabla.clearSelection();
-            
+
             pane1.txtBuscar.setText("");
             pane1.elQueOrdena.setRowFilter(RowFilter.regexFilter("", 0));
             jbModificar.setEnabled(false);
@@ -315,7 +243,7 @@ public class frmEmpresa extends JInternalFrame implements ActionListener, KeyLis
         }
     }
 
-    private void Iniciar_componentes() {
+    public void Iniciar_componentes() {
         pestañas = new JTabbedPane();
         pane1 = new ListadoEmpresa(this);
         pane2 = new Registrar(this);

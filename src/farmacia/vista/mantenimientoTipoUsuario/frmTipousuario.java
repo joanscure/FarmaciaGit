@@ -7,6 +7,7 @@ package farmacia.vista.mantenimientoTipoUsuario;
 
 import farmacia.calculos.configuracionImagenes;
 import farmacia.diseño.DiseñoFormulario;
+import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.tipotrabajador;
@@ -36,69 +37,17 @@ import javax.swing.event.InternalFrameEvent;
  *
  * @author fecyp
  */
-public class frmTipousuario extends JInternalFrame implements ActionListener, KeyListener,DiseñoFormulario {
+public class frmTipousuario extends EstrategiaIFrame implements ActionListener, KeyListener {
 
-    public JTabbedPane pestañas;
+   
     public ListadoTipousuario pane1;
     public Registrar pane2;
-    public static JButton jbNuevo, jbEliminar, jbGuardar, jbModificar, jbSalir, jbCancelar;
-    JToolBar toolBar;
-    private Color c = Color.white;
-    Font fontboton = new Font("Geneva", 1, 14);
-    configuracionImagenes config = new configuracionImagenes();
-    public static String action = "nothing";
+   
 
-    public frmTipousuario() throws DAOException {
-        super("Formulario Tipo de Usuario", false, true, false, true);
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        Iniciar_componentes();
-        pestañas.setSelectedIndex(0);
-        perzonalizacionfondocolor();
-        deshabilitar();
-        perzonalizartipoletra();
-        personalizarboton();
-        pack();
+    public frmTipousuario(String titulo) throws DAOException {
+        super(titulo);
         pane1.actualizartabla();
-        addInternalFrameListener(new InternalFrameAdapter() {
-            @Override
-            public void internalFrameClosing(InternalFrameEvent e) {
-                if (!action.equals("nothing")) {
-                    JOptionPane.showMessageDialog(null, "Se esta ejecutando una Accion\n para cerrar la ventana debe cancelar o terminar con dicha acción", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    jbSalir.doClick();
-                }
-            }
 
-        });
-
-    }
-
-    public JPanel getBotones() {
-        JPanel botones_principal = new JPanel(new BorderLayout());
-        botones_principal.setBackground(c);
-        JPanel botones = new JPanel(new GridLayout(6, 1));
-        jbNuevo = new JButton("Nuevo", config.obtenerIcono("nuevo.png"));
-
-        jbGuardar = new JButton("Guardar", config.obtenerIcono("guardar.png"));
-        jbEliminar = new JButton("Eliminar", config.obtenerIcono("eliminar.png"));
-        jbModificar = new JButton("Modificar", config.obtenerIcono("modificar.png"));
-        jbCancelar = new JButton("Cancelar", config.obtenerIcono("cancelar.png"));
-        botones.setBackground(c);
-        jbSalir = new JButton("Salir", config.obtenerIcono("salir.png"));
-        botones.add(jbNuevo);
-        botones.add(jbGuardar);
-        botones.add(jbEliminar);
-        botones.add(jbModificar);
-        botones.add(jbCancelar);
-        botones.add(jbSalir);
-        botones_principal.add(botones, BorderLayout.WEST);
-        botones_principal.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createTitledBorder("Mantenimiento")));
-
-//        barraBotones.add(botones_principal);
-//        barraBotones.setOrientation(JToolBar.HORIZONTAL);
-        return botones_principal;
     }
 
     public void perzonalizacionfondocolor() {
@@ -299,7 +248,7 @@ public class frmTipousuario extends JInternalFrame implements ActionListener, Ke
         }
     }
 
-    private void Iniciar_componentes() {
+    public void Iniciar_componentes() {
         pestañas = new JTabbedPane();
         pane1 = new ListadoTipousuario(this);
         pane2 = new Registrar(this);

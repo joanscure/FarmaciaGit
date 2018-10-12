@@ -12,10 +12,5 @@ import javax.swing.JPanel;
  * @author fecyp
  */
 public interface DiseñoFormulario {
-    public JPanel getBotones();
-    public void perzonalizartipoletra();
-    public void perzonalizacionfondocolor();
-    public void personalizarboton();
-    public void habilitar();
-    public void deshabilitar();
+    
 }

@@ -96,7 +96,6 @@ boolean verificar=false;
              new frmcarga().setVisible(true);
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
                
            
