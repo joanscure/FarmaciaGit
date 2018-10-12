@@ -8,13 +8,11 @@ package farmacia.vista.mantenimientoProductos;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
-import farmacia.calculos.configuracionImagenes;
-import farmacia.calculos.configuracionesTabla;
+import farmacia.diseño.estrategias.EstrategiaPaneListado;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -37,32 +35,10 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoProductos extends JPanel implements ActionListener, KeyListener {
+public class ListadoProductos extends EstrategiaPaneListado implements ActionListener, KeyListener {
 
-    public JTable tabla;
-    DefaultTableModel modelo;
-    JPanel principal;
-    JPanel pane1;
-    JButton buscar;
-    public JTextField txtBuscar;
-    JComboBox buscarPor;
-    JLabel contador;
-    frmProducto regis;
-    TextAutoCompleter autocompletar;
-    TableRowSorter<TableModel> elQueOrdena;
-    int indexSelecion = -1;
-    String dni;
-    configuracionesTabla config = new configuracionesTabla();
-    configuracionImagenes configIma = new configuracionImagenes();
-    Font fontboton = new Font("Geneva", 1, 13);
-    Color c = new java.awt.Color(255, 204, 102);
-    public boolean control = true;
-    public boolean teclamas = false;
-
-    ListadoProductos(frmProducto regis) {
-        this.regis = regis;
-        iniciar_componentes();
-        perzonalizartipoletra();
+    ListadoProductos(String titulo) {
+        super( titulo);
     }
      public void actualizartabla() throws DAOException {
          for (int i = 0; i < modelo.getRowCount(); ) {
@@ -95,7 +71,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
 
     }
 
-    private void iniciar_componentes() {
+    public void Iniciar_componentes(String titulo) {
         tabla = new JTable(20, 20);
 
         modelo = new DefaultTableModel();
@@ -115,14 +91,14 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(productos_tabla(), BorderLayout.CENTER);
+        pane1.add(getTabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
         setLayout(new FlowLayout());
         pane1.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                BorderFactory.createTitledBorder("Listado de Productos")));
+                BorderFactory.createTitledBorder("Listado de "+titulo)));
 
         setLayout(new GridLayout(1, 1));
         add(pane1);
@@ -138,7 +114,7 @@ public class ListadoProductos extends JPanel implements ActionListener, KeyListe
 
     }
 
-    public JScrollPane productos_tabla() {
+    public JScrollPane getTabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"Codigo", "Nombre", "Descripcion", "Dosis", "Precio Venta", "IGV", "Precio Total", "Stock", "estado"};

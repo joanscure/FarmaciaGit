@@ -6,6 +6,7 @@
 package farmacia.vista.mantenimientoProductos;
 
 import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
@@ -27,25 +28,15 @@ import javax.swing.JTextField;
  *
  * @author fecyp
  */
-public class Registrar extends JPanel implements ActionListener, KeyListener {
+public class RegistrarProductos extends EstrategiaPanelRegistrar implements ActionListener, KeyListener {
 
-    frmProducto regis;
-
-    JPanel pane;
     JLabel nombre, descripcion, dosispro, precioventa, igv, preciofinal, stock, idproducto;
     public JTextField txtnombre, txtdescripcion, txtdosis, txtprecioventa, txtidproducto, txtigv, txtiddescuento, txtpreciofinal, txtstock;
-    configuracionImagenes iamgeConfig = new configuracionImagenes();
-    Color c = new java.awt.Color(255, 255, 153);
-    Font fontboton = new Font("Geneva", 1, 13);
-    boolean teclaunida = false;
     boolean controlpunto = false;
     boolean controlpuntoigv = false;
 
-    public Registrar(frmProducto regis) {
-        this.regis = regis;
-        iniciar_componentes();
-        setBackground(c);
-        personalizartipoletra();
+    public RegistrarProductos(String titulo) {
+        super(titulo);
 
         txtnombre.addActionListener(this);
         txtdescripcion.addActionListener(this);
@@ -259,7 +250,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 
     }
 
-    private void iniciar_componentes() {
+    public void iniciar_componentes(String titulo) {
 
         GridLayout g = new GridLayout(6, 1);
         g.setHgap(10);
@@ -372,12 +363,11 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         pane.add(quinto);
         pane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createTitledBorder("Datos del Cliente")));
+                BorderFactory.createTitledBorder("Datos del " + titulo)));
         pane.setBackground(c);
 //        setLayout(new GridLayout(1,1));
         add(pane);
 
     }
-    
 
 }

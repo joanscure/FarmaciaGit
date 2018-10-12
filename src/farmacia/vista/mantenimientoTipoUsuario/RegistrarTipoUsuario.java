@@ -5,15 +5,11 @@
  */
 package farmacia.vista.mantenimientoTipoUsuario;
 
-import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDateChooser;
-import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import farmacia.vista.mantenimientoCliente.frmClientes;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,36 +19,24 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
  *
  * @author fecyp
  */
-public class Registrar extends JPanel implements ActionListener, KeyListener, MouseListener {
+public class RegistrarTipoUsuario extends EstrategiaPanelRegistrar implements ActionListener, KeyListener, MouseListener {
 
-    frmTipousuario regis;
-
-    JPanel pane;
+    
     JLabel descripcion, tipouser;
     public JTextField txtdescripcion, txtidtipouser;
     JCheckBox aventas, aproductos, aclientes, aconsultas, aempleados, atiposusuario, acambioclave, aanularventas, aeliminarproducto, aelmininartipotrabajor, aeliminarusuario, aeliminarclientes;
-    configuracionImagenes iamgeConfig = new configuracionImagenes();
-    Color c = new java.awt.Color(255, 255, 153);
-    Font fontboton = new Font("Geneva", 1, 13);
-    boolean teclaunida = false;
+    
 
-    public Registrar(frmTipousuario regis) {
-        this.regis = regis;
-        iniciar_componentes();
-        setBackground(c);
-        personalizartipoletra();
+    public RegistrarTipoUsuario(String titulo) {
+        super(titulo);
 
         txtdescripcion.addActionListener(this);
         txtdescripcion.addKeyListener(this);
@@ -205,7 +189,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener, Mo
         }
     }
 
-    private void iniciar_componentes() {
+    public void iniciar_componentes(String titulo) {
 
         pane = new JPanel(new BorderLayout());
 

@@ -5,15 +5,12 @@
  */
 package farmacia.vista.mantenimientoEmpleado;
 
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
-import farmacia.calculos.configuracionImagenes;
+import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import farmacia.vista.frmregistrarSuperusuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,18 +22,14 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
  *
  * @author fecyp
  */
-public class Registrar extends JPanel implements ActionListener, KeyListener {
+public class RegistrarEmpleado extends EstrategiaPanelRegistrar implements ActionListener, KeyListener {
 
-    JPanel pane;
     JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion, jledad;
     public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona, txtedad;
     public JTextField txtdireccion;
@@ -45,15 +38,9 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
 //    JLabel tipodocumento;
     public JComboBox cbxtipodeempleado;
     public JDateChooser fecharegistro;
-    configuracionImagenes iamgeConfig = new configuracionImagenes();
-    Color c = new java.awt.Color(255, 255, 153);
-    Font fontboton = new Font("Geneva", 1, 13);
-    boolean teclaunida = false;
 
-    public Registrar() {
-        iniciar_componentes();
-        setBackground(c);
-        personalizartipoletra();
+    public RegistrarEmpleado(String titulo) {
+        super(titulo);
 
         txtapellidop.addActionListener(this);
         txtnombre.addActionListener(this);
@@ -246,11 +233,11 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         }
 
         if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-          if (frmEmpleados.jbCancelar != null) {
-                    frmEmpleados.jbCancelar.doClick();
-                } else {
-                    frmregistrarSuperusuario.salir.doClick();
-                }
+            if (frmEmpleados.jbCancelar != null) {
+                frmEmpleados.jbCancelar.doClick();
+            } else {
+                frmregistrarSuperusuario.salir.doClick();
+            }
 
         }
         if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
@@ -270,7 +257,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         }
     }
 
-    private void iniciar_componentes() {
+    public void iniciar_componentes(String titulo) {
 
         GridLayout g = new GridLayout(8, 1);
         g.setHgap(10);
@@ -348,7 +335,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         //quinto 
         JPanel panefecha = new JPanel(new GridLayout(1, 2));
         jlfecha = new JLabel("Fecha  Alta:");
-        
+
         fecharegistro = new JDateChooser();
         fecharegistro.setDate(new Date());
         fecharegistro.setPreferredSize(new Dimension(122, 5));
@@ -447,7 +434,7 @@ public class Registrar extends JPanel implements ActionListener, KeyListener {
         pane.add(setimo);
         pane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createTitledBorder("Datos del Empleado")));
+                BorderFactory.createTitledBorder("Datos del " + titulo)));
         pane.setBackground(c);
 //        setLayout(new GridLayout(1,1));
         add(pane);

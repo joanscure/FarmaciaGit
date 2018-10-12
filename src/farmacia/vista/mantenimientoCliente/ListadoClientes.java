@@ -8,17 +8,14 @@ package farmacia.vista.mantenimientoCliente;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
-import farmacia.calculos.configuracionImagenes;
-import farmacia.calculos.configuracionesTabla;
+import farmacia.diseño.estrategias.EstrategiaPaneListado;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.personacliente;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,42 +35,12 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoClientes extends JPanel implements ActionListener, KeyListener {
+public class ListadoClientes extends EstrategiaPaneListado implements ActionListener, KeyListener {
 
-    JTable tabla;
-    DefaultTableModel modelo;
-    JPanel principal;
-    JPanel pane1;
-    JButton buscar;
-    public JTextField txtBuscar;
-    JComboBox buscarPor;
-    JLabel contador;
-    frmClientes regis;
-    TextAutoCompleter autocompletar;
-    TableRowSorter<TableModel> elQueOrdena;
-    int indexSelecion = -1;
-    String dni;
-    configuracionesTabla config = new configuracionesTabla();
-    configuracionImagenes configIma = new configuracionImagenes();
-    Font fontboton = new Font("Geneva", 1, 13);
-    Color c = new java.awt.Color(255, 204, 102);
-    public boolean control = true;
-    public boolean teclamas = false;
 
-    ListadoClientes(frmClientes regis) {
-        this.regis = regis;
-        iniciar_componentes();
-        perzonalizartipoletra();
-    }
-
-    public void perzonalizartipoletra() {
-        buscar.setFont(fontboton);
-        txtBuscar.setFont(fontboton);
-        buscarPor.setFont(fontboton);
-        contador.setFont(fontboton);
-        tabla.setFont(new Font("Geneva", 0, 13));
-        tabla.getTableHeader().setFont(fontboton);
-
+    ListadoClientes(String titulo) {
+        super(titulo);
+       
     }
 
     public void actualizartabla() throws DAOException {
@@ -105,7 +72,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         }
     }
 
-    private void iniciar_componentes() {
+    public  void Iniciar_componentes(String titulo){
         tabla = new JTable(20, 20);
 
         modelo = new DefaultTableModel();
@@ -127,14 +94,14 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(clientes_tabla(), BorderLayout.CENTER);
+        pane1.add(getTabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
         setLayout(new FlowLayout());
         pane1.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                BorderFactory.createTitledBorder("Listado de Clientes")));
+                BorderFactory.createTitledBorder("Listado de "+ titulo)));
 
         setLayout(new GridLayout(1, 1));
         add(pane1);
@@ -149,7 +116,7 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
 
     }
 
-    public JScrollPane clientes_tabla() {
+    public JScrollPane getTabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"idcliente", "idpersona", "Nombre", "Apellido Paterno", "Apellido Materno", "Numero de DNI", "Edad", "Direccion", "Telefono", "estado"};
@@ -223,15 +190,6 @@ public class ListadoClientes extends JPanel implements ActionListener, KeyListen
                 return;
             }
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//                int index = tabla.getSelectedRow();
-//                if (index == 0) {
-//                    index = tabla.getRowCount();
-//                }
-//                index--;
-//                control = false;
-//                tabla.changeSelection(index, 0, false, false);
-//                //se pasa el index como parametro o se usa el selected
-////            control = true;
                 frmClientes.jbModificar.doClick();
 
             } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {

@@ -38,19 +38,19 @@ public abstract class EstrategiaIFrame extends JInternalFrame {
     public configuracionImagenes config = new configuracionImagenes();
     public String action = "nothing";
     public Permisos acceso = new Permisos();
-    boolean estaabierto;
+    boolean estaabierto, permisoeliminar;
 
     public EstrategiaIFrame(String titulo) throws DAOException {
         super("Formulario " + titulo, false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        Iniciar_componentes();
+        Iniciar_componentes(titulo);
         pestañas.setSelectedIndex(0);
         perzonalizacionfondocolor();
         deshabilitar();
         perzonalizartipoletra();
         personalizarboton();
         pack();
-        
+
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -90,9 +90,29 @@ public abstract class EstrategiaIFrame extends JInternalFrame {
         return botones_principal;
     }
 
-    public abstract void perzonalizartipoletra();
+    public void perzonalizacionfondocolor() {
+        jbNuevo.setBackground(c);
+        jbGuardar.setBackground(c);
+        jbCancelar.setBackground(c);
+        jbEliminar.setBackground(c);
+        jbSalir.setBackground(c);
+        jbModificar.setBackground(c);
+        pestañas.setBackground(c);
+        pestañas.setBackgroundAt(0, c);
+        pestañas.setBackgroundAt(1, c);
+        this.setBackground(c);
+    }
 
-    public abstract void perzonalizacionfondocolor();
+    public void perzonalizartipoletra() {
+        jbNuevo.setFont(fontboton);
+        jbGuardar.setFont(fontboton);
+        jbCancelar.setFont(fontboton);
+        jbEliminar.setFont(fontboton);
+        jbSalir.setFont(fontboton);
+        jbModificar.setFont(fontboton);
+        setFont(fontboton);
+        pestañas.setFont(fontboton);
+    }
 
     public abstract void personalizarboton();
 
@@ -100,5 +120,5 @@ public abstract class EstrategiaIFrame extends JInternalFrame {
 
     public abstract void deshabilitar();
 
-    public abstract void Iniciar_componentes();
+    public abstract void Iniciar_componentes(String titulo);
 }

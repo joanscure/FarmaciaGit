@@ -5,43 +5,31 @@
  */
 package farmacia.vista.mantenimientoTipoUsuario;
 
-import farmacia.calculos.configuracionImagenes;
-import farmacia.diseño.DiseñoFormulario;
 import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.tipotrabajador;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JInternalFrame;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 /**
  *
  * @author fecyp
  */
-public class frmTipousuario extends EstrategiaIFrame implements ActionListener, KeyListener {
+public class frmTipousuario extends EstrategiaIFrame implements ActionListener {
 
    
     public ListadoTipousuario pane1;
-    public Registrar pane2;
+    public RegistrarTipoUsuario pane2;
    
 
     public frmTipousuario(String titulo) throws DAOException {
@@ -50,29 +38,6 @@ public class frmTipousuario extends EstrategiaIFrame implements ActionListener, 
 
     }
 
-    public void perzonalizacionfondocolor() {
-        jbNuevo.setBackground(c);
-        jbGuardar.setBackground(c);
-        jbCancelar.setBackground(c);
-        jbEliminar.setBackground(c);
-        jbSalir.setBackground(c);
-        jbModificar.setBackground(c);
-        pestañas.setBackground(c);
-        pestañas.setBackgroundAt(0, c);
-        pestañas.setBackgroundAt(1, c);
-        this.setBackground(c);
-    }
-
-    public void perzonalizartipoletra() {
-        jbNuevo.setFont(fontboton);
-        jbGuardar.setFont(fontboton);
-        jbCancelar.setFont(fontboton);
-        jbEliminar.setFont(fontboton);
-        jbSalir.setFont(fontboton);
-        jbModificar.setFont(fontboton);
-        setFont(fontboton);
-        pestañas.setFont(fontboton);
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -248,10 +213,10 @@ public class frmTipousuario extends EstrategiaIFrame implements ActionListener, 
         }
     }
 
-    public void Iniciar_componentes() {
+    public void Iniciar_componentes(String titulo) {
         pestañas = new JTabbedPane();
-        pane1 = new ListadoTipousuario(this);
-        pane2 = new Registrar(this);
+        pane1 = new ListadoTipousuario(titulo);
+        pane2 = new RegistrarTipoUsuario(titulo);
         pestañas.add("Buscar", pane1);
 
         pestañas.add("Registrar", pane2);
@@ -273,7 +238,6 @@ public class frmTipousuario extends EstrategiaIFrame implements ActionListener, 
 
         jbNuevo.addActionListener(this);
         jbGuardar.addActionListener(this);
-        jbGuardar.addKeyListener(this);
         jbEliminar.addActionListener(this);
         jbSalir.addActionListener(this);
         jbModificar.addActionListener(this);
@@ -383,19 +347,5 @@ public class frmTipousuario extends EstrategiaIFrame implements ActionListener, 
         jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
     }
 
-    @Override
-    public void keyTyped(KeyEvent ke) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent ke) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent ke) {
-
-    }
 
 }

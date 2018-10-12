@@ -8,13 +8,11 @@ package farmacia.vista.mantenimientoTipoUsuario;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
-import farmacia.calculos.configuracionImagenes;
-import farmacia.calculos.configuracionesTabla;
+import farmacia.diseño.estrategias.EstrategiaPaneListado;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.tipotrabajador;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -37,32 +35,11 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoTipousuario extends JPanel implements ActionListener, KeyListener {
+public class ListadoTipousuario extends EstrategiaPaneListado implements ActionListener, KeyListener {
 
-    public static JTable tabla;
-    DefaultTableModel modelo;
-    JPanel principal;
-    JPanel pane1;
-    JButton buscar;
-    public JTextField txtBuscar;
-    JComboBox buscarPor;
-    JLabel contador;
-    frmTipousuario regis;
-    TextAutoCompleter autocompletar;
-    TableRowSorter<TableModel> elQueOrdena;
-    int indexSelecion = -1;
-    String dni;
-    configuracionesTabla config = new configuracionesTabla();
-    configuracionImagenes configIma = new configuracionImagenes();
-    Font fontboton = new Font("Geneva", 1, 13);
-    Color c = new java.awt.Color(255, 204, 102);
-    public boolean control = true;
-    public boolean teclamas = false;
 
-    ListadoTipousuario(frmTipousuario regis) {
-        this.regis = regis;
-        iniciar_componentes();
-        perzonalizartipoletra();
+    ListadoTipousuario(String titulo) {
+     super(titulo);
     }
 
     public void perzonalizartipoletra() {
@@ -100,7 +77,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
         }
     }
 
-    private void iniciar_componentes() {
+    public void Iniciar_componentes(String titulo) {
         tabla = new JTable(20, 20);
 
         modelo = new DefaultTableModel();
@@ -120,14 +97,14 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(tipoUsuario_tabla(), BorderLayout.CENTER);
+        pane1.add(getTabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
         setLayout(new FlowLayout());
         pane1.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                BorderFactory.createTitledBorder("Listado de Tipos de Usuario")));
+                BorderFactory.createTitledBorder("Listado de "+ titulo)));
 
         setLayout(new GridLayout(1, 1));
         add(pane1);
@@ -142,7 +119,7 @@ public class ListadoTipousuario extends JPanel implements ActionListener, KeyLis
 
     }
 
-    public JScrollPane tipoUsuario_tabla() {
+    public JScrollPane getTabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"idtipo", "Descripcion", "Acc.ventas(2)", "Acc.produto(3)", "Acc.Clientes(4)", "Acc.Consultas(5)",

@@ -11,7 +11,7 @@ import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.tipotrabajador;
-import farmacia.vista.mantenimientoEmpleado.Registrar;
+import farmacia.vista.mantenimientoEmpleado.RegistrarEmpleado;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -30,7 +30,7 @@ import javax.swing.JPanel;
  */
 public class frmregistrarSuperusuario extends JFrame implements ActionListener {
 
-    Registrar panelregistro;
+    RegistrarEmpleado panelregistro;
     JPanel principal;
     public static JButton salir, registrar;
 Color c = new java.awt.Color(255, 255, 153);
@@ -143,7 +143,7 @@ Color c = new java.awt.Color(255, 255, 153);
 
     private void iniciarcomponents() {
         principal = new JPanel(new BorderLayout());
-        panelregistro = new Registrar();
+        panelregistro = new RegistrarEmpleado("Empleado");
         JPanel botones = new JPanel(new FlowLayout());
 
         salir = new JButton("SALIR", new ImageIcon(getClass().getResource("/Files/salir.gif")));
