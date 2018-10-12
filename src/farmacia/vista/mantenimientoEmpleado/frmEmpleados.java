@@ -256,9 +256,10 @@ public class frmEmpleados extends EstrategiaIFrame implements ActionListener {
             jbEliminar.setEnabled(false);
             jbGuardar.setEnabled(false);
             pane1.control = true;
-
+            
             dispose();
             frmprincipal.visibleempleados=false;
+            frmprincipal.marchivo.requestFocus();
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";

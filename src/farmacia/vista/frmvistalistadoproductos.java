@@ -43,8 +43,9 @@ import javax.swing.table.TableRowSorter;
 public class frmvistalistadoproductos extends EstrategiaFrameVistas implements ActionListener, KeyListener, MouseListener {
     
 
-    frmvistalistadoproductos(String titulo) {
+    frmvistalistadoproductos(String titulo) throws DAOException {
         super(titulo);
+        actualizartabla();
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);

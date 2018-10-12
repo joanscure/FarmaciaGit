@@ -17,6 +17,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
@@ -26,9 +27,10 @@ import javax.swing.*;
  *
  * @author fecyp
  */
-public class frmprincipal extends JFrame implements ActionListener, MouseListener {
+public class frmprincipal extends JFrame implements ActionListener, MouseListener, KeyListener {
 
-    public JMenu micono, malmacen, mconsultas, mherramientas, mayuda, marchivo, mventas, mmantenimiento, manulaciones;
+    public JMenu malmacen, mconsultas, mherramientas, mayuda, mventas, mmantenimiento, manulaciones;
+    public static JMenu marchivo;
     private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
     public JDesktopPane desktopPane;
     private JMenuBar barra;
@@ -45,6 +47,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     configuracionImagenes imageconfig = new configuracionImagenes();
     frmusuariologin login;
     boolean[] permiso = new boolean[12];
+    public boolean controlpriincipal=true;
     public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false;
 
     public frmprincipal(frmusuariologin login) throws DAOException {
@@ -69,6 +72,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         setMinimumSize(new Dimension(500, 500));
         setVisible(true);
         perzonalizartipoletra();
+        marchivo.addKeyListener(this);
 
     }
 
@@ -141,9 +145,9 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         desktopPane = new JDesktopPane();
 
         barra = new JMenuBar();
-        micono = new JMenu("");
-        micono.setIcon(imageconfig.obtenerIcono("caduceo.png", 32));
-        micono.setSelected(false);
+//        micono = new JMenu("");
+//        micono.setIcon(imageconfig.obtenerIcono("caduceo.png", 32));
+//        micono.setSelected(false);
         mventas = new JMenu("Ventas");
         mventas.setIcon(imageconfig.obtenerIcono("mventa.png", 32));
 
@@ -232,7 +236,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         mayuda.add(iacercade);
         mayuda.add(iayuda);
-        barra.add(micono);
+//        barra.add(micono);
         barra.add(marchivo);
         barra.add(malmacen);
         barra.add(mventas);
@@ -305,7 +309,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmtipousuario.toFront();
             frmtipousuario.setVisible(true);
             frmtipousuario.pane1.txtBuscar.requestFocus();
-            frmtipousuario.permisoeliminar=permiso[11];
+            frmtipousuario.permisoeliminar = permiso[11];
 
         } else if (source == iusuarios_accesos) {
             if (!visibleempleados) {
@@ -385,6 +389,25 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             list[i] = (String) frmtipousuario.pane1.tabla.getValueAt(i, 1);
         }
         frmempleados.actualizaritem(list);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+        if (controlpriincipal) {
+            if (e.getKeyCode() == KeyEvent.VK_LEFT ||e.getKeyCode()==KeyEvent.VK_RIGHT) {
+                marchivo.doClick();
+//                controlpriincipal=false;
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 
 }

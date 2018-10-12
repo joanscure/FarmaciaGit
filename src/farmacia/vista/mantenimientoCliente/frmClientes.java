@@ -231,6 +231,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener{
             
             dispose();
             frmprincipal.visibleclientes=false;
+            frmprincipal.marchivo.requestFocus();
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";

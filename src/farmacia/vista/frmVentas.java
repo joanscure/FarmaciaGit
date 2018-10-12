@@ -97,7 +97,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     DefaultTableModel modelo;
     public static String action = "nothing";
 
-    frmvistalistadoproductos frmvistaproducto = new frmvistalistadoproductos("Productos");
+    frmvistalistadoproductos frmvistaproducto;
 
     public frmVentas() {
         super("Formulario Ventas", false, true, false, true);
@@ -119,6 +119,11 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             }
 
         });
+        try {
+              frmvistaproducto  = new frmvistalistadoproductos("Productos");
+        } catch (DAOException e) {
+            System.out.println(e.getMessage());
+        }
         deshabilitar();
         txtprecio.setText("10");
         bnsalir.addActionListener(this);
@@ -667,6 +672,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                     txtnombreProducto.setText((String) frmvistaproducto.tabla.getValueAt(i, 1));
                     txtprecio.setText(frmvistaproducto.tabla.getValueAt(i, 6).toString());
                     txtstock.setText(frmvistaproducto.tabla.getValueAt(i, 7).toString());
+                    return;
                 } else {
                     txtnombreProducto.setText("");
                     txtprecio.setText("");

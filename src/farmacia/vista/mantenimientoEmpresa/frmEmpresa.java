@@ -204,6 +204,7 @@ public class frmEmpresa extends EstrategiaIFrame implements ActionListener {
 
             dispose();
             frmprincipal.visibleempleados=false;
+            frmprincipal.marchivo.requestFocus();
             
         } else if (source == jbNuevo) {
             habilitar();

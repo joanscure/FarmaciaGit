@@ -9,6 +9,7 @@ import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.tipotrabajador;
+import farmacia.vista.frmprincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -200,8 +201,8 @@ public class frmTipousuario extends EstrategiaIFrame implements ActionListener {
             jbGuardar.setEnabled(false);
             pane1.control = true;
 
-            dispose();
-            
+            setVisible(false);
+            frmprincipal.marchivo.requestFocus();
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
