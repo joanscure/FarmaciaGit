@@ -18,8 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.*;
 
 /**
@@ -27,11 +25,11 @@ import javax.swing.*;
  *
  * @author fecyp
  */
-public class frmprincipal extends JFrame implements ActionListener, MouseListener, KeyListener {
+public class frmprincipal extends JFrame implements ActionListener, KeyListener {
 
     public JMenu malmacen, mconsultas, mherramientas, mayuda, mventas, mmantenimiento, manulaciones;
     public static JMenu marchivo;
-    private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
+    private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda, iconsumo, iconsultaventas;
     public JDesktopPane desktopPane;
     private JMenuBar barra;
     public static Long jlidpersona, jlidempleado;
@@ -47,8 +45,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     configuracionImagenes imageconfig = new configuracionImagenes();
     frmusuariologin login;
     boolean[] permiso = new boolean[12];
-    public boolean controlpriincipal=true;
-    public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false;
+    public boolean controlpriincipal = true;
+    public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false, visibleventas = false;
 
     public frmprincipal(frmusuariologin login) throws DAOException {
 
@@ -69,7 +67,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         iempresa.addActionListener(this);
         icambiarPass.addActionListener(this);
         isalir.addActionListener(this);
-        setMinimumSize(new Dimension(500, 500));
+        setMinimumSize(new Dimension(600, 600));
         setVisible(true);
         perzonalizartipoletra();
         marchivo.addKeyListener(this);
@@ -138,6 +136,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         iacercade.setFont(fontitem);
         iayuda.setFont(fontitem);
         iempresa.setFont(fontitem);
+        iconsultaventas.setFont(fontitem);
+        iconsumo.setFont(fontitem);
     }
 
     public void inciar_componentes() {
@@ -174,27 +174,33 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
         icerrarsesion = new JMenuItem("Cerrar Sesion");
         icerrarsesion.setIcon(imageconfig.obtenerIcono("desconectar.png", 30));
-        icerrarsesion.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 
         isalir = new JMenuItem("Salir");
         isalir.setIcon(imageconfig.obtenerIcono("salir.png", 30));
-        isalir.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
 
         iproductos = new JMenuItem("Productos");
-        iproductos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
+        iproductos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
         iproductos.setIcon(new ImageIcon(getClass().getResource("/Files/productos.png")));
 
         iventas = new JMenuItem("Ventas");
-        iventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+        iventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
         iventas.setIcon(new ImageIcon(getClass().getResource("/Files/ventas.png")));
 
         iclientes = new JMenuItem("Clientes");
         iclientes.setIcon(new ImageIcon(getClass().getResource("/Files/clientes.png")));
-        iclientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+        iclientes.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0));
 
         iempresa = new JMenuItem("Empresas");
         iempresa.setIcon(imageconfig.obtenerIcono("empresa.png", 30));
-        iempresa.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
+        iempresa.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
+
+        iconsultaventas = new JMenuItem("Consultar ventas");
+        iconsultaventas.setIcon(imageconfig.obtenerIcono("consulta.png", 40));
+        iconsultaventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+
+        iconsumo = new JMenuItem("Consumos");
+        iconsumo.setIcon(imageconfig.obtenerIcono("consumos.png", 40));
+        iconsumo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
 
         iusuarios_accesos = new JMenuItem("Usuarios y Accesos");
         iusuarios_accesos.setIcon(new ImageIcon(getClass().getResource("/Files/trabajadores.png")));
@@ -226,6 +232,9 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         mventas.add(iventas);
         mventas.add(iclientes);
         mventas.add(iempresa);
+
+        mconsultas.add(iconsultaventas);
+        mconsultas.add(iconsumo);
 
         mmantenimiento.add(iusuarios_accesos);
         mmantenimiento.add(itipousuario);
@@ -330,14 +339,15 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             }
 
         } else if (source == iventas) {
-            if (frmventas == null) {
+            if (!visibleventas) {
                 frmventas = new frmVentas();
                 desktopPane.add(frmventas);
+                frmventas.toFront();
+                frmventas.setVisible(true);
+                visibleventas=true;
+                frmventas.bnnuevo.requestFocus();
             }
 
-            frmventas.toFront();
-            frmventas.setVisible(true);
-            frmventas.bnnuevo.requestFocus();
         } else if (source == iempresa) {
 
             if (!visibleempresa) {
@@ -362,27 +372,6 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         }
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
     private void actualizaritem() {
         String list[] = new String[frmtipousuario.pane1.tabla.getRowCount()];
         for (int i = 0; i < list.length; i++) {
@@ -399,7 +388,7 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     public void keyPressed(KeyEvent e) {
 
         if (controlpriincipal) {
-            if (e.getKeyCode() == KeyEvent.VK_LEFT ||e.getKeyCode()==KeyEvent.VK_RIGHT) {
+            if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_RIGHT) {
                 marchivo.doClick();
 //                controlpriincipal=false;
             }

@@ -14,15 +14,19 @@ import farmacia.vista.mantenimientoTipoUsuario.ListadoTipousuario;
  */
 public class Permisos {
 
-    public boolean verificarEliminar( int index) {
+    public static boolean verificarEliminar( int index,String ocupacion) {
         //11 cliente
         //10 productos
         //12  empleados
         //13 tipousuario
+        if(index==14)
+        {
+            index=11;
+        }
         int indexRow = 0;
         boolean valid = false;
         for (int i = 0; i < ListadoTipousuario.tabla.getRowCount(); i++) {
-            if (frmprincipal.jlocupacion.equals(ListadoTipousuario.tabla.getValueAt(i, 1))) {
+            if (ocupacion.equals(ListadoTipousuario.tabla.getValueAt(i, 1))) {
                 indexRow = i;
             }
         }

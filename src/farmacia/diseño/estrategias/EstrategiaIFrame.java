@@ -18,6 +18,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -114,11 +115,31 @@ public abstract class EstrategiaIFrame extends JInternalFrame {
         pestañas.setFont(fontboton);
     }
 
-    public abstract void personalizarboton();
+     public void personalizarboton() {
 
+        jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbEliminar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbEliminar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbGuardar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbGuardar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbModificar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbModificar.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+        jbSalir.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
+        jbCancelar.setHorizontalTextPosition(SwingConstants.CENTER);
+        jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
+    }
     public abstract void habilitar();
 
     public abstract void deshabilitar();
 
     public abstract void Iniciar_componentes(String titulo);
+     public abstract void guardar();
+    public abstract void modificar();
+     public abstract void eliminar();
 }

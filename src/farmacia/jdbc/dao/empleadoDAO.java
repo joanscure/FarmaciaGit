@@ -8,4 +8,5 @@ public interface empleadoDAO extends DAO<empleado, Long> {
 
     void insertarNuevo(persona per, empleado emp) throws DAOException;
     void actualizarpassword(empleado emp)throws DAOException;
+    String obtenerOcupacion(empleado emp)throws DAOException;
 }

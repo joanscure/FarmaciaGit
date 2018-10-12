@@ -9,6 +9,7 @@ import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
+import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
 import static farmacia.vista.frmprincipal.visibleproductos;
 import java.awt.BorderLayout;
@@ -19,13 +20,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.RowFilter;
-import javax.swing.SwingConstants;
 
 /**
  *
  * @author fecyp
  */
-public class frmProducto extends EstrategiaIFrame implements ActionListener{
+public class frmProducto extends EstrategiaIFrame implements ActionListener {
 
     public ListadoProductos pane1;
     public RegistrarProductos pane2;
@@ -35,26 +35,25 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener{
         pane1.actualizartabla();
     }
 
-  
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == jbModificar) {
-             habilitar();
-             int fila = pane1.tabla.getSelectedRow();
-           pane2.txtidproducto.setText((Long) pane1.tabla.getValueAt(fila, 0)+"");
+            habilitar();
+            int fila = pane1.tabla.getSelectedRow();
+            pane2.txtidproducto.setText((Long) pane1.tabla.getValueAt(fila, 0) + "");
             pane2.txtnombre.setText((String) pane1.tabla.getValueAt(fila, 1));
             pane2.txtdescripcion.setText((String) pane1.tabla.getValueAt(fila, 2));
             pane2.txtdosis.setText((String) pane1.tabla.getValueAt(fila, 3));
-            pane2.txtprecioventa.setText((Double) pane1.tabla.getValueAt(fila, 4)+"");
-            pane2.txtigv.setText((Double) pane1.tabla.getValueAt(fila, 5)+"");
-            pane2.txtpreciofinal.setText((Double) pane1.tabla.getValueAt(fila, 6)+"");
-            pane2.txtstock.setText((int) pane1.tabla.getValueAt(fila, 7)+"");
+            pane2.txtprecioventa.setText((Double) pane1.tabla.getValueAt(fila, 4) + "");
+            pane2.txtigv.setText((Double) pane1.tabla.getValueAt(fila, 5) + "");
+            pane2.txtpreciofinal.setText((Double) pane1.tabla.getValueAt(fila, 6) + "");
+            pane2.txtstock.setText((int) pane1.tabla.getValueAt(fila, 7) + "");
             action = "modificar";
             pestañas.setSelectedIndex(1);
             pane2.txtnombre.requestFocus();
             pestañas.setEnabledAt(0, false);
-           
+
             jbEliminar.setEnabled(false);
             jbSalir.setEnabled(false);
             jbNuevo.setEnabled(false);
@@ -72,128 +71,44 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener{
 
         } else if (source == jbGuardar) {
             if (action.equals("nuevo")) {
-                if (pane2.txtnombre.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Nombre Del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtnombre.requestFocus();
-                    pane2.txtnombre.setBackground(Color.yellow);
-                    return;
+                int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres Guardar el Producto?", "confirmar", 2);
+                if (confirmacion == 0) {
+                    guardar();
                 }
-                if (pane2.txtdosis.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar La Dosis del producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtdosis.requestFocus();
-                    pane2.txtdosis.setBackground(Color.yellow);
-                    return;
-                }
-                if (pane2.txtpreciofinal.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar El Precio de venta del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtprecioventa.requestFocus();
-                    pane2.txtprecioventa.setBackground(Color.yellow);
-                    return;
-                }
-                if (pane2.txtstock.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar El Stock del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtstock.requestFocus();
-                    pane2.txtstock.setBackground(Color.yellow);
-                    return;
-                }
-
-                DAOManagerSQL manager = null;
-                try {
-                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-                    String nombre = pane2.txtnombre.getText();
-                    String descripcion = pane2.txtdescripcion.getText();
-                    String dosis = pane2.txtdosis.getText();
-                    double precioventa = Double.parseDouble(pane2.txtprecioventa.getText());
-                    double igv = Double.parseDouble(pane2.txtigv.getText());
-                    double preciofinal = Double.parseDouble(pane2.txtpreciofinal.getText());
-                    int stock = Integer.parseInt(pane2.txtstock.getText());
-                    
-                    producto p=new producto(nombre, descripcion, dosis, precioventa, igv, preciofinal, stock);
-                    manager.getProductoDAO().insertar(p);
-                    manager.cerrarConexion();
-                     pane1.actualizartabla();
-                } catch (DAOException ex) {
-                    System.out.println(" error"+ ex.getMessage());
-                   
-                }
-
-                //mensaje de exito
-                JOptionPane.showMessageDialog(null, "Se Registro el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
             } else if (action.equals("modificar")) {
-                DAOManagerSQL manager = null;
-                try {
-                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-                    Long idproducto= new Long(pane2.txtidproducto.getText());
-                    String nombre = pane2.txtnombre.getText();
-                    String descripcion = pane2.txtdescripcion.getText();
-                    String dosis = pane2.txtdosis.getText();
-                    double precioventa = Double.parseDouble(pane2.txtprecioventa.getText());
-                    double igv = Double.parseDouble(pane2.txtigv.getText());
-                    double preciofinal = Double.parseDouble(pane2.txtpreciofinal.getText());
-                    int stock = Integer.parseInt(pane2.txtstock.getText());
-                    
-                    producto p=new producto(nombre, descripcion, dosis, precioventa, igv, preciofinal, stock);
-                    p.setIdproducto(idproducto);
-                    manager.getProductoDAO().modificar(p);
-                    manager.cerrarConexion();
-                     pane1.actualizartabla();
-                } catch (DAOException ex) {
-                        System.out.println(" errorr");
-                   
+                int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres  Guardar la edicion del Producto?", "confirmar", 2);
+                if (confirmacion == 0) {
+                    modificar();
+
                 }
-                JOptionPane.showMessageDialog(null, "Se Editó el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
             }
-            //actualizar taba
-           deshabilitar();
-            pane1.control = true;
-            pane1.txtBuscar.requestFocus();
-            action = "nothing";
-
         } else if (source == jbEliminar) {
-             DAOManagerSQL manager = null;
-                try {
-                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-                    int fila = pane1.tabla.getSelectedRow();
-                    Long idproducto= new Long((long) pane1.tabla.getValueAt(fila, 0));
-                    producto p=new producto();
-                    p.setIdproducto(idproducto);
-                    manager.getProductoDAO().eliminar(p);
-                    manager.cerrarConexion();
-                     pane1.actualizartabla();
-                } catch (DAOException ex) {
-                    try {
-                        throw new DAOException("error al insertar producto");
-                    } catch (DAOException ex1) {
-                        System.out.println(" errorr");
-                    }
-                   
+            int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar el Producto?", "confirmar", 2);
+            if (confirmacion == 0) {
+                 if (permisoeliminar) {
+                    frmpermiso permiso = new frmpermiso(this);
+                    return;
                 }
-
-            pane1.tabla.clearSelection();
-            jbEliminar.setEnabled(false);
-            jbModificar.setEnabled(false);
-            action = "nothing";
-            pane1.txtBuscar.requestFocus();
+                eliminar();
+            }
 
         } else if (source == jbSalir) {
-            deshabilitar();
-            pane1.tabla.clearSelection();
-            
-            pane1.txtBuscar.setText("");
-            pane1.elQueOrdena.setRowFilter(RowFilter.regexFilter("", 0));
-            jbModificar.setEnabled(false);
-            jbCancelar.setEnabled(false);
-            jbEliminar.setEnabled(false);
-            jbGuardar.setEnabled(false);
-            pane1.control = true;
-            dispose();
-            visibleproductos=false;
-            frmprincipal.marchivo.requestFocus();
+            int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres Salir?", "confirmar", 2);
+            if (confirmacion == 0) {
+                deshabilitar();
+                pane1.tabla.clearSelection();
+
+                pane1.txtBuscar.setText("");
+                pane1.elQueOrdena.setRowFilter(RowFilter.regexFilter("", 0));
+                jbModificar.setEnabled(false);
+                jbCancelar.setEnabled(false);
+                jbEliminar.setEnabled(false);
+                jbGuardar.setEnabled(false);
+                pane1.control = true;
+                dispose();
+                visibleproductos = false;
+                frmprincipal.marchivo.requestFocus();
+            }
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
@@ -234,7 +149,6 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener{
         jbEliminar.addActionListener(this);
         jbSalir.addActionListener(this);
         jbModificar.addActionListener(this);
-         
 
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
@@ -293,25 +207,110 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener{
 
     }
 
-    public void personalizarboton() {
+    @Override
+    public void guardar() {
+        if (pane2.txtnombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un Nombre Del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtnombre.requestFocus();
+            pane2.txtnombre.setBackground(Color.yellow);
+            return;
+        }
+        if (pane2.txtdosis.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar La Dosis del producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtdosis.requestFocus();
+            pane2.txtdosis.setBackground(Color.yellow);
+            return;
+        }
+        if (pane2.txtpreciofinal.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar El Precio de venta del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtprecioventa.requestFocus();
+            pane2.txtprecioventa.setBackground(Color.yellow);
+            return;
+        }
+        if (pane2.txtstock.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar El Stock del Producto", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtstock.requestFocus();
+            pane2.txtstock.setBackground(Color.yellow);
+            return;
+        }
 
-        jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            String nombre = pane2.txtnombre.getText();
+            String descripcion = pane2.txtdescripcion.getText();
+            String dosis = pane2.txtdosis.getText();
+            double precioventa = Double.parseDouble(pane2.txtprecioventa.getText());
+            double igv = Double.parseDouble(pane2.txtigv.getText());
+            double preciofinal = Double.parseDouble(pane2.txtpreciofinal.getText());
+            int stock = Integer.parseInt(pane2.txtstock.getText());
 
-        jbEliminar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbEliminar.setVerticalTextPosition(SwingConstants.BOTTOM);
+            producto p = new producto(nombre, descripcion, dosis, precioventa, igv, preciofinal, stock);
+            manager.getProductoDAO().insertar(p);
+            manager.cerrarConexion();
+            pane1.actualizartabla();
+            JOptionPane.showMessageDialog(null, "Se Registro el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
 
-        jbGuardar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbGuardar.setVerticalTextPosition(SwingConstants.BOTTOM);
+            pestañas.setEnabledAt(0, true);
+            pestañas.setSelectedIndex(0);
+        } catch (DAOException ex) {
+            System.out.println(" error" + ex.getMessage());
 
-        jbModificar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbModificar.setVerticalTextPosition(SwingConstants.BOTTOM);
-
-        jbSalir.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
-        jbCancelar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
+        }
     }
 
+    @Override
+    public void modificar() {
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            Long idproducto = new Long(pane2.txtidproducto.getText());
+            String nombre = pane2.txtnombre.getText();
+            String descripcion = pane2.txtdescripcion.getText();
+            String dosis = pane2.txtdosis.getText();
+            double precioventa = Double.parseDouble(pane2.txtprecioventa.getText());
+            double igv = Double.parseDouble(pane2.txtigv.getText());
+            double preciofinal = Double.parseDouble(pane2.txtpreciofinal.getText());
+            int stock = Integer.parseInt(pane2.txtstock.getText());
+
+            producto p = new producto(nombre, descripcion, dosis, precioventa, igv, preciofinal, stock);
+            p.setIdproducto(idproducto);
+            manager.getProductoDAO().modificar(p);
+            manager.cerrarConexion();
+            pane1.actualizartabla();
+            JOptionPane.showMessageDialog(null, "Se Editó el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+            pestañas.setEnabledAt(0, true);
+            pestañas.setSelectedIndex(0);
+            deshabilitar();
+            pane1.control = true;
+            pane1.txtBuscar.requestFocus();
+            action = "nothing";
+        } catch (DAOException ex) {
+            System.out.println(" errorr");
+        }
+    }
+
+    @Override
+    public void eliminar() {
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            int fila = pane1.tabla.getSelectedRow();
+            Long idproducto = new Long((long) pane1.tabla.getValueAt(fila, 0));
+            producto p = new producto();
+            p.setIdproducto(idproducto);
+            manager.getProductoDAO().eliminar(p);
+            manager.cerrarConexion();
+            pane1.actualizartabla();
+
+            pane1.tabla.clearSelection();
+            jbEliminar.setEnabled(false);
+            jbModificar.setEnabled(false);
+            action = "nothing";
+            pane1.txtBuscar.requestFocus();
+        } catch (DAOException ex) {
+            System.out.println(" errorr");
+        }
+    }
 
 }

@@ -5,7 +5,16 @@
  */
 package farmacia.vista;
 
+import static farmacia.calculos.EncriptacionPass.cryptMD5;
+import farmacia.calculos.Permisos;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.empleado;
 import farmacia.vista.mantenimientoCliente.frmClientes;
+import farmacia.vista.mantenimientoEmpleado.frmEmpleados;
+import farmacia.vista.mantenimientoEmpresa.frmEmpresa;
+import farmacia.vista.mantenimientoProductos.frmProducto;
+import farmacia.vista.mantenimientoTipoUsuario.frmTipousuario;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -28,11 +37,84 @@ public class frmpermiso extends JDialog implements ActionListener {
     Font font = new Font("Geneva", 1, 13);
 //    Color c = new java.awt.Color(255, 255, 153);
     Color c = Color.WHITE;
+    frmClientes frm1;
+    frmEmpleados frm2;
+    frmTipousuario frm4;
+    frmProducto frm3;
+    frmEmpresa frm5;
 
-    public frmpermiso() {
+    int index;
+
+    public frmpermiso(frmClientes frm) {
 //        super(frm, "Conceder Permiso", true);
-        setTitle("Conceder Permiso");
-        
+        setTitle("No tiene Acceso");
+        this.frm1 = frm;
+        index = 11;
+        setModal(true);
+        iniciarComponentes();
+        pack();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        cambiarletras();
+
+        acceder.addActionListener(this);
+        cancelar.addActionListener(this);
+    }
+
+    public frmpermiso(frmEmpleados frm) {
+//        super(frm, "Conceder Permiso", true);
+        setTitle("No tiene Acceso");
+        this.frm2 = frm;
+        index = 12;
+        setModal(true);
+        iniciarComponentes();
+        pack();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        cambiarletras();
+
+        acceder.addActionListener(this);
+        cancelar.addActionListener(this);
+    }
+
+    public frmpermiso(frmEmpresa frm) {
+//        super(frm, "Conceder Permiso", true);
+        setTitle("No tiene Acceso");
+        this.frm5 = frm;
+        index = 14;
+        setModal(true);
+        iniciarComponentes();
+        pack();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        cambiarletras();
+
+        acceder.addActionListener(this);
+        cancelar.addActionListener(this);
+    }
+
+    public frmpermiso(frmProducto frm) {
+//        super(frm, "Conceder Permiso", true);
+        setTitle("No tiene Acceso");
+        this.frm3 = frm;
+        index = 10;
+        setModal(true);
+        iniciarComponentes();
+        pack();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        cambiarletras();
+
+        acceder.addActionListener(this);
+        cancelar.addActionListener(this);
+    }
+
+    public frmpermiso(frmTipousuario frm) {
+//        super(frm, "Conceder Permiso", true);
+        setTitle("No tiene Acceso");
+        this.frm4 = frm;
+        index = 13;
+        setModal(true);
         iniciarComponentes();
         pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -58,7 +140,76 @@ public class frmpermiso extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        dispose();
+        Object source = e.getSource();
+        if (source == cancelar) {
+            dispose();
+        } else if (source == acceder) {
+            String usuario = (user.getText());
+            String contraseña = (String.valueOf(password.getPassword()));
+            String contraseñaEcriptada = cryptMD5(contraseña);
+            
+            if (usuario.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Campo vacío", "Advertencia ", JOptionPane.ERROR_MESSAGE);
+                user.requestFocus();
+                return;
+            }
+            if (contraseña.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Campo vacío", "Advertencia ", JOptionPane.ERROR_MESSAGE);
+                password.requestFocus();
+                return;
+            }
+            if (!validaruser(usuario)) {
+                JOptionPane.showMessageDialog(null, "Los datos no coinciden", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
+                user.requestFocus();
+                return;
+            }
+            if (!validarpass(usuario, contraseñaEcriptada)) {
+                JOptionPane.showMessageDialog(null, "Los datos no coinciden", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
+                user.requestFocus();
+                return;
+            }
+            
+            DAOManagerSQL manager = null;
+            try {
+                manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                empleado emp;
+                emp = new empleado();
+                emp.setLogin(usuario);
+                String ocupacion = manager.getEmpleadoDAO().obtenerOcupacion(emp);
+                manager.cerrarConexion();
+                if (Permisos.verificarEliminar(index, ocupacion)) {
+
+                    switch (index) {
+                        case 10:
+                            frm3.eliminar();
+                            break;
+                        case 11:
+                            frm1.eliminar();
+                            break;
+                        case 12:
+                            frm2.eliminar();
+                            break;
+                        case 13:
+                            frm4.eliminar();
+                            break;
+                        case 14:
+                            frm5.eliminar();
+                            break;
+                        default:
+                            System.out.println("ERORRRRR");
+                    }
+                }
+                else 
+                {
+                     JOptionPane.showMessageDialog(null, "No tiene acceso", "imposible eliminar ", JOptionPane.ERROR_MESSAGE);
+                }
+                dispose();
+
+            } catch (DAOException ex) {
+                System.out.println(" errorr");
+            }
+
+        }
     }
 
     private void iniciarComponentes() {
@@ -84,7 +235,7 @@ public class frmpermiso extends JDialog implements ActionListener {
         todo.setBackground(c);
         todo.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                BorderFactory.createTitledBorder("Proporcionar Acceso")));
+                BorderFactory.createTitledBorder("Proporcionar Acceso de un Administrador")));
         JPanel botones = new JPanel(new GridLayout(1, 2));
         cancelar = new JButton("Cancelar");
 
@@ -97,6 +248,26 @@ public class frmpermiso extends JDialog implements ActionListener {
         panelprincipal.add(todo, BorderLayout.NORTH);
         panelprincipal.add(botones, BorderLayout.SOUTH);
         add(panelprincipal);
+    }
+      private boolean validaruser(String user) {
+        for (int i = 0; i < frmusuariologin.tabla.getRowCount(); i++) {
+            if (user.equals(frmusuariologin.tabla.getValueAt(i, 2))) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    private boolean validarpass(String user, String passw) {
+        
+        for (int i = 0; i < frmusuariologin.tabla.getRowCount(); i++) {
+            if (passw.equals(frmusuariologin.tabla.getValueAt(i, 3))&& user.equals(frmusuariologin.tabla.getValueAt(i, 2))) {
+                return true;
+            }
+
+        }
+        return false;
     }
 
 }

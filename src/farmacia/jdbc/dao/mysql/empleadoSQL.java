@@ -28,6 +28,7 @@ public class empleadoSQL implements empleadoDAO {
     private final String GETONE = "SELECT * FROM empleado WHERE idempleado = ?";
     private final String CHANGEPASS="UPDATE empleado set password=? "
             + "WHERE login=?";
+    private final String GETROl="SELECT * FROM `empleado` inner join tipotrabajador on empleado.idtipotrabajador=tipotrabajador.idtipotrabajador where empleado.status=1 and empleado.admin=?  ";
 
     public empleadoSQL(Connection con) {
         this.conexion = con;
@@ -208,6 +209,26 @@ public class empleadoSQL implements empleadoDAO {
         }finally{
             UtilSQL.cerrar(stat);
         }
+    }
+
+    @Override
+    public String obtenerOcupacion(empleado emp) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        String ocupacion="";
+        try {
+            stat = conexion.prepareStatement(GETONE);
+            stat.setString(1, emp.getLogin());
+            rs = stat.executeQuery();
+            if (rs.next()) {
+                ocupacion=rs.getString("nombretipotrabajador");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return ocupacion;
     }
 
 }

@@ -319,7 +319,10 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == bnsalir) {
-            setVisible(false);
+            frmprincipal.visibleventas=false;
+            dispose();
+            frmvistaproducto.dispose();
+            
         } else if (source == bnagregar) {
             int index = -1;
             for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {

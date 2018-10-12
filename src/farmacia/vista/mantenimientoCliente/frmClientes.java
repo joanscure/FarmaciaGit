@@ -20,20 +20,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.RowFilter;
-import javax.swing.SwingConstants;
 
 /**
  *
  * @author fecyp
  */
-public class frmClientes extends EstrategiaIFrame implements ActionListener{
- public ListadoClientes pane1;
+public class frmClientes extends EstrategiaIFrame implements ActionListener {
+
+    public ListadoClientes pane1;
     public RegistrarCliente pane2;
-  
 
     public frmClientes(String titulo) throws DAOException {
-       super(titulo);
-       pane1.actualizartabla();
+        super(titulo);
+        pane1.actualizartabla();
     }
 
     @Override
@@ -73,165 +72,48 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener{
 
         } else if (source == jbGuardar) {
             if (action.equals("nuevo")) {
-                if (pane2.txtnombre.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Nombre para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtnombre.requestFocus();
-                    pane2.txtnombre.setBackground(Color.yellow);
-                    return;
-                }
-                if (pane2.txtapellidop.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Apellido paterno para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtapellidop.requestFocus();
-                    pane2.txtapellidop.setBackground(Color.yellow);
-                    return;
-                }
-                if (pane2.txtapellidom.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Apellido materno para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtapellidom.requestFocus();
-                    pane2.txtapellidom.setBackground(Color.yellow);
-                    return;
-                }
-                if (pane2.txtdocumento.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtdocumento.requestFocus();
-                    pane2.txtdocumento.setBackground(Color.yellow);
-                    return;
-                }
-
-                //verificar dni
-                if (pane2.txtdocumento.getText().length() != 8) {
-                    JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
-                    pane2.txtdocumento.requestFocus();
-                    pane2.txtdocumento.setBackground(Color.yellow);
-                    return;
-                }
-
-                DAOManagerSQL manager = null;
-                try {
-                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-                    persona p;
-                    String nombre = pane2.txtnombre.getText();
-                    String appaterno = pane2.txtapellidop.getText();
-                    String apmaterno = pane2.txtapellidom.getText();
-                    String dni = pane2.txtdocumento.getText();
-                    char[] numerodni = dni.toCharArray();
-                    int personaedad = 0;
-                    try {
-                        personaedad = Integer.parseInt(pane2.txtedad.getText());
-                    } catch (NumberFormatException ne) {
-                    }
-                    String direccion = pane2.txtdireccion.getText();
-                    String telefono = pane2.txttelefono.getText();
-                    p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
-
-                    personacliente cliente;
-
-                    cliente = new personacliente(0L);
-
-                    manager.getPersonaClienteDAO().ingresarNuevo(cliente, p);
-                    manager.cerrarConexion();
-                    pane1.actualizartabla();
-                } catch (DAOException ex) {
-                    System.out.println(" errorr");
+                int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres Guardar al Cliente?", "confirmar", 2);
+                if (confirmacion == 0) {
+                    guardar();
 
                 }
-                //mensaje de exito
-                JOptionPane.showMessageDialog(null, "Se Registro el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
             } else if (action.equals("modificar")) {
-                DAOManagerSQL manager = null;
-                try {
-                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-                    persona p;
-                    Long idp = new Long(pane2.txtidpersona.getText());
-                    Long idc = new Long(pane2.txtidcliente.getText());
-                    String nombre = pane2.txtnombre.getText();
-                    String appaterno = pane2.txtapellidop.getText();
-                    String apmaterno = pane2.txtapellidom.getText();
-                    String dni = pane2.txtdocumento.getText();
-                    char[] numerodni = dni.toCharArray();
-                    int personaedad = Integer.parseInt(pane2.txtedad.getText());
-                    String direccion = pane2.txtdireccion.getText();
-                    String telefono = pane2.txttelefono.getText();
-                    p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
-                    p.setIdPersona(idp);
-                    personacliente cliente;
-
-                    cliente = new personacliente(0L);
-                    cliente.setIdpersona(idp);
-                    cliente.setIdpersonacliente(idc);
-
-                    manager.getPersonaClienteDAO().modificar(cliente);
-                    manager.getPersonaDAO().modificar(p);
-                    manager.cerrarConexion();
-                    pane1.actualizartabla();
-                } catch (DAOException ex) {
-                    System.out.println(" errorr");
+                int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres  Guardar la edicion del cliente?", "confirmar", 2);
+                if (confirmacion == 0) {
+                    modificar();
 
                 }
-                JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-                deshabilitar();
-                pestañas.setEnabledAt(0, true);
-                pestañas.setSelectedIndex(0);
+
             }
-            deshabilitar();
-            pane1.control = true;
-            pane1.txtBuscar.requestFocus();
-            action = "nothing";
-
         } else if (source == jbEliminar) {
-            if (permisoeliminar) {
-                frmpermiso permiso = new frmpermiso();
-
-            } else {
-                DAOManagerSQL manager = null;
-                try {
-                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-                    persona p;
-                    int fila = pane1.tabla.getSelectedRow();
-                    Long idp = new Long((long) pane1.tabla.getValueAt(fila, 1));
-                    Long idc = new Long((long) pane1.tabla.getValueAt(fila, 0));
-
-                    p = new persona();
-                    p.setIdPersona(idp);
-                    personacliente cliente;
-
-                    cliente = new personacliente();
-                    cliente.setIdpersona(idp);
-                    cliente.setIdpersonacliente(idc);
-
-                    manager.getPersonaClienteDAO().eliminar(cliente);
-                    manager.getPersonaDAO().eliminar(p);
-                    manager.cerrarConexion();
-                    pane1.actualizartabla();
-                } catch (DAOException ex) {
-                    System.out.println(" errorr");
-
+            int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar el Cliente?", "confirmar", 2);
+            if (confirmacion == 0) {
+                if (permisoeliminar) {
+                    frmpermiso permiso = new frmpermiso(this);
+                    return;
                 }
-                pane1.tabla.clearSelection();
-                jbEliminar.setEnabled(false);
-                jbModificar.setEnabled(false);
-                action = "nothing";
-                pane1.txtBuscar.requestFocus();
+                eliminar();
+
             }
 
         } else if (source == jbSalir) {
-            deshabilitar();
-            pane1.tabla.clearSelection();
-            
-            pane1.txtBuscar.setText("");
-            pane1.elQueOrdena.setRowFilter(RowFilter.regexFilter("", 0));
-            jbModificar.setEnabled(false);
-            jbCancelar.setEnabled(false);
-            jbEliminar.setEnabled(false);
-            jbGuardar.setEnabled(false);
-            pane1.control = true;
-            
-            dispose();
-            frmprincipal.visibleclientes=false;
-            frmprincipal.marchivo.requestFocus();
+            int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres Salir?", "confirmar", 2);
+            if (confirmacion == 0) {
+                deshabilitar();
+                pane1.tabla.clearSelection();
+
+                pane1.txtBuscar.setText("");
+                pane1.elQueOrdena.setRowFilter(RowFilter.regexFilter("", 0));
+                jbModificar.setEnabled(false);
+                jbCancelar.setEnabled(false);
+                jbEliminar.setEnabled(false);
+                jbGuardar.setEnabled(false);
+                pane1.control = true;
+
+                dispose();
+                frmprincipal.visibleclientes = false;
+                frmprincipal.marchivo.requestFocus();
+            }
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
@@ -336,25 +218,145 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener{
 
     }
 
-    public void personalizarboton() {
+    public void guardar() {
+        if (pane2.txtnombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un Nombre para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtnombre.requestFocus();
+            pane2.txtnombre.setBackground(Color.yellow);
+            return;
+        }
+        if (pane2.txtapellidop.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un Apellido paterno para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtapellidop.requestFocus();
+            pane2.txtapellidop.setBackground(Color.yellow);
+            return;
+        }
+        if (pane2.txtapellidom.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un Apellido materno para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtapellidom.requestFocus();
+            pane2.txtapellidom.setBackground(Color.yellow);
+            return;
+        }
+        if (pane2.txtdocumento.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI para el Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtdocumento.requestFocus();
+            pane2.txtdocumento.setBackground(Color.yellow);
+            return;
+        }
 
-        jbNuevo.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbNuevo.setVerticalTextPosition(SwingConstants.BOTTOM);
+        //verificar dni
+        if (pane2.txtdocumento.getText().length() != 8) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un Numero de DNI Valido", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
+            pane2.txtdocumento.requestFocus();
+            pane2.txtdocumento.setBackground(Color.yellow);
+            return;
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            persona p;
+            String nombre = pane2.txtnombre.getText();
+            String appaterno = pane2.txtapellidop.getText();
+            String apmaterno = pane2.txtapellidom.getText();
+            String dni = pane2.txtdocumento.getText();
+            char[] numerodni = dni.toCharArray();
+            int personaedad = 0;
+            try {
+                personaedad = Integer.parseInt(pane2.txtedad.getText());
+            } catch (NumberFormatException ne) {
+            }
+            String direccion = pane2.txtdireccion.getText();
+            String telefono = pane2.txttelefono.getText();
+            p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
 
-        jbEliminar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbEliminar.setVerticalTextPosition(SwingConstants.BOTTOM);
+            personacliente cliente;
 
-        jbGuardar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbGuardar.setVerticalTextPosition(SwingConstants.BOTTOM);
+            cliente = new personacliente(0L);
 
-        jbModificar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbModificar.setVerticalTextPosition(SwingConstants.BOTTOM);
+            manager.getPersonaClienteDAO().ingresarNuevo(cliente, p);
+            manager.cerrarConexion();
+            pane1.actualizartabla();
+            JOptionPane.showMessageDialog(null, "Se Registro el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+            deshabilitar();
+            pestañas.setEnabledAt(0, true);
+            pestañas.setSelectedIndex(0);
+        } catch (DAOException ex) {
+            System.out.println(" errorr");
 
-        jbSalir.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbSalir.setVerticalTextPosition(SwingConstants.BOTTOM);
-        jbCancelar.setHorizontalTextPosition(SwingConstants.CENTER);
-        jbCancelar.setVerticalTextPosition(SwingConstants.BOTTOM);
+        }
     }
 
+    public void modificar() {
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            persona p;
+            Long idp = new Long(pane2.txtidpersona.getText());
+            Long idc = new Long(pane2.txtidcliente.getText());
+            String nombre = pane2.txtnombre.getText();
+            String appaterno = pane2.txtapellidop.getText();
+            String apmaterno = pane2.txtapellidom.getText();
+            String dni = pane2.txtdocumento.getText();
+            char[] numerodni = dni.toCharArray();
+            int personaedad = Integer.parseInt(pane2.txtedad.getText());
+            String direccion = pane2.txtdireccion.getText();
+            String telefono = pane2.txttelefono.getText();
+            p = new persona(nombre, appaterno, apmaterno, numerodni, personaedad, direccion, telefono);
+            p.setIdPersona(idp);
+            personacliente cliente;
+
+            cliente = new personacliente(0L);
+            cliente.setIdpersona(idp);
+            cliente.setIdpersonacliente(idc);
+
+            manager.getPersonaClienteDAO().modificar(cliente);
+            manager.getPersonaDAO().modificar(p);
+            manager.cerrarConexion();
+            pane1.actualizartabla();
+            JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
+            deshabilitar();
+            pestañas.setEnabledAt(0, true);
+            pestañas.setSelectedIndex(0);
+            pane1.control = true;
+            pane1.txtBuscar.requestFocus();
+            action = "nothing";
+        } catch (DAOException ex) {
+            System.out.println(" errorr");
+
+        }
+
+    }
+
+    public void eliminar() {
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            persona p;
+            int fila = pane1.tabla.getSelectedRow();
+            Long idp = new Long((long) pane1.tabla.getValueAt(fila, 1));
+            Long idc = new Long((long) pane1.tabla.getValueAt(fila, 0));
+
+            p = new persona();
+            p.setIdPersona(idp);
+            personacliente cliente;
+
+            cliente = new personacliente();
+            cliente.setIdpersona(idp);
+            cliente.setIdpersonacliente(idc);
+
+            manager.getPersonaClienteDAO().eliminar(cliente);
+            manager.getPersonaDAO().eliminar(p);
+            manager.cerrarConexion();
+            pane1.actualizartabla();
+            pane1.tabla.clearSelection();
+            jbEliminar.setEnabled(false);
+            jbModificar.setEnabled(false);
+            action = "nothing";
+            pane1.txtBuscar.requestFocus();
+        } catch (DAOException ex) {
+            System.out.println(" errorr");
+
+        }
+    }
 
 }
