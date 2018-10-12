@@ -34,19 +34,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.*;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -101,7 +97,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     DefaultTableModel modelo;
     public static String action = "nothing";
 
-    frmvistalistadoproductos frmvistaproducto = new frmvistalistadoproductos();
+    frmvistalistadoproductos frmvistaproducto = new frmvistalistadoproductos("Productos");
 
     public frmVentas() {
         super("Formulario Ventas", false, true, false, true);
@@ -431,7 +427,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
             txtcodigo.requestFocus();
             if (cbxtipocomprobante.getSelectedIndex() == 0) {
-                frmvistalistadocliente frmvistacliente = new frmvistalistadocliente();
+                frmvistalistadocliente frmvistacliente = new frmvistalistadocliente("Clientes");
 
                 frmvistacliente.setVisible(true);
                 frmvistacliente.toFront();
@@ -442,7 +438,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 }
 
             } else {
-                frmvistalistadoEmpresa frmvistaempresa = new frmvistalistadoEmpresa();
+                frmvistalistadoEmpresa frmvistaempresa = new frmvistalistadoEmpresa("Empresas");
                 frmvistaempresa.setVisible(true);
                 frmvistaempresa.toFront();
                 try {
@@ -663,8 +659,11 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 return;
 
             }
+            Long idproducto=new Long(txtcodigo.getText().toString());
+            
             for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
-                if (Long.compare(Long.parseLong(txtcodigo.getText()), (Long) frmvistaproducto.tabla.getValueAt(i, 0)) == 0) {
+                Long idaux=new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
+                if (Long.compare(idproducto, idaux ) == 0) {
                     txtnombreProducto.setText((String) frmvistaproducto.tabla.getValueAt(i, 1));
                     txtprecio.setText(frmvistaproducto.tabla.getValueAt(i, 6).toString());
                     txtstock.setText(frmvistaproducto.tabla.getValueAt(i, 7).toString());

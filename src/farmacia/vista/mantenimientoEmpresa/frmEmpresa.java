@@ -10,6 +10,7 @@ import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empresa;
 import farmacia.jdbc.modelado.empresacliente;
+import farmacia.vista.frmprincipal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -201,7 +202,9 @@ public class frmEmpresa extends EstrategiaIFrame implements ActionListener {
             jbGuardar.setEnabled(false);
             pane1.control = true;
 
-            setVisible(false);
+            dispose();
+            frmprincipal.visibleempleados=false;
+            
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";

@@ -182,7 +182,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener{
             action = "nothing";
 
         } else if (source == jbEliminar) {
-            if (!frmprincipal.ecliente) {
+            if (permisoeliminar) {
                 frmpermiso permiso = new frmpermiso();
 
             } else {
@@ -229,7 +229,8 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener{
             jbGuardar.setEnabled(false);
             pane1.control = true;
             
-            setVisible(false);
+            dispose();
+            frmprincipal.visibleclientes=false;
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";

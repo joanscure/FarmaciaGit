@@ -19,19 +19,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
+ * iI
  *
  * @author fecyp
  */
 public class frmprincipal extends JFrame implements ActionListener, MouseListener {
 
-    private JMenu micono,malmacen, mconsultas, mherramientas, mayuda, marchivo, mventas, mmantenimiento, manulaciones;
+    public JMenu micono, malmacen, mconsultas, mherramientas, mayuda, marchivo, mventas, mmantenimiento, manulaciones;
     private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda;
-    public  JDesktopPane desktopPane;
+    public JDesktopPane desktopPane;
     private JMenuBar barra;
     public static Long jlidpersona, jlidempleado;
     public static Long jlocupacion;
@@ -45,7 +44,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     frmEmpresa frmempresa;
     configuracionImagenes imageconfig = new configuracionImagenes();
     frmusuariologin login;
-    public static boolean eproducto, ecliente, eempleado, etipousuario;
+    boolean[] permiso = new boolean[12];
+    public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false;
 
     public frmprincipal(frmusuariologin login) throws DAOException {
 
@@ -72,176 +72,10 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
 
     }
 
-    public JMenu getMicono() {
-        return micono;
-    }
-
-    public JMenu getMalmacen() {
-        return malmacen;
-    }
-
-    public void setMalmacen(JMenu malmacen) {
-        this.malmacen = malmacen;
-    }
-
-    public JMenu getMconsultas() {
-        return mconsultas;
-    }
-
-    public void setMconsultas(JMenu mconsultas) {
-        this.mconsultas = mconsultas;
-    }
-
-    public JMenu getMherramientas() {
-        return mherramientas;
-    }
-
-    public void setMherramientas(JMenu mherramientas) {
-        this.mherramientas = mherramientas;
-    }
-
-    public JMenu getMayuda() {
-        return mayuda;
-    }
-
-    public void setMayuda(JMenu mayuda) {
-        this.mayuda = mayuda;
-    }
-
-    public JMenu getMarchivo() {
-        return marchivo;
-    }
-
-    public void setMarchivo(JMenu marchivo) {
-        this.marchivo = marchivo;
-    }
-
-    public JMenu getMventas() {
-        return mventas;
-    }
-
-    public void setMventas(JMenu mventas) {
-        this.mventas = mventas;
-    }
-
-    public JMenu getMmantenimiento() {
-        return mmantenimiento;
-    }
-
-    public void setMmantenimiento(JMenu mmantenimiento) {
-        this.mmantenimiento = mmantenimiento;
-    }
-
-    public JMenu getManulaciones() {
-        return manulaciones;
-    }
-
-    public void setManulaciones(JMenu manulaciones) {
-        this.manulaciones = manulaciones;
-    }
-
-    public JMenuItem getIempresa() {
-        return iempresa;
-    }
-
-    public void setIempresa(JMenuItem iempresa) {
-        this.iempresa = iempresa;
-    }
-
-    public JMenuItem getIproductos() {
-        return iproductos;
-    }
-
-    public void setIproductos(JMenuItem iproductos) {
-        this.iproductos = iproductos;
-    }
-
-    public JMenuItem getIsalir() {
-        return isalir;
-    }
-
-    public void setIsalir(JMenuItem isalir) {
-        this.isalir = isalir;
-    }
-
-    public JMenuItem getIcerrarsesion() {
-        return icerrarsesion;
-    }
-
-    public void setIcerrarsesion(JMenuItem icerrarsesion) {
-        this.icerrarsesion = icerrarsesion;
-    }
-
-    public JMenuItem getIventas() {
-        return iventas;
-    }
-
-    public void setIventas(JMenuItem iventas) {
-        this.iventas = iventas;
-    }
-
-    public JMenuItem getIusuarios_accesos() {
-        return iusuarios_accesos;
-    }
-
-    public void setIusuarios_accesos(JMenuItem iusuarios_accesos) {
-        this.iusuarios_accesos = iusuarios_accesos;
-    }
-
-    public JMenuItem getItipousuario() {
-        return itipousuario;
-    }
-
-    public void setItipousuario(JMenuItem itipousuario) {
-        this.itipousuario = itipousuario;
-    }
-
-    public JMenuItem getIcambiarPass() {
-        return icambiarPass;
-    }
-
-    public void setIcambiarPass(JMenuItem icambiarPass) {
-        this.icambiarPass = icambiarPass;
-    }
-
-    public JMenuItem getIclientes() {
-        return iclientes;
-    }
-
-    public void setIclientes(JMenuItem iclientes) {
-        this.iclientes = iclientes;
-    }
-
-    public JMenuItem getIacercade() {
-        return iacercade;
-    }
-
-    public void setIacercade(JMenuItem iacercade) {
-        this.iacercade = iacercade;
-    }
-
-    public JMenuItem getIayuda() {
-        return iayuda;
-    }
-
-    public void setIayuda(JMenuItem iayuda) {
-        this.iayuda = iayuda;
-    }
-
-    public configuracionImagenes getImageconfig() {
-        return imageconfig;
-    }
-
-    public void setImageconfig(configuracionImagenes imageconfig) {
-        this.imageconfig = imageconfig;
-    }
-
     public void permisos() {
-        int posicion;
-        boolean[] permiso = new boolean[12];
+
         for (int i = 0; i < frmtipousuario.pane1.tabla.getRowCount(); i++) {
             if (Long.compare(jlocupacion, (Long) frmtipousuario.pane1.tabla.getValueAt(i, 0)) == 0) {
-                posicion = i;
                 permiso[0] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 2);//ventas
 
                 permiso[1] = (boolean) frmtipousuario.pane1.tabla.getValueAt(i, 3);//productos
@@ -271,10 +105,10 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         iclientes.setVisible(permiso[2]);
         mconsultas.setVisible(permiso[3]);
         iempresa.setVisible(permiso[2]);
-        eproducto=(permiso[8]);
-        ecliente=(permiso[9]);
-        eempleado=(permiso[10]);
-        etipousuario=(permiso[11]);
+//        eproducto=(permiso[8]);
+//        ecliente=(permiso[9]);
+//        eempleado=(permiso[10]);
+//        etipousuario=(permiso[11]);
 
     }
 
@@ -307,8 +141,8 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
         desktopPane = new JDesktopPane();
 
         barra = new JMenuBar();
-        micono=new JMenu("");
-        micono.setIcon(imageconfig.obtenerIcono("caduceo.png",32));
+        micono = new JMenu("");
+        micono.setIcon(imageconfig.obtenerIcono("caduceo.png", 32));
         micono.setSelected(false);
         mventas = new JMenu("Ventas");
         mventas.setIcon(imageconfig.obtenerIcono("mventa.png", 32));
@@ -417,91 +251,79 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == iclientes) {
-            if (frmclientes == null) {
+            if (!visibleclientes) {
                 try {
                     frmclientes = new frmClientes("Cliente");
+                    desktopPane.add(frmclientes);
+
+                    frmclientes.toFront();
+                    frmclientes.setVisible(true);
+                    frmclientes.permisoeliminar = permiso[9];
+                    visibleclientes = true;
+                    frmclientes.pane1.txtBuscar.requestFocus();
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
                 }
-                desktopPane.add(frmclientes);
+
             }
 
-            frmclientes.toFront();
-            frmclientes.setVisible(true);
-            frmclientes.pane1.txtBuscar.requestFocus();
         } else if (source == icerrarsesion) {
 // si esque cierra sesion, se cierran todas las ventanas si esque se han abierto
 // y se abre el login guardando el txtusuario
             login.setVisible(true);
             login.txtpassword.setText("");
-            login.requestFocus();
+            login.txtpassword.requestFocus();
             try {
                 login.llenartabla();
             } catch (DAOException ex) {
-                Logger.getLogger(frmprincipal.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("error" + ex.getMessage());
             }
-            if (frmproducto != null) {
-                frmproducto.dispose();
-            }
-            if (frmclientes != null) {
-                frmclientes.dispose();
-            }
-            if (frmtipousuario != null) {
-                frmtipousuario.dispose();
-            }
-            if (frmempleados != null) {
-                frmempleados.dispose();
-            }
-            if (frmventas != null) {
-                if (frmventas.frmvistaproducto != null) {
-                    frmventas.frmvistaproducto.dispose();
-                }
-                frmventas.dispose();
-            }
-            if (frmempresa != null) {
-                frmempresa.dispose();
-            }
+
             dispose();
 
         } else if (source == isalir) {
             System.exit(0);
 
         } else if (source == iproductos) {
-            if (frmproducto == null) {
+            if (!visibleproductos) {
                 try {
                     frmproducto = new frmProducto("Producto");
+                    desktopPane.add(frmproducto);
+                    frmproducto.toFront();
+                    frmproducto.setVisible(true);
+                    frmproducto.permisoeliminar = permiso[8];
+                    visibleproductos = true;
+                    frmproducto.pane1.txtBuscar.requestFocus();
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
                 }
-                desktopPane.add(frmproducto);
-            }
 
-            frmproducto.toFront();
-            frmproducto.setVisible(true);
-            frmproducto.pane1.txtBuscar.requestFocus();
+            }
 
         } else if (source == itipousuario) {
 
             frmtipousuario.toFront();
             frmtipousuario.setVisible(true);
             frmtipousuario.pane1.txtBuscar.requestFocus();
+            frmtipousuario.permisoeliminar=permiso[11];
 
         } else if (source == iusuarios_accesos) {
-            if (frmempleados == null) {
+            if (!visibleempleados) {
                 try {
                     frmempleados = new frmEmpleados("Empleado");
                     desktopPane.add(frmempleados);
+                    frmempleados.toFront();
+                    frmempleados.setVisible(true);
+                    visibleempleados = true;
+                    frmempleados.permisoeliminar = permiso[10];
+                    frmempleados.pane1.txtBuscar.requestFocus();
+
+                    actualizaritem();
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
                 }
 
             }
-
-            frmempleados.toFront();
-            frmempleados.setVisible(true);
-            frmempleados.pane1.txtBuscar.requestFocus();
-
-            actualizaritem();
 
         } else if (source == iventas) {
             if (frmventas == null) {
@@ -514,19 +336,21 @@ public class frmprincipal extends JFrame implements ActionListener, MouseListene
             frmventas.bnnuevo.requestFocus();
         } else if (source == iempresa) {
 
-            if (frmempresa == null) {
+            if (!visibleempresa) {
                 try {
                     frmempresa = new frmEmpresa("Empresa");
                     desktopPane.add(frmempresa);
+                    frmempresa.toFront();
+                    frmempresa.setVisible(true);
+                    frmempresa.permisoeliminar = permiso[9];
+                    frmempresa.pane1.txtBuscar.requestFocus();
+
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
                 }
 
             }
 
-            frmempresa.toFront();
-            frmempresa.setVisible(true);
-            frmempresa.pane1.txtBuscar.requestFocus();
         } else if (source == icambiarPass) {
             frmCambioClave frm = new frmCambioClave(this);
             frm.setVisible(true);

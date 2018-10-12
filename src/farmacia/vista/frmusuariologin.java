@@ -15,17 +15,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
@@ -75,7 +71,20 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == bnentrar) {
+              if (txtusuario.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No debe haber ningun campo en blanco", "nombre de usuario", JOptionPane.ERROR_MESSAGE);
+                txtusuario.requestFocus();
+
+                return;
+            }
+            if (txtpassword.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "No debe haber ningun campo en blanco", "contraseña", JOptionPane.ERROR_MESSAGE);
+                txtpassword.requestFocus();
+                index = -1;
+                return;
+            }
             //permitir acceso
+            
             if (!validaruser()) {
                 JOptionPane.showMessageDialog(null, "el nombre de usuario es invalido", "Acceso denegado", JOptionPane.ERROR_MESSAGE);
                 txtusuario.requestFocus();
@@ -100,7 +109,7 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
             sistem.jlidpersona = new Long((Long) tabla.getValueAt(index, 1)+"") ;
             sistem.jlocupacion = new Long((Long) tabla.getValueAt(index, 5)+"") ;
             sistem.permisos();
-            sistem.getMicono().doClick();
+            sistem.micono.doClick();
             
             } catch (DAOException ex) {
                 Logger.getLogger(frmusuariologin.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,21 +121,13 @@ public class frmusuariologin extends JFrame implements ActionListener, KeyListen
         } else if (source == bncancelar) {
             System.exit(0);
         } else if (source == txtusuario) {
-            if (txtpassword.getText().isEmpty()) {
-                txtusuario.transferFocus();
-            } else {
-                if (!txtusuario.getText().isEmpty()) {
+           
                     bnentrar.doClick();
-                }
-            }
+               
         } else if (source == txtpassword) {
-            if (txtusuario.getText().isEmpty()) {
-                txtusuario.requestFocus();
-            } else {
-                if (!txtpassword.getText().isEmpty()) {
+            
                     bnentrar.doClick();
-                }
-            }
+             
         }
     }
 

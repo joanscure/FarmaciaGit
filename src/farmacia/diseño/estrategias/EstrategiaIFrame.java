@@ -38,14 +38,14 @@ public abstract class EstrategiaIFrame extends JInternalFrame {
     public configuracionImagenes config = new configuracionImagenes();
     public String action = "nothing";
     public Permisos acceso = new Permisos();
-    boolean estaabierto, permisoeliminar;
+    public boolean  permisoeliminar;
 
     public EstrategiaIFrame(String titulo) throws DAOException {
         super("Formulario " + titulo, false, true, false, true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         Iniciar_componentes(titulo);
         pestañas.setSelectedIndex(0);
-        perzonalizacionfondocolor();
+        personalizacionfondocolor();
         deshabilitar();
         perzonalizartipoletra();
         personalizarboton();
@@ -90,7 +90,7 @@ public abstract class EstrategiaIFrame extends JInternalFrame {
         return botones_principal;
     }
 
-    public void perzonalizacionfondocolor() {
+    public void personalizacionfondocolor() {
         jbNuevo.setBackground(c);
         jbGuardar.setBackground(c);
         jbCancelar.setBackground(c);

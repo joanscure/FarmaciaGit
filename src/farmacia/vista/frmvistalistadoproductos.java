@@ -8,13 +8,11 @@ package farmacia.vista;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
-import farmacia.calculos.configuracionImagenes;
-import farmacia.calculos.configuracionesTabla;
+import farmacia.diseño.estrategias.EstrategiaFrameVistas;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -25,8 +23,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -44,36 +40,11 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class frmvistalistadoproductos extends JFrame implements ActionListener, KeyListener, MouseListener {
+public class frmvistalistadoproductos extends EstrategiaFrameVistas implements ActionListener, KeyListener, MouseListener {
+    
 
-    public JTable tabla;
-    DefaultTableModel modelo;
-    JPanel principal;
-    JPanel pane1;
-    JButton buscar, agregar, salir;
-    ;
-    public JTextField txtBuscar;
-    JComboBox buscarPor;
-    JLabel contador;
-    TextAutoCompleter autocompletar;
-    TableRowSorter<TableModel> elQueOrdena;
-    int indexSelecion = -1;
-    String dni;
-    configuracionesTabla config = new configuracionesTabla();
-    configuracionImagenes configIma = new configuracionImagenes();
-    Font fontboton = new Font("Geneva", 1, 13);
-    Color c = new java.awt.Color(255, 204, 102);
-//    Color c=Color.white;
-    public boolean control = true;
-
-    frmvistalistadoproductos() {
-        iniciar_componentes();
-        perzonalizartipoletra();
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(683, 553);
-        setResizable(false);
-        setLocationRelativeTo(null);
-        agregar.setEnabled(false);
+    frmvistalistadoproductos(String titulo) {
+        super(titulo);
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
@@ -83,15 +54,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         salir.addActionListener(this);
         agregar.addActionListener(this);
         tabla.addMouseListener(this);
-        txtBuscar.requestFocus();
-        addWindowListener(new WindowAdapter() {
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                salir.doClick();
-            }
-
-        });
+        
     }
 
     public void actualizartabla() throws DAOException {
@@ -125,7 +88,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
 
     }
 
-    private void iniciar_componentes() {
+    public void iniciar_componentes(String titulo) {
         tabla = new JTable(20, 20);
 
         modelo = new DefaultTableModel();
@@ -150,14 +113,14 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
         autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
-        pane1.add(clientes_tabla(), BorderLayout.CENTER);
+        pane1.add(getTabla(), BorderLayout.CENTER);
         pane1.add(contador, BorderLayout.SOUTH);
         pane1.setPreferredSize(new Dimension(700, 400));
 
         setLayout(new FlowLayout());
         pane1.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                BorderFactory.createTitledBorder("Listado de Productos")));
+                BorderFactory.createTitledBorder("Listado de "+ titulo)));
 
         setLayout(new GridLayout(1, 1));
         add(pane1);
@@ -172,7 +135,7 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
 
     }
 
-    public JScrollPane clientes_tabla() {
+    public JScrollPane getTabla() {
 
         Object[][] data = new Object[0][0];
         String[] lista = {"Codigo", "Nombre", "Descripcion", "Dosis", "Precio Venta", "IGV", "Precio Total", "Stock", "estado"};
@@ -228,12 +191,18 @@ public class frmvistalistadoproductos extends JFrame implements ActionListener, 
             elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
 
         } else if (source == agregar) {
+            if(tabla.getSelectedRows()==null)
+            {
+                return;
+            }
             frmVentas.txtcodigo.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 0).toString());
             frmVentas.txtnombreProducto.setText((String) modelo.getValueAt(tabla.getSelectedRow(), 1));
             frmVentas.txtprecio.setText((Double) modelo.getValueAt(tabla.getSelectedRow(), 6)+"");
             frmVentas.txtstock.setText((int) modelo.getValueAt(tabla.getSelectedRow(), 7)+"");
             tabla.clearSelection();
             txtBuscar.requestFocus();
+             agregar.setEnabled(false);
+           
         }
 
     }

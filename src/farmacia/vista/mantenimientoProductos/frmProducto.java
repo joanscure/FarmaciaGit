@@ -9,6 +9,7 @@ import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
+import static farmacia.vista.frmprincipal.visibleproductos;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -189,8 +190,8 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener{
             jbEliminar.setEnabled(false);
             jbGuardar.setEnabled(false);
             pane1.control = true;
-
-            setVisible(false);
+            dispose();
+            visibleproductos=false;
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";

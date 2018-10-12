@@ -200,7 +200,8 @@ public class frmTipousuario extends EstrategiaIFrame implements ActionListener {
             jbGuardar.setEnabled(false);
             pane1.control = true;
 
-            setVisible(false);
+            dispose();
+            
         } else if (source == jbNuevo) {
             habilitar();
             action = "nuevo";
