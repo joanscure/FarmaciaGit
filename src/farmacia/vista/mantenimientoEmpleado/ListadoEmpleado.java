@@ -37,7 +37,7 @@ import javax.swing.table.TableRowSorter;
  * @author fecyp
  */
 public class ListadoEmpleado extends EstrategiaPaneListado implements ActionListener, KeyListener {
-
+  public static  JTable tabla;
 
     public ListadoEmpleado(String titulo) {
         super(titulo);

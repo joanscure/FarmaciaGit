@@ -128,21 +128,27 @@ public class frmCambioClave extends JDialog implements ActionListener,KeyListene
         panelprincipal.setBackground(c);
         JPanel paneuser = new JPanel(new GridLayout(1, 2));
         jluser = new JLabel("Usuario:");
+        jluser.setFont(new Font("Geneva", 1, 16));
         user = new JTextField(10);
+        user.setFont(new Font("Geneva", 1, 16));
         paneuser.add(jluser);
         paneuser.add(user);
         paneuser.setBackground(c);
 
         JPanel panelpassA = new JPanel(new GridLayout(1, 2));
         jlpassactual = new JLabel("Contraseña Nueva:");
+        jlpassactual.setFont(new Font("Geneva", 1, 16));
         txtpasswordconfir = new JPasswordField(10);
+        txtpasswordconfir.setFont(new Font("Geneva", 1, 16));
         panelpassA.add(jlpassactual);
         panelpassA.add(txtpasswordconfir);
         panelpassA.setBackground(c);
 
         JPanel panelpassN = new JPanel(new GridLayout(1, 2));
         jlpassnueva = new JLabel("Confirmar Contraseña:");
+        jlpassnueva.setFont(new Font("Geneva", 1, 16));
         txtpassnueva = new JPasswordField(10);
+        txtpassnueva.setFont(new Font("Geneva", 1, 16));
         panelpassN.add(jlpassnueva);
         panelpassN.add(txtpassnueva);
         panelpassN.setBackground(c);
@@ -157,8 +163,10 @@ public class frmCambioClave extends JDialog implements ActionListener,KeyListene
                 BorderFactory.createTitledBorder("Proporcionar Acceso")));
         JPanel botones = new JPanel(new GridLayout(1, 2));
         cancelar = new JButton("Cancelar");
+        cancelar.setFont(new Font("Geneva", 1, 16));
 
         acceder = new JButton("Acceder");
+        acceder.setFont(new Font("Geneva", 1, 16));
 
         botones.add(acceder);
         botones.add(cancelar);

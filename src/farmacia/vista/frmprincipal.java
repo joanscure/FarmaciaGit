@@ -375,7 +375,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
     private void actualizaritem() {
         String list[] = new String[frmtipousuario.pane1.tabla.getRowCount()];
         for (int i = 0; i < list.length; i++) {
-            list[i] = (String) frmtipousuario.pane1.tabla.getValueAt(i, 1);
+            list[i] = (String) frmtipousuario.pane1.tabla.getValueAt(i, 1).toString();
         }
         frmempleados.actualizaritem(list);
     }

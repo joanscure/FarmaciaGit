@@ -5,7 +5,6 @@
  */
 package farmacia.calculos;
 
-import farmacia.vista.frmprincipal;
 import farmacia.vista.mantenimientoTipoUsuario.ListadoTipousuario;
 
 /**

@@ -28,7 +28,7 @@ import javax.swing.table.TableRowSorter;
  */
 public abstract class EstrategiaPaneListado extends JPanel {
     
-    public static  JTable tabla;
+  
     public DefaultTableModel modelo;
     public JPanel principal;
     public JPanel pane1;
@@ -56,8 +56,7 @@ public abstract class EstrategiaPaneListado extends JPanel {
         txtBuscar.setFont(fontboton);
         buscarPor.setFont(fontboton);
         contador.setFont(fontboton);
-        tabla.setFont(new Font("Geneva", 0, 13));
-        tabla.getTableHeader().setFont(fontboton);
+       
 
     }
     public abstract void Iniciar_componentes(String titulo);

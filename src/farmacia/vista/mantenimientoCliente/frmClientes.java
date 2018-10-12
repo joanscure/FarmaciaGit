@@ -88,12 +88,12 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener {
         } else if (source == jbEliminar) {
             int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar el Cliente?", "confirmar", 2);
             if (confirmacion == 0) {
-                if (permisoeliminar) {
+                if (!permisoeliminar) {
                     frmpermiso permiso = new frmpermiso(this);
-                    return;
-                }
-                eliminar();
 
+                } else {
+                    eliminar();
+                }
             }
 
         } else if (source == jbSalir) {

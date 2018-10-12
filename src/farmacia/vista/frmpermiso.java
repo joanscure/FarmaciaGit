@@ -50,15 +50,8 @@ public class frmpermiso extends JDialog implements ActionListener {
         setTitle("No tiene Acceso");
         this.frm1 = frm;
         index = 11;
-        setModal(true);
         iniciarComponentes();
-        pack();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        cambiarletras();
 
-        acceder.addActionListener(this);
-        cancelar.addActionListener(this);
     }
 
     public frmpermiso(frmEmpleados frm) {
@@ -66,15 +59,8 @@ public class frmpermiso extends JDialog implements ActionListener {
         setTitle("No tiene Acceso");
         this.frm2 = frm;
         index = 12;
-        setModal(true);
         iniciarComponentes();
-        pack();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        cambiarletras();
 
-        acceder.addActionListener(this);
-        cancelar.addActionListener(this);
     }
 
     public frmpermiso(frmEmpresa frm) {
@@ -82,15 +68,8 @@ public class frmpermiso extends JDialog implements ActionListener {
         setTitle("No tiene Acceso");
         this.frm5 = frm;
         index = 14;
-        setModal(true);
         iniciarComponentes();
-        pack();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        cambiarletras();
 
-        acceder.addActionListener(this);
-        cancelar.addActionListener(this);
     }
 
     public frmpermiso(frmProducto frm) {
@@ -98,15 +77,8 @@ public class frmpermiso extends JDialog implements ActionListener {
         setTitle("No tiene Acceso");
         this.frm3 = frm;
         index = 10;
-        setModal(true);
         iniciarComponentes();
-        pack();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        cambiarletras();
 
-        acceder.addActionListener(this);
-        cancelar.addActionListener(this);
     }
 
     public frmpermiso(frmTipousuario frm) {
@@ -114,15 +86,9 @@ public class frmpermiso extends JDialog implements ActionListener {
         setTitle("No tiene Acceso");
         this.frm4 = frm;
         index = 13;
-        setModal(true);
         iniciarComponentes();
-        pack();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        cambiarletras();
+//        pack();
 
-        acceder.addActionListener(this);
-        cancelar.addActionListener(this);
     }
 
     public void cambiarletras() {
@@ -141,13 +107,14 @@ public class frmpermiso extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
+        System.out.println("asdasdasdasda");
         if (source == cancelar) {
             dispose();
         } else if (source == acceder) {
             String usuario = (user.getText());
             String contraseña = (String.valueOf(password.getPassword()));
             String contraseñaEcriptada = cryptMD5(contraseña);
-            
+
             if (usuario.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Campo vacío", "Advertencia ", JOptionPane.ERROR_MESSAGE);
                 user.requestFocus();
@@ -168,7 +135,7 @@ public class frmpermiso extends JDialog implements ActionListener {
                 user.requestFocus();
                 return;
             }
-            
+
             DAOManagerSQL manager = null;
             try {
                 manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
@@ -198,10 +165,8 @@ public class frmpermiso extends JDialog implements ActionListener {
                         default:
                             System.out.println("ERORRRRR");
                     }
-                }
-                else 
-                {
-                     JOptionPane.showMessageDialog(null, "No tiene acceso", "imposible eliminar ", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No tiene acceso", "imposible eliminar ", JOptionPane.ERROR_MESSAGE);
                 }
                 dispose();
 
@@ -217,14 +182,18 @@ public class frmpermiso extends JDialog implements ActionListener {
         panelprincipal.setBackground(c);
         JPanel paneuser = new JPanel(new GridLayout(1, 2));
         jluser = new JLabel("Usuario:");
+        jluser.setFont(new Font("Geneva", 1, 16));
         user = new JTextField(10);
+        user.setFont(new Font("Geneva", 1, 16));
         paneuser.add(jluser);
         paneuser.add(user);
         paneuser.setBackground(c);
 
         JPanel panelpass = new JPanel(new GridLayout(1, 2));
         jlpass = new JLabel("Contraseña:");
+        jlpass.setFont(new Font("Geneva", 1, 16));
         password = new JPasswordField(10);
+        password.setFont(new Font("Geneva", 1, 16));
         panelpass.add(jlpass);
         panelpass.add(password);
         panelpass.setBackground(c);
@@ -238,9 +207,9 @@ public class frmpermiso extends JDialog implements ActionListener {
                 BorderFactory.createTitledBorder("Proporcionar Acceso de un Administrador")));
         JPanel botones = new JPanel(new GridLayout(1, 2));
         cancelar = new JButton("Cancelar");
-
+        cancelar.setFont(new Font("Geneva", 1, 16));
         acceder = new JButton("Acceder");
-
+        acceder.setFont(new Font("Geneva", 1, 16));
         botones.add(acceder);
         botones.add(cancelar);
         botones.setBackground(c);
@@ -248,8 +217,18 @@ public class frmpermiso extends JDialog implements ActionListener {
         panelprincipal.add(todo, BorderLayout.NORTH);
         panelprincipal.add(botones, BorderLayout.SOUTH);
         add(panelprincipal);
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        cambiarletras();
+        setSize(400,220);
+
+        setVisible(true);
+        acceder.addActionListener(this);
+        cancelar.addActionListener(this);
     }
-      private boolean validaruser(String user) {
+
+    private boolean validaruser(String user) {
         for (int i = 0; i < frmusuariologin.tabla.getRowCount(); i++) {
             if (user.equals(frmusuariologin.tabla.getValueAt(i, 2))) {
                 return true;
@@ -260,9 +239,9 @@ public class frmpermiso extends JDialog implements ActionListener {
     }
 
     private boolean validarpass(String user, String passw) {
-        
+
         for (int i = 0; i < frmusuariologin.tabla.getRowCount(); i++) {
-            if (passw.equals(frmusuariologin.tabla.getValueAt(i, 3))&& user.equals(frmusuariologin.tabla.getValueAt(i, 2))) {
+            if (passw.equals(frmusuariologin.tabla.getValueAt(i, 3)) && user.equals(frmusuariologin.tabla.getValueAt(i, 2))) {
                 return true;
             }
 

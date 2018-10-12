@@ -84,7 +84,7 @@ public class frmEmpresa extends EstrategiaIFrame implements ActionListener {
         } else if (source == jbEliminar) {
             int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar la Empresa?", "confirmar", 2);
             if (confirmacion == 0) {
-                 if (permisoeliminar) {
+                 if (!permisoeliminar) {
                     frmpermiso permiso = new frmpermiso(this);
                     return;
                 }
