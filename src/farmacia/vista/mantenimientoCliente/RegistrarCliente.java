@@ -54,7 +54,7 @@ public class RegistrarCliente extends EstrategiaPanelRegistrar implements Action
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (!ExistenVacios()) {
-            frmClientes.jbGuardar.doClick();
+            this.jbGuardar.doClick();
         }
         if (source == txtnombre) {
             txtnombre.transferFocus();

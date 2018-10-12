@@ -31,9 +31,8 @@ public abstract class EstrategiaIFrame extends JInternalFrame {
 
     public JTabbedPane pestañas;
 
-    public static JButton jbNuevo, jbEliminar, jbGuardar, jbModificar, jbSalir, jbCancelar;
+    public  JButton jbNuevo, jbEliminar, jbGuardar, jbModificar, jbSalir, jbCancelar;
 
-    public String nombreAlm, telefonoAlm, direccionAlm;
     public Color c = Color.white;
     public Font fontboton = new Font("Geneva", 1, 14);
     public configuracionImagenes config = new configuracionImagenes();

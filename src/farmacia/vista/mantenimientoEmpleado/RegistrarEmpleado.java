@@ -6,6 +6,7 @@
 package farmacia.vista.mantenimientoEmpleado;
 
 import com.toedter.calendar.JDateChooser;
+import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import farmacia.vista.frmregistrarSuperusuario;
 import java.awt.BorderLayout;
@@ -82,9 +83,12 @@ public class RegistrarEmpleado extends EstrategiaPanelRegistrar implements Actio
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         Object source = e.getSource();
         if (!ExistenVacios()) {
-            frmEmpleados.jbGuardar.doClick();
+            if (frmEmpleados.jbGuardar != null) {
+                frmEmpleados.jbGuardar.doClick();
+            }
         }
         if (source == txtnombre) {
             txtnombre.transferFocus();

@@ -39,7 +39,6 @@ public abstract class EstrategiaPaneListado extends JPanel {
     public TextAutoCompleter autocompletar;
     public TableRowSorter<TableModel> elQueOrdena;
      public int indexSelecion = -1;
-    public String dni;
     public configuracionesTabla config = new configuracionesTabla();
     public configuracionImagenes configIma = new configuracionImagenes();
     public Font fontboton = new Font("Geneva", 1, 13);

@@ -7,11 +7,13 @@ package farmacia.vista.mantenimientoCliente;
 
 import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.DAOManager;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.personacliente;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
+import static farmacia.vista.mantenimientoCliente.ListadoClientes.tabla;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -25,7 +27,7 @@ import javax.swing.RowFilter;
  *
  * @author fecyp
  */
-public class frmClientes extends EstrategiaIFrame implements ActionListener {
+public class frmClientes extends EstrategiaIFrame implements ActionListener,KeyListener {
 
     public ListadoClientes pane1;
     public RegistrarCliente pane2;
@@ -158,6 +160,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener {
 
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
+        funcionregistrar();
     }
 
     public void habilitar() {
@@ -357,6 +360,16 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener {
             System.out.println(" errorr");
 
         }
+    }
+
+    private void funcionregistrar() {
+         tabla.getSelectionModel().addListSelectionListener(e -> {
+            if (pane1.control) {
+                jbEliminar.setEnabled(true);
+                jbModificar.setEnabled(true);
+            }
+        }
+        );
     }
 
 }

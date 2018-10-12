@@ -133,13 +133,7 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
-        tabla.getSelectionModel().addListSelectionListener(e -> {
-            if (control) {
-                frmClientes.jbEliminar.setEnabled(true);
-                frmClientes.jbModificar.setEnabled(true);
-            }
-        }
-        );
+       
         tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
         int[] tamaño = {0, 0, 150, 150, 150, 180, 100, 200, 80, 0};
