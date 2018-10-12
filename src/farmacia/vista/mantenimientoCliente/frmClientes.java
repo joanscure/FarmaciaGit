@@ -7,17 +7,17 @@ package farmacia.vista.mantenimientoCliente;
 
 import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.jdbc.dao.DAOException;
-import farmacia.jdbc.dao.DAOManager;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.personacliente;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
-import static farmacia.vista.mantenimientoCliente.ListadoClientes.tabla;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -27,7 +27,7 @@ import javax.swing.RowFilter;
  *
  * @author fecyp
  */
-public class frmClientes extends EstrategiaIFrame implements ActionListener,KeyListener {
+public class frmClientes extends EstrategiaIFrame implements ActionListener, KeyListener {
 
     public ListadoClientes pane1;
     public RegistrarCliente pane2;
@@ -127,6 +127,25 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener,KeyL
             jbNuevo.setEnabled(false);
 
         }
+        
+        if (source == pane2.txtnombre) {
+            pane2.txtnombre.transferFocus();
+
+        } else if (source == pane2.txtapellidop) {
+            pane2.txtapellidop.transferFocus();
+
+        } else if (source == pane2.txtapellidom) {
+//            cbxtipodocumento.setPopupVisible(true);
+            pane2.txtapellidom.transferFocus();
+        } else if (source == pane2.txtdocumento) {
+            pane2.txtdocumento.transferFocus();
+        } else if (source == pane2.txtdireccion) {
+            pane2.txttelefono.requestFocus();
+        } else if (source == pane2.txttelefono) {
+            jbGuardar.doClick();
+        } else if (source == pane2.txtedad) {
+            pane2.txtedad.transferFocus();
+        }
     }
 
     public void Iniciar_componentes(String titulo) {
@@ -161,6 +180,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener,KeyL
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
         funcionregistrar();
+        funcionlistado();
     }
 
     public void habilitar() {
@@ -318,6 +338,9 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener,KeyL
             pane1.actualizartabla();
             JOptionPane.showMessageDialog(null, "Se Editó el Cliente satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
             deshabilitar();
+            jbEliminar.setEnabled(false);
+            jbModificar.setEnabled(false);
+            pane1.tabla.clearSelection();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
             pane1.control = true;
@@ -363,13 +386,152 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener,KeyL
     }
 
     private void funcionregistrar() {
-         tabla.getSelectionModel().addListSelectionListener(e -> {
+        pane1.tabla.getSelectionModel().addListSelectionListener(e -> {
             if (pane1.control) {
                 jbEliminar.setEnabled(true);
                 jbModificar.setEnabled(true);
             }
         }
         );
+        pane2.txtapellidop.addKeyListener(this);
+        pane2.txtapellidom.addKeyListener(this);
+        pane2.txtnombre.addKeyListener(this);
+        pane2.txtdocumento.addKeyListener(this);
+        pane2.txttelefono.addKeyListener(this);
+        pane2.txtdireccion.addKeyListener(this);
+        pane2.txtedad.addKeyListener(this);
+        pane2.txtapellidop.addActionListener(this);
+        pane2.txtnombre.addActionListener(this);
+        pane2.txtdocumento.addActionListener(this);
+        pane2.txttelefono.addActionListener(this);
+        pane2.txtapellidom.addActionListener(this);
+        pane2.txtdireccion.addActionListener(this);
+        pane2.txtedad.addActionListener(this);
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+        Object source = ke.getSource();
+//        if (source != cbxtipodocumento) {
+        ke.getComponent().setBackground(Color.white);
+//        }
+
+        if (source == pane2.txtapellidom || source == pane2.txtapellidop || source == pane2.txtnombre || source == pane2.txtdireccion) {
+            char c = ke.getKeyChar();
+            if (Character.isLowerCase(c)) {
+                String cad = ("" + c).toUpperCase();
+                c = cad.charAt(0);
+                ke.setKeyChar(c);
+            }
+            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != pane2.txtdireccion) {
+                ke.consume();
+            }
+        } else if (source == pane2.txttelefono || source == pane2.txtdocumento) {
+            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+                ke.consume();
+            }
+            if (source == pane2.txtdocumento) {
+                if (pane2.txtdocumento.getText().length() >= 8) {
+                    ke.consume();
+                }
+            }
+            if (source == pane2.txttelefono) {
+                if (pane2.txttelefono.getText().length() >= 9) {
+                    ke.consume();
+                }
+            }
+        } else if (source == pane2.txtedad) {
+            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+
+                ke.consume();
+            }
+            if (pane2.txtedad.getText().length() >= 2) {
+                ke.consume();
+            }
+        }
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        Object source = ke.getSource();
+//        if (source == cbxtipodocumento) {
+//            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+//                cbxtipodocumento.setPopupVisible(false);
+//                cbxtipodocumento.transferFocus();
+//            }
+//        }
+        if (source == pane1.tabla) {
+            if (pane1.tabla.getSelectedRow() == -1) {
+                return;
+            }
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                jbModificar.doClick();
+
+            } else if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
+                jbEliminar.doClick();
+            }
+        } else if (source == pane1.txtBuscar) {
+            if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+                pane1.buscarPor.setPopupVisible(true);
+                pane1.buscarPor.requestFocus();
+            }
+
+        } else if (source == pane1.buscarPor) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                pane1.buscarPor.setPopupVisible(false);
+                pane1.buscarPor.transferFocus();
+            }
+        }
+
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            pane1.teclamas = true;
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (source == pane2.txttelefono) {
+                pane2.txtdireccion.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocusBackward();
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (source == pane2.txttelefono) {
+                pane2.txtnombre.requestFocus();
+                return;
+            }
+            if (source == pane2.txtdireccion) {
+                pane2.txttelefono.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocus();
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            jbCancelar.doClick();
+            jbSalir.doClick();
+
+        }
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            pane2.teclaunida = true;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_S && pane2.teclaunida) {
+            jbGuardar.doClick();
+            pane2.teclaunida = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_N && pane1.teclamas) {
+            jbNuevo.doClick();
+            pane1.teclamas = false;
+        }
+    }
+
+    private void funcionlistado() {
+        pane1.tabla.addKeyListener(this);
+        pane1.txtBuscar.addKeyListener(this);
+        pane1.buscarPor.addKeyListener(this);
     }
 
 }

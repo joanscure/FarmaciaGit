@@ -6,7 +6,6 @@
 package farmacia.vista.mantenimientoEmpleado;
 
 import com.toedter.calendar.JDateChooser;
-import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import farmacia.vista.frmregistrarSuperusuario;
 import java.awt.BorderLayout;
@@ -29,7 +28,7 @@ import javax.swing.JTextField;
  *
  * @author fecyp
  */
-public class RegistrarEmpleado extends EstrategiaPanelRegistrar implements ActionListener, KeyListener {
+public class RegistrarEmpleado extends EstrategiaPanelRegistrar  {
 
     JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idempleado, jlfecha, jlusr, jlpass, jlocupacion, jledad;
     public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidempleado, txttelefono, txtdocumento, txtuser, txtidtipodepersona, txtedad;
@@ -43,26 +42,7 @@ public class RegistrarEmpleado extends EstrategiaPanelRegistrar implements Actio
     public RegistrarEmpleado(String titulo) {
         super(titulo);
 
-        txtapellidop.addActionListener(this);
-        txtnombre.addActionListener(this);
-        txtdocumento.addActionListener(this);
-        txttelefono.addActionListener(this);
-        txtapellidom.addActionListener(this);
-        txtdireccion.addActionListener(this);
-        txtuser.addActionListener(this);
-        txtpassw.addActionListener(this);
-        txtedad.addActionListener(this);
-
-        txtapellidop.addKeyListener(this);
-        txtapellidom.addKeyListener(this);
-        txtnombre.addKeyListener(this);
-        txtdocumento.addKeyListener(this);
-        txttelefono.addKeyListener(this);
-        txtdireccion.addKeyListener(this);
-        cbxtipodeempleado.addKeyListener(this);
-        txtuser.addKeyListener(this);
-        txtedad.addKeyListener(this);
-        txtpassw.addKeyListener(this);
+        
     }
 
     public boolean ExistenVacios() {
@@ -81,40 +61,7 @@ public class RegistrarEmpleado extends EstrategiaPanelRegistrar implements Actio
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-        Object source = e.getSource();
-        if (!ExistenVacios()) {
-            if (frmEmpleados.jbGuardar != null) {
-                frmEmpleados.jbGuardar.doClick();
-            }
-        }
-        if (source == txtnombre) {
-            txtnombre.transferFocus();
-
-        } else if (source == txtapellidop) {
-            txtapellidop.transferFocus();
-
-        } else if (source == txtapellidom) {
-//            cbxtipodocumento.setPopupVisible(true);
-            txtapellidom.transferFocus();
-        } else if (source == txtdocumento) {
-            txtdocumento.transferFocus();
-        } else if (source == txtdireccion) {
-            txttelefono.requestFocus();
-
-        } else if (source == txttelefono) {
-            txttelefono.transferFocus();
-        } else if (source == txtuser) {
-            txtuser.transferFocus();
-        } else if (source == txtpassw) {
-            txtpassw.transferFocus();
-            cbxtipodeempleado.setPopupVisible(true);
-        } else if (source == txtedad) {
-            txtedad.transferFocus();
-        }
-    }
+    
 
     public void personalizartipoletra() {
         nombre.setFont(fontboton);
@@ -148,118 +95,7 @@ public class RegistrarEmpleado extends EstrategiaPanelRegistrar implements Actio
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent ke) {
-        Object source = ke.getSource();
-        if (source != cbxtipodeempleado) {
-            ke.getComponent().setBackground(Color.white);
-        }
-
-        if ((source == txtapellidom || source == txtapellidop || source == txtnombre || source == txtdireccion) && source != txtpassw && source != txtuser && source != fecharegistro) {
-            char c = ke.getKeyChar();
-            if (Character.isLowerCase(c)) {
-                String cad = ("" + c).toUpperCase();
-                c = cad.charAt(0);
-                ke.setKeyChar(c);
-            }
-            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != txtdireccion) {
-                ke.consume();
-            }
-        } else if (source == txttelefono || source == txtdocumento && source != txtpassw && source != txtuser) {
-            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
-                ke.consume();
-            }
-            if (source == txtdocumento) {
-                if (txtdocumento.getText().length() >= 8) {
-                    ke.consume();
-                }
-            }
-            if (source == txttelefono) {
-                if (txttelefono.getText().length() >= 9) {
-                    ke.consume();
-                }
-            }
-        } else if (source == txtedad) {
-            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
-                if (txtedad.getText().length() >= 2) {
-                    ke.consume();
-                }
-            }
-            if (txtedad.getText().length() >= 2) {
-                ke.consume();
-            }
-        }
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        Object source = ke.getSource();
-//        if (source == cbxtipodocumento) {
-//            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-//                cbxtipodocumento.setPopupVisible(false);
-//                cbxtipodocumento.transferFocus();
-//            }
-//        }
-        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            if (source == cbxtipodeempleado) {
-                cbxtipodeempleado.setPopupVisible(false);
-                txtnombre.requestFocus();
-                return;
-            }
-            if (source == txttelefono) {
-                txtdireccion.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocusBackward();
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (source == cbxtipodeempleado) {
-                cbxtipodeempleado.setPopupVisible(false);
-                txtnombre.requestFocus();
-                return;
-            }
-            if (source == txtdireccion) {
-                txttelefono.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocus();
-        }
-        if (source == cbxtipodeempleado) {
-            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-                cbxtipodeempleado.setPopupVisible(false);
-                if (frmEmpleados.jbGuardar != null) {
-                    frmEmpleados.jbGuardar.doClick();
-                } else {
-                    frmregistrarSuperusuario.registrar.doClick();
-                }
-            }
-        }
-
-        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            if (frmEmpleados.jbCancelar != null) {
-                frmEmpleados.jbCancelar.doClick();
-            } else {
-                frmregistrarSuperusuario.salir.doClick();
-            }
-
-        }
-        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclaunida = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-            if (frmEmpleados.jbGuardar != null) {
-                frmEmpleados.jbGuardar.doClick();
-            } else {
-                frmregistrarSuperusuario.registrar.doClick();
-            }
-            teclaunida = false;
-        }
-    }
+    
 
     public void iniciar_componentes(String titulo) {
 

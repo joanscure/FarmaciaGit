@@ -20,7 +20,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -35,7 +34,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoClientes extends EstrategiaPaneListado implements ActionListener, KeyListener {
+public class ListadoClientes extends EstrategiaPaneListado implements ActionListener {
   public static  JTable tabla;
 
     ListadoClientes(String titulo) {
@@ -110,9 +109,7 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
-        tabla.addKeyListener(this);
-        txtBuscar.addKeyListener(this);
-        buscarPor.addKeyListener(this);
+        
 
     }
 
@@ -171,53 +168,10 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+    
 
-    }
+  
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        Object source = e.getSource();
-        if (source == tabla) {
-            if (tabla.getSelectedRow() == -1) {
-                return;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                frmClientes.jbModificar.doClick();
-
-            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                frmClientes.jbEliminar.doClick();
-            }
-        } else if (source == txtBuscar) {
-            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                buscarPor.setPopupVisible(true);
-                buscarPor.requestFocus();
-            }
-
-        } else if (source == buscarPor) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                buscarPor.setPopupVisible(false);
-                buscarPor.transferFocus();
-            }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmClientes.jbSalir.doClick();
-        }
-
-        if (e.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclamas = true;
-        }
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-        if (e.getKeyCode() == KeyEvent.VK_N && teclamas) {
-            frmClientes.jbNuevo.doClick();
-            teclamas = false;
-        }
-    }
+  
 
 }

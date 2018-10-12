@@ -5,12 +5,10 @@
  */
 package farmacia.vista.mantenimientoProductos;
 
-import farmacia.calculos.configuracionImagenes;
 import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +26,7 @@ import javax.swing.JTextField;
  *
  * @author fecyp
  */
-public class RegistrarProductos extends EstrategiaPanelRegistrar implements ActionListener, KeyListener {
+public class RegistrarProductos extends EstrategiaPanelRegistrar  {
 
     JLabel nombre, descripcion, dosispro, precioventa, igv, preciofinal, stock, idproducto;
     public JTextField txtnombre, txtdescripcion, txtdosis, txtprecioventa, txtidproducto, txtigv, txtiddescuento, txtpreciofinal, txtstock;
@@ -38,25 +36,7 @@ public class RegistrarProductos extends EstrategiaPanelRegistrar implements Acti
     public RegistrarProductos(String titulo) {
         super(titulo);
 
-        txtnombre.addActionListener(this);
-        txtdescripcion.addActionListener(this);
-        txtdosis.addActionListener(this);
-        txtprecioventa.addActionListener(this);
-        txtidproducto.addActionListener(this);
-        txtigv.addActionListener(this);
-        txtiddescuento.addActionListener(this);
-        txtpreciofinal.addActionListener(this);
-        txtstock.addActionListener(this);
-
-        txtnombre.addKeyListener(this);
-        txtdescripcion.addKeyListener(this);
-        txtdosis.addKeyListener(this);
-        txtprecioventa.addKeyListener(this);
-        txtidproducto.addKeyListener(this);
-        txtigv.addKeyListener(this);
-        txtiddescuento.addKeyListener(this);
-        txtpreciofinal.addKeyListener(this);
-        txtstock.addKeyListener(this);
+       
 
     }
 
@@ -76,28 +56,6 @@ public class RegistrarProductos extends EstrategiaPanelRegistrar implements Acti
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (!ExistenVacios()) {
-            frmProducto.jbGuardar.doClick();
-        }
-        if (source == txtnombre) {
-            txtnombre.transferFocus();
-
-        } else if (source == txtdescripcion) {
-            txtdescripcion.transferFocus();
-
-        } else if (source == txtdosis) {
-            txtdosis.transferFocus();
-        } else if (source == txtprecioventa) {
-            txtstock.requestFocus();
-        } else if (source == txtstock) {
-            frmProducto.jbGuardar.doClick();
-        } else if (source == txtigv) {
-            txtigv.transferFocus();
-        }
-    }
 
     public void personalizartipoletra() {
         nombre.setFont(fontboton);
@@ -119,136 +77,7 @@ public class RegistrarProductos extends EstrategiaPanelRegistrar implements Acti
         txtidproducto.setFont(fontboton);
     }
 
-    @Override
-    public void keyTyped(KeyEvent ke) {
-        Object source = ke.getSource();
-
-        ke.getComponent().setBackground(Color.white);
-
-        if (source == txtnombre || source == txtdosis || source == txtnombre || source == txtdescripcion) {
-            char c = ke.getKeyChar();
-            if (Character.isLowerCase(c)) {
-                String cad = ("" + c).toUpperCase();
-                c = cad.charAt(0);
-                ke.setKeyChar(c);
-            }
-            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != txtdosis && source != txtdescripcion) {
-                ke.consume();
-            }
-        } else if (source == txtprecioventa) {
-            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57) && ((ke.getKeyChar() != 46) || controlpunto)) {
-
-                ke.consume();
-
-            }
-        } else if (source == txtstock) {
-            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57)) {
-
-                ke.consume();
-
-            }
-        }
-        if (source == txtigv) {
-            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57) && ((ke.getKeyChar() != 46) || controlpuntoigv)) {
-
-                ke.consume();
-
-            }
-        }
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        Object source = ke.getSource();
-        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            if (source == txtstock) {
-                txtprecioventa.requestFocus();
-                return;
-            }
-            if (source == txtnombre) {
-                txtstock.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocusBackward();
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (source == txtstock) {
-                txtnombre.requestFocus();
-                return;
-            }
-            if (source == txtprecioventa) {
-                txtstock.requestFocus();
-                return;
-            }
-
-            ke.getComponent().transferFocus();
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmProducto.jbCancelar.doClick();
-
-        }
-        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclaunida = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        Object source = e.getSource();
-        if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-            frmProducto.jbGuardar.doClick();
-            teclaunida = false;
-        }
-        if (source == txtprecioventa || source == txtigv) {
-            int validacion = txtigv.getText().indexOf(".");
-            if (validacion == -1) {
-                controlpuntoigv = false;//deja poner el punto ya que dice que no encuentra punto
-            } else {
-                controlpuntoigv = true;//no lo deja poner el punto ya que dice que ya se encuentra un punto
-
-            }
-            validacion = txtprecioventa.getText().indexOf(".");
-            if (validacion == -1) {
-                controlpunto = false;//deja poner el punto ya que dice que no encuentra punto
-            } else {
-                controlpunto = true;//no lo deja poner el punto ya que dice que ya se encuentra un punto
-
-            }
-            //para que el igv no este vacio
-            if (txtigv.getText().isEmpty()) {
-                return;
-            } else if (txtigv.getText().charAt(txtigv.getText().length() - 1) == '.') //para que el igv no quede en un punto
-            {
-                return;
-            }
-
-            if (txtprecioventa.getText().isEmpty()) {
-                txtpreciofinal.setText("");
-                return;
-            } else if (txtprecioventa.getText().charAt(txtprecioventa.getText().length() - 1) == '.') {
-                txtpreciofinal.setText("");
-                return;
-            }
-            //validamos que solo halla un punto
-
-            //
-            if (txtprecioventa.getText().charAt(txtprecioventa.getText().length() - 1) == '.') {
-                if (txtprecioventa.getText().length() == 1) {
-                    return;
-                }
-            }
-
-            double igv = (Double.parseDouble(txtigv.getText()) / 100) + 1;
-
-            double preciototal = Double.parseDouble(txtprecioventa.getText()) * igv;
-            BigDecimal bd = new BigDecimal(preciototal);
-            bd = bd.setScale(2, RoundingMode.HALF_UP);
-
-            txtpreciofinal.setText(bd.doubleValue() + "");
-        }
-
-    }
+    
 
     public void iniciar_componentes(String titulo) {
 

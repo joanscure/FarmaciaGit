@@ -21,7 +21,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -36,7 +35,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoEmpleado extends EstrategiaPaneListado implements ActionListener, KeyListener {
+public class ListadoEmpleado extends EstrategiaPaneListado implements ActionListener{
   public static  JTable tabla;
 
     public ListadoEmpleado(String titulo) {
@@ -120,9 +119,7 @@ public class ListadoEmpleado extends EstrategiaPaneListado implements ActionList
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
-        tabla.addKeyListener(this);
-        txtBuscar.addKeyListener(this);
-        buscarPor.addKeyListener(this);
+        
 
     }
 
@@ -143,13 +140,7 @@ public class ListadoEmpleado extends EstrategiaPaneListado implements ActionList
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
-        tabla.getSelectionModel().addListSelectionListener(e -> {
-            if (control) {
-                frmEmpleados.jbEliminar.setEnabled(true);
-                frmEmpleados.jbModificar.setEnabled(true);
-            }
-        }
-        );
+        
         tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
         int[] tamaño = {0, 0, 80, 150, 150, 180,100, 200, 80, 0,0,0,0};
@@ -187,66 +178,6 @@ public class ListadoEmpleado extends EstrategiaPaneListado implements ActionList
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        Object source = e.getSource();
-        if (source == tabla) {
-            if(tabla.getSelectedRow()==-1)
-            {
-                return;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//                int index = tabla.getSelectedRow();
-//                if (index == 0) {
-//                    index = tabla.getRowCount();
-//                }
-//                index--;
-//                control = false;
-//                tabla.changeSelection(index, 0, false, false);
-//                //se pasa el index como parametro o se usa el selected
-////            control = true;
-                frmEmpleados.jbModificar.doClick();
-
-            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                frmEmpleados.jbEliminar.doClick();
-            }
-        }
-        else if(source==txtBuscar)
-        {
-             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                  buscarPor.setPopupVisible(true);
-               buscarPor.requestFocus();
-            }
-         
-        }else if (source == buscarPor) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                buscarPor.setPopupVisible(false);
-                buscarPor.transferFocus();
-            }
-        }
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                frmEmpleados.jbSalir.doClick();
-            }
-         
-        
-        if (e.getExtendedKeyCode()== KeyEvent.VK_CONTROL ) {
-                  teclamas=true;
-            }
-        
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-      
-       if (e.getKeyCode() == KeyEvent.VK_N &&teclamas) {
-                    frmEmpleados.jbNuevo.doClick();
-                    teclamas=false;
-                }
-    }
+  
 
 }

@@ -27,7 +27,7 @@ import javax.swing.JTextField;
  *
  * @author fecyp
  */
-public class RegistrarTipoUsuario extends EstrategiaPanelRegistrar implements ActionListener, KeyListener, MouseListener {
+public class RegistrarTipoUsuario extends EstrategiaPanelRegistrar implements ActionListener {
 
     
     JLabel descripcion, tipouser;
@@ -39,32 +39,7 @@ public class RegistrarTipoUsuario extends EstrategiaPanelRegistrar implements Ac
         super(titulo);
 
         txtdescripcion.addActionListener(this);
-        txtdescripcion.addKeyListener(this);
-        aventas.addKeyListener(this);
-        aproductos.addKeyListener(this);
-        aclientes.addKeyListener(this);
-        aconsultas.addKeyListener(this);
-        aempleados.addKeyListener(this);
-        atiposusuario.addKeyListener(this);
-        acambioclave.addKeyListener(this);
-        aanularventas.addKeyListener(this);
-        aeliminarproducto.addKeyListener(this);
-        aelmininartipotrabajor.addKeyListener(this);
-        aeliminarusuario.addKeyListener(this);
-        aeliminarclientes.addKeyListener(this);
-
-        aventas.addMouseListener(this);
-        aproductos.addMouseListener(this);
-        aclientes.addMouseListener(this);
-        aconsultas.addMouseListener(this);
-        aempleados.addMouseListener(this);
-        atiposusuario.addMouseListener(this);
-        acambioclave.addMouseListener(this);
-        aanularventas.addMouseListener(this);
-        aeliminarproducto.addMouseListener(this);
-        aelmininartipotrabajor.addMouseListener(this);
-        aeliminarusuario.addMouseListener(this);
-        aeliminarclientes.addMouseListener(this);
+       
 
     }
 
@@ -97,97 +72,7 @@ public class RegistrarTipoUsuario extends EstrategiaPanelRegistrar implements Ac
         aeliminarclientes.setBackground(Color.WHITE);
     }
 
-    @Override
-    public void keyTyped(KeyEvent ke) {
-        Object source = ke.getSource();
-
-        if (source == txtdescripcion) {
-            char c = ke.getKeyChar();
-            if (Character.isLowerCase(c)) {
-                String cad = ("" + c).toUpperCase();
-                c = cad.charAt(0);
-                ke.setKeyChar(c);
-            }
-            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90)) {
-                ke.consume();
-            }
-        }
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        Object source = ke.getSource();
-        if (source != txtdescripcion) {
-            if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-
-                ke.getComponent().transferFocusBackward();
-            }
-            if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-                if (source == aelmininartipotrabajor) {
-                    aventas.requestFocus();
-                    return;
-                }
-                ke.getComponent().transferFocus();
-            }
-            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-                JCheckBox cheaux = (JCheckBox) ke.getComponent();
-                cheaux.setSelected(!cheaux.isSelected());
-               
-            }
-        } else {
-            txtdescripcion.setBackground(Color.white);
-        }
-         if (source == aclientes) {
-            if (aclientes.isSelected()) {
-                aeliminarclientes.setEnabled(true);
-
-            } else {
-                aeliminarclientes.setEnabled(false);
-                aeliminarclientes.setSelected(false);
-                return;
-
-            }
-        } else if (source == aproductos) {
-            if (aproductos.isSelected()) {
-                aeliminarproducto.setEnabled(true);
-
-            } else {
-                aeliminarproducto.setEnabled(false);
-                aeliminarproducto.setSelected(false);
-            }
-        } else if (source == aempleados) {
-            if (aempleados.isSelected()) {
-                aeliminarusuario.setEnabled(true);
-            } else {
-                aeliminarusuario.setEnabled(false);
-                aeliminarusuario.setSelected(false);
-            }
-        } else if (source == atiposusuario) {
-            if (atiposusuario.isSelected()) {
-                aelmininartipotrabajor.setEnabled(true);
-            } else {
-                aelmininartipotrabajor.setEnabled(false);
-                aelmininartipotrabajor.setSelected(false);
-            }
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmClientes.jbCancelar.doClick();
-
-        }
-
-        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclaunida = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-            frmClientes.jbGuardar.doClick();
-            teclaunida = false;
-        }
-    }
+   
 
     public void iniciar_componentes(String titulo) {
 
@@ -285,58 +170,5 @@ public class RegistrarTipoUsuario extends EstrategiaPanelRegistrar implements Ac
         return resp;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        Object source = e.getSource();
-
-        if (source == aclientes) {
-            if (aclientes.isSelected()) {
-                aeliminarclientes.setEnabled(true);
-
-            } else {
-                aeliminarclientes.setEnabled(false);
-                aeliminarclientes.setSelected(false);
-                return;
-
-            }
-        } else if (source == aproductos) {
-            if (aproductos.isSelected()) {
-                aeliminarproducto.setEnabled(true);
-
-            } else {
-                aeliminarproducto.setEnabled(false);
-                aeliminarproducto.setSelected(false);
-            }
-        } else if (source == aempleados) {
-            if (aempleados.isSelected()) {
-                aeliminarusuario.setEnabled(true);
-            } else {
-                aeliminarusuario.setEnabled(false);
-                aeliminarusuario.setSelected(false);
-            }
-        } else if (source == atiposusuario) {
-            if (atiposusuario.isSelected()) {
-                aelmininartipotrabajor.setEnabled(true);
-            } else {
-                aelmininartipotrabajor.setEnabled(false);
-                aelmininartipotrabajor.setSelected(false);
-            }
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
+   
 }

@@ -14,10 +14,14 @@ import farmacia.jdbc.modelado.empleado;
 import farmacia.jdbc.modelado.persona;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
+import farmacia.vista.frmregistrarSuperusuario;
+import static farmacia.vista.mantenimientoEmpleado.ListadoEmpleado.tabla;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,7 +32,7 @@ import javax.swing.RowFilter;
  *
  * @author fecyp
  */
-public class frmEmpleados extends EstrategiaIFrame implements ActionListener {
+public class frmEmpleados extends EstrategiaIFrame implements ActionListener, KeyListener {
 
     public ListadoEmpleado pane1;
     public RegistrarEmpleado pane2;
@@ -93,7 +97,7 @@ public class frmEmpleados extends EstrategiaIFrame implements ActionListener {
         } else if (source == jbEliminar) {
             int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar el Empleado?", "confirmar", 2);
             if (confirmacion == 0) {
-                 if (!permisoeliminar) {
+                if (!permisoeliminar) {
                     frmpermiso permiso = new frmpermiso(this);
                     return;
                 }
@@ -129,6 +133,31 @@ public class frmEmpleados extends EstrategiaIFrame implements ActionListener {
             jbNuevo.setEnabled(false);
 
         }
+        
+        if (source == pane2.txtnombre) {
+            pane2.txtnombre.transferFocus();
+
+        } else if (source == pane2.txtapellidop) {
+            pane2.txtapellidop.transferFocus();
+
+        } else if (source == pane2.txtapellidom) {
+//            cbxtipodocumento.setPopupVisible(true);
+            pane2.txtapellidom.transferFocus();
+        } else if (source == pane2.txtdocumento) {
+            pane2.txtdocumento.transferFocus();
+        } else if (source == pane2.txtdireccion) {
+            pane2.txttelefono.requestFocus();
+
+        } else if (source == pane2.txttelefono) {
+            pane2.txttelefono.transferFocus();
+        } else if (source == pane2.txtuser) {
+            pane2.txtuser.transferFocus();
+        } else if (source == pane2.txtpassw) {
+            pane2.txtpassw.transferFocus();
+            pane2.cbxtipodeempleado.setPopupVisible(true);
+        } else if (source == pane2.txtedad) {
+            pane2.txtedad.transferFocus();
+        }
     }
 
     public void Iniciar_componentes(String titulo) {
@@ -162,6 +191,8 @@ public class frmEmpleados extends EstrategiaIFrame implements ActionListener {
 
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
+        funcionregistrar();
+        funcionlistado();
     }
 
     public void habilitar() {
@@ -384,6 +415,9 @@ public class frmEmpleados extends EstrategiaIFrame implements ActionListener {
             pane1.actualizartabla();
             JOptionPane.showMessageDialog(null, "Se Editó el Empleado satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
             deshabilitar();
+            jbEliminar.setEnabled(false);
+            jbModificar.setEnabled(false);
+            tabla.clearSelection();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
             pane1.control = true;
@@ -426,5 +460,185 @@ public class frmEmpleados extends EstrategiaIFrame implements ActionListener {
 
         }
 
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+        Object source = ke.getSource();
+        if (source != pane2.cbxtipodeempleado) {
+            ke.getComponent().setBackground(Color.white);
+        }
+
+        if ((source == pane2.txtapellidom || source == pane2.txtapellidop || source == pane2.txtnombre || source == pane2.txtdireccion) && source != pane2.txtpassw && source != pane2.txtuser && source != pane2.fecharegistro) {
+            char c = ke.getKeyChar();
+            if (Character.isLowerCase(c)) {
+                String cad = ("" + c).toUpperCase();
+                c = cad.charAt(0);
+                ke.setKeyChar(c);
+            }
+            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != pane2.txtdireccion) {
+                ke.consume();
+            }
+        } else if (source == pane2.txttelefono || source == pane2.txtdocumento && source != pane2.txtpassw && source != pane2.txtuser) {
+            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+                ke.consume();
+            }
+            if (source == pane2.txtdocumento) {
+                if (pane2.txtdocumento.getText().length() >= 8) {
+                    ke.consume();
+                }
+            }
+            if (source == pane2.txttelefono) {
+                if (pane2.txttelefono.getText().length() >= 9) {
+                    ke.consume();
+                }
+            }
+        } else if (source == pane2.txtedad) {
+            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
+                if (pane2.txtedad.getText().length() >= 2) {
+                    ke.consume();
+                }
+            }
+            if (pane2.txtedad.getText().length() >= 2) {
+                ke.consume();
+            }
+        }
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        Object source = ke.getSource();
+//        if (source == cbxtipodocumento) {
+//            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+//                cbxtipodocumento.setPopupVisible(false);
+//                cbxtipodocumento.transferFocus();
+//            }
+//        }
+        if (source == tabla) {
+            if (tabla.getSelectedRow() == -1) {
+                return;
+            }
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                jbModificar.doClick();
+
+            } else if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
+                jbEliminar.doClick();
+            }
+        } else if (source == pane1.txtBuscar) {
+            if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+                pane1.buscarPor.setPopupVisible(true);
+                pane1.buscarPor.requestFocus();
+            }
+
+        } else if (source == pane1.buscarPor) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                pane1.buscarPor.setPopupVisible(false);
+                pane1.buscarPor.transferFocus();
+            }
+        }
+
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            pane1.teclamas = true;
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (source == pane2.cbxtipodeempleado) {
+                pane2.cbxtipodeempleado.setPopupVisible(false);
+                pane2.txtnombre.requestFocus();
+                return;
+            }
+            if (source == pane2.txttelefono) {
+                pane2.txtdireccion.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocusBackward();
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (source == pane2.cbxtipodeempleado) {
+                pane2.cbxtipodeempleado.setPopupVisible(false);
+                pane2.txtnombre.requestFocus();
+                return;
+            }
+            if (source == pane2.txtdireccion) {
+                pane2.txttelefono.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocus();
+        }
+        if (source == pane2.cbxtipodeempleado) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                pane2.cbxtipodeempleado.setPopupVisible(false);
+                if (jbGuardar != null) {
+                    jbGuardar.doClick();
+                } else {
+                    frmregistrarSuperusuario.registrar.doClick();
+                }
+            }
+        }
+
+        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (jbCancelar != null) {
+                jbCancelar.doClick();
+            } else {
+                frmregistrarSuperusuario.salir.doClick();
+            }
+
+        }
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            pane2.teclaunida = true;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_S && pane2.teclaunida) {
+            if (jbGuardar != null) {
+                jbGuardar.doClick();
+            } else {
+                frmregistrarSuperusuario.registrar.doClick();
+            }
+            pane2.teclaunida = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_N && pane1.teclamas) {
+            jbNuevo.doClick();
+            pane1.teclamas = false;
+        }
+    }
+
+    private void funcionregistrar() {
+
+        pane2.txtapellidop.addActionListener(this);
+        pane2.txtnombre.addActionListener(this);
+        pane2.txtdocumento.addActionListener(this);
+        pane2.txttelefono.addActionListener(this);
+        pane2.txtapellidom.addActionListener(this);
+        pane2.txtdireccion.addActionListener(this);
+        pane2.txtuser.addActionListener(this);
+        pane2.txtpassw.addActionListener(this);
+        pane2.txtedad.addActionListener(this);
+
+        pane2.txtapellidop.addKeyListener(this);
+        pane2.txtapellidom.addKeyListener(this);
+        pane2.txtnombre.addKeyListener(this);
+        pane2.txtdocumento.addKeyListener(this);
+        pane2.txttelefono.addKeyListener(this);
+        pane2.txtdireccion.addKeyListener(this);
+        pane2.cbxtipodeempleado.addKeyListener(this);
+        pane2.txtuser.addKeyListener(this);
+        pane2.txtedad.addKeyListener(this);
+        pane2.txtpassw.addKeyListener(this);
+    }
+
+    private void funcionlistado() {
+        tabla.addKeyListener(this);
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+            if (pane1.control) {
+                jbEliminar.setEnabled(true);
+                jbModificar.setEnabled(true);
+            }
+        }
+        );
+        pane1.txtBuscar.addKeyListener(this);
+        pane1.buscarPor.addKeyListener(this);
     }
 }

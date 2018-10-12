@@ -8,12 +8,7 @@ package farmacia.vista.mantenimientoEmpresa;
 import com.toedter.calendar.JDateChooser;
 import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -24,7 +19,7 @@ import javax.swing.JTextField;
  *
  * @author fecyp
  */
-public class RegistrarEmpresa extends EstrategiaPanelRegistrar implements ActionListener, KeyListener {
+public class RegistrarEmpresa extends EstrategiaPanelRegistrar  {
 
     JLabel nombre, telefono, documento, direccion, idcliente, jlfecha;
     public JTextField txtnombre, txtidclienteempresa, txtidempresa, txttelefono, txtdocumento;
@@ -36,34 +31,12 @@ public class RegistrarEmpresa extends EstrategiaPanelRegistrar implements Action
     public RegistrarEmpresa(String titulo) {
         super(titulo);
 
-        txtnombre.addActionListener(this);
-        txtdocumento.addActionListener(this);
-        txttelefono.addActionListener(this);
-        txtdireccion.addActionListener(this);
-
-        txtnombre.addKeyListener(this);
-        txtdocumento.addKeyListener(this);
-        txttelefono.addKeyListener(this);
-        txtdireccion.addKeyListener(this);
+        
 //        cbxtipodocumento.addKeyListener(this);
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (source == txtnombre) {
-            txtnombre.transferFocus();
-
-        } else if (source == txtdocumento) {
-            txtdocumento.transferFocus();
-        } else if (source == txtdireccion) {
-            txttelefono.requestFocus();
-        } else if (source == txttelefono) {
-            frmEmpresa.jbGuardar.doClick();
-        }
-    }
-
+    
     public void personalizartipoletra() {
         nombre.setFont(fontboton);
 
@@ -83,84 +56,6 @@ public class RegistrarEmpresa extends EstrategiaPanelRegistrar implements Action
         fecharegistro.setFont(fontboton);
     }
 
-    @Override
-    public void keyTyped(KeyEvent ke) {
-        Object source = ke.getSource();
-//        if (source != cbxtipodocumento) {
-        ke.getComponent().setBackground(Color.white);
-//        }
-
-        if (source == txtnombre || source == txtdireccion) {
-            char c = ke.getKeyChar();
-            if (Character.isLowerCase(c)) {
-                String cad = ("" + c).toUpperCase();
-                c = cad.charAt(0);
-                ke.setKeyChar(c);
-            }
-            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != txtdireccion) {
-                ke.consume();
-            }
-        } else if (source == txttelefono || source == txtdocumento) {
-            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
-                ke.consume();
-            }
-            if (source == txtdocumento) {
-                if (txtdocumento.getText().length() >= 11) {
-                    ke.consume();
-                }
-            }
-            if (source == txttelefono) {
-                if (txttelefono.getText().length() >= 9) {
-                    ke.consume();
-                }
-            }
-        }
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        Object source = ke.getSource();
-//        if (source == cbxtipodocumento) {
-//            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-//                cbxtipodocumento.setPopupVisible(false);
-//                cbxtipodocumento.transferFocus();
-//            }
-//        }
-        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            if (source == txttelefono) {
-                txtdireccion.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocusBackward();
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (source == txttelefono) {
-                txtnombre.requestFocus();
-                return;
-            }
-            if (source == txtdireccion) {
-                txttelefono.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocus();
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmEmpresa.jbCancelar.doClick();
-
-        }
-        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclaunida = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-            frmEmpresa.jbGuardar.doClick();
-            teclaunida = false;
-        }
-    }
 
     public void iniciar_componentes(String titulo) {
 

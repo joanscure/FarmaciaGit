@@ -20,7 +20,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -35,7 +34,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoTipousuario extends EstrategiaPaneListado implements ActionListener, KeyListener {
+public class ListadoTipousuario extends EstrategiaPaneListado implements ActionListener {
   public static  JTable tabla;
 
     ListadoTipousuario(String titulo) {
@@ -113,9 +112,7 @@ public class ListadoTipousuario extends EstrategiaPaneListado implements ActionL
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
-        tabla.addKeyListener(this);
-        txtBuscar.addKeyListener(this);
-        buscarPor.addKeyListener(this);
+      
 
     }
 
@@ -138,13 +135,7 @@ tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKe
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
-        tabla.getSelectionModel().addListSelectionListener(e -> {
-            if (control) {
-                frmTipousuario.jbEliminar.setEnabled(true);
-                frmTipousuario.jbModificar.setEnabled(true);
-            }
-        }
-        );
+       
         pane.setBackground(c);
         int[] tamaño = {0, 180, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 0};
         config.fijarTamaño(tabla, tamaño);
@@ -179,62 +170,6 @@ tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKe
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        Object source = e.getSource();
-        if (source == tabla) {
-            if (tabla.getSelectedRow() == -1) {
-                return;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//                int index = tabla.getSelectedRow();
-//                if (index == 0) {
-//                    index = tabla.getRowCount();
-//                }
-//                index--;
-//                control = false;
-//                tabla.changeSelection(index, 0, false, false);
-//                //se pasa el index como parametro o se usa el selected
-////            control = true;
-                frmTipousuario.jbModificar.doClick();
-
-            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                frmTipousuario.jbEliminar.doClick();
-            }
-        } else if (source == txtBuscar) {
-            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                buscarPor.setPopupVisible(true);
-                buscarPor.requestFocus();
-            }
-
-        } else if (source == buscarPor) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                buscarPor.setPopupVisible(false);
-                buscarPor.transferFocus();
-            }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmTipousuario.jbSalir.doClick();
-        }
-
-        if (e.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclamas = true;
-        }
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-        if (e.getKeyCode() == KeyEvent.VK_N && teclamas) {
-            frmTipousuario.jbNuevo.doClick();
-            teclamas = false;
-        }
-    }
+    
 
 }

@@ -35,7 +35,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoProductos extends EstrategiaPaneListado implements ActionListener, KeyListener {
+public class ListadoProductos extends EstrategiaPaneListado implements ActionListener {
   public static  JTable tabla;
     ListadoProductos(String titulo) {
         super( titulo);
@@ -107,9 +107,7 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
-        tabla.addKeyListener(this);
-        txtBuscar.addKeyListener(this);
-        buscarPor.addKeyListener(this);
+       
        
 
     }
@@ -130,13 +128,7 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
-        tabla.getSelectionModel().addListSelectionListener(e -> {
-            if (control) {
-                frmProducto.jbEliminar.setEnabled(true);
-                frmProducto.jbModificar.setEnabled(true);
-            }
-        }
-        );
+        
         tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
         int[] tamaño = { 80, 180, 180, 120, 100, 80, 80, 80, 0};
@@ -171,62 +163,6 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        Object source = e.getSource();
-        if (source == tabla) {
-            if (tabla.getSelectedRow() == -1) {
-                return;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//                int index = tabla.getSelectedRow();
-//                if (index == 0) {
-//                    index = tabla.getRowCount();
-//                }
-//                index--;
-//                control = false;
-//                tabla.changeSelection(index, 0, false, false);
-//                //se pasa el index como parametro o se usa el selected
-////            control = true;
-                frmProducto.jbModificar.doClick();
-
-            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                frmProducto.jbEliminar.doClick();
-            }
-        } else if (source == txtBuscar) {
-            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                buscarPor.setPopupVisible(true);
-                buscarPor.requestFocus();
-            }
-
-        } else if (source == buscarPor) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                buscarPor.setPopupVisible(false);
-                buscarPor.transferFocus();
-            }
-        }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmProducto.jbSalir.doClick();
-        }
-
-        if (e.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclamas = true;
-        }
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-        if (e.getKeyCode() == KeyEvent.VK_N && teclamas) {
-            frmProducto.jbNuevo.doClick();
-            teclamas = false;
-        }
-    }
+   
 
 }

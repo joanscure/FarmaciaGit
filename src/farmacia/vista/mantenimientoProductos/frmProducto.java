@@ -12,10 +12,15 @@ import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
 import static farmacia.vista.frmprincipal.visibleproductos;
+import static farmacia.vista.mantenimientoProductos.ListadoProductos.tabla;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -25,7 +30,7 @@ import javax.swing.RowFilter;
  *
  * @author fecyp
  */
-public class frmProducto extends EstrategiaIFrame implements ActionListener {
+public class frmProducto extends EstrategiaIFrame implements ActionListener, KeyListener {
 
     public ListadoProductos pane1;
     public RegistrarProductos pane2;
@@ -85,7 +90,7 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener {
         } else if (source == jbEliminar) {
             int confirmacion = JOptionPane.showConfirmDialog(rootPane, "¿Estas seguro que quieres eliminar el Producto?", "confirmar", 2);
             if (confirmacion == 0) {
-                 if (!permisoeliminar) {
+                if (!permisoeliminar) {
                     frmpermiso permiso = new frmpermiso(this);
                     return;
                 }
@@ -118,6 +123,22 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener {
             pestañas.setEnabledAt(0, false);
             jbSalir.setEnabled(false);
             jbNuevo.setEnabled(false);
+        }
+
+        if (source == pane2.txtnombre) {
+            pane2.txtnombre.transferFocus();
+
+        } else if (source == pane2.txtdescripcion) {
+            pane2.txtdescripcion.transferFocus();
+
+        } else if (source == pane2.txtdosis) {
+            pane2.txtdosis.transferFocus();
+        } else if (source == pane2.txtprecioventa) {
+            pane2.txtstock.requestFocus();
+        } else if (source == pane2.txtstock) {
+            jbGuardar.doClick();
+        } else if (source == pane2.txtigv) {
+            pane2.txtigv.transferFocus();
         }
     }
 
@@ -152,6 +173,8 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener {
 
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
+        funcionregistrar();
+        funcionlistado();
     }
 
     public void habilitar() {
@@ -250,7 +273,8 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener {
             manager.cerrarConexion();
             pane1.actualizartabla();
             JOptionPane.showMessageDialog(null, "Se Registro el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
-
+            deshabilitar();
+             action = "nothing";
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
         } catch (DAOException ex) {
@@ -311,6 +335,212 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener {
         } catch (DAOException ex) {
             System.out.println(" errorr");
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+        Object source = ke.getSource();
+
+        ke.getComponent().setBackground(Color.white);
+
+        if (source == pane2.txtnombre || source == pane2.txtdosis || source == pane2.txtnombre || source == pane2.txtdescripcion) {
+            char c = ke.getKeyChar();
+            if (Character.isLowerCase(c)) {
+                String cad = ("" + c).toUpperCase();
+                c = cad.charAt(0);
+                ke.setKeyChar(c);
+            }
+            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != pane2.txtdosis && source != pane2.txtdescripcion) {
+                ke.consume();
+            }
+        } else if (source == pane2.txtprecioventa) {
+            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57) && ((ke.getKeyChar() != 46) || pane2.controlpunto)) {
+
+                ke.consume();
+
+            }
+        } else if (source == pane2.txtstock) {
+            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57)) {
+
+                ke.consume();
+
+            }
+        }
+        if (source == pane2.txtigv) {
+            if ((ke.getKeyChar() < 48 || ke.getKeyChar() > 57) && ((ke.getKeyChar() != 46) || pane2.controlpuntoigv)) {
+
+                ke.consume();
+
+            }
+        }
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        Object source = ke.getSource();
+        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (source == pane2.txtstock) {
+                pane2.txtprecioventa.requestFocus();
+                return;
+            }
+            if (source == pane2.txtnombre) {
+                pane2.txtstock.requestFocus();
+                return;
+            }
+            ke.getComponent().transferFocusBackward();
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (source == pane2.txtstock) {
+                pane2.txtnombre.requestFocus();
+                return;
+            }
+            if (source == pane2.txtprecioventa) {
+                pane2.txtstock.requestFocus();
+                return;
+            }
+
+            ke.getComponent().transferFocus();
+        }
+        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            jbCancelar.doClick();
+            jbSalir.doClick();
+        }
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            pane2.teclaunida = true;
+        }
+        if (source == tabla) {
+            if (tabla.getSelectedRow() == -1) {
+                return;
+            }
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+//                int index = tabla.getSelectedRow();
+//                if (index == 0) {
+//                    index = tabla.getRowCount();
+//                }
+//                index--;
+//                control = false;
+//                tabla.changeSelection(index, 0, false, false);
+//                //se pasa el index como parametro o se usa el selected
+////            control = true;
+                jbModificar.doClick();
+
+            } else if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
+                jbEliminar.doClick();
+            }
+        } else if (source == pane1.txtBuscar) {
+            if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
+                pane1.buscarPor.setPopupVisible(true);
+                pane1.buscarPor.requestFocus();
+            }
+
+        } else if (source == pane1.buscarPor) {
+            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+                pane1.buscarPor.setPopupVisible(false);
+                pane1.buscarPor.transferFocus();
+            }
+        }
+        
+
+        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
+            pane1.teclamas = true;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        Object source = e.getSource();
+        if (e.getKeyCode() == KeyEvent.VK_S && pane2.teclaunida) {
+            jbGuardar.doClick();
+            pane2.teclaunida = false;
+        }
+        if (source == pane2.txtprecioventa || source == pane2.txtigv) {
+            int validacion = pane2.txtigv.getText().indexOf(".");
+            if (validacion == -1) {
+                pane2.controlpuntoigv = false;//deja poner el punto ya que dice que no encuentra punto
+            } else {
+                pane2.controlpuntoigv = true;//no lo deja poner el punto ya que dice que ya se encuentra un punto
+
+            }
+            validacion = pane2.txtprecioventa.getText().indexOf(".");
+            if (validacion == -1) {
+                pane2.controlpunto = false;//deja poner el punto ya que dice que no encuentra punto
+            } else {
+                pane2.controlpunto = true;//no lo deja poner el punto ya que dice que ya se encuentra un punto
+
+            }
+            //para que el igv no este vacio
+            if (pane2.txtigv.getText().isEmpty()) {
+                return;
+            } else if (pane2.txtigv.getText().charAt(pane2.txtigv.getText().length() - 1) == '.') //para que el igv no quede en un punto
+            {
+                return;
+            }
+
+            if (pane2.txtprecioventa.getText().isEmpty()) {
+                pane2.txtpreciofinal.setText("");
+                return;
+            } else if (pane2.txtprecioventa.getText().charAt(pane2.txtprecioventa.getText().length() - 1) == '.') {
+                pane2.txtpreciofinal.setText("");
+                return;
+            }
+            //validamos que solo halla un punto
+
+            //
+            if (pane2.txtprecioventa.getText().charAt(pane2.txtprecioventa.getText().length() - 1) == '.') {
+                if (pane2.txtprecioventa.getText().length() == 1) {
+                    return;
+                }
+            }
+
+            double igv = (Double.parseDouble(pane2.txtigv.getText()) / 100) + 1;
+
+            double preciototal = Double.parseDouble(pane2.txtprecioventa.getText()) * igv;
+            BigDecimal bd = new BigDecimal(preciototal);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+
+            pane2.txtpreciofinal.setText(bd.doubleValue() + "");
+        }
+        if (e.getKeyCode() == KeyEvent.VK_N && pane1.teclamas) {
+           jbNuevo.doClick();
+           pane1.teclamas = false;
+        }
+
+    }
+
+    private void funcionregistrar() {
+        pane2.txtnombre.addActionListener(this);
+        pane2.txtdescripcion.addActionListener(this);
+        pane2.txtdosis.addActionListener(this);
+        pane2.txtprecioventa.addActionListener(this);
+        pane2.txtidproducto.addActionListener(this);
+        pane2.txtigv.addActionListener(this);
+        pane2.txtiddescuento.addActionListener(this);
+        pane2.txtpreciofinal.addActionListener(this);
+        pane2.txtstock.addActionListener(this);
+
+        pane2.txtnombre.addKeyListener(this);
+        pane2.txtdescripcion.addKeyListener(this);
+        pane2.txtdosis.addKeyListener(this);
+        pane2.txtprecioventa.addKeyListener(this);
+        pane2.txtidproducto.addKeyListener(this);
+        pane2.txtigv.addKeyListener(this);
+        pane2.txtiddescuento.addKeyListener(this);
+        pane2.txtpreciofinal.addKeyListener(this);
+        pane2.txtstock.addKeyListener(this);
+    }
+
+    private void funcionlistado() {
+        tabla.addKeyListener(this);
+        pane1.txtBuscar.addKeyListener(this);
+        pane1.buscarPor.addKeyListener(this);
+        tabla.getSelectionModel().addListSelectionListener(e -> {
+            if ( pane1.control) {
+                jbEliminar.setEnabled(true);
+                jbModificar.setEnabled(true);
+            }
+        }
+        );
     }
 
 }

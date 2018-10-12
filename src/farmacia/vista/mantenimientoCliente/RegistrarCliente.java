@@ -7,12 +7,7 @@ package farmacia.vista.mantenimientoCliente;
 
 import farmacia.diseño.estrategias.EstrategiaPanelRegistrar;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,7 +17,7 @@ import javax.swing.JTextField;
  *
  * @author fecyp
  */
-public class RegistrarCliente extends EstrategiaPanelRegistrar implements ActionListener, KeyListener {
+public class RegistrarCliente extends EstrategiaPanelRegistrar {
 
     JLabel nombre, apellidop, apellidom, telefono, documento, direccion, idcliente, jledad;
     public JTextField txtnombre, txtapellidop, txtapellidom, txtidpersona, txtidcliente, txttelefono, txtdocumento, txtedad;
@@ -31,50 +26,14 @@ public class RegistrarCliente extends EstrategiaPanelRegistrar implements Action
     public RegistrarCliente(String titulo) {
         super(titulo);
 
-        txtapellidop.addActionListener(this);
-        txtnombre.addActionListener(this);
-        txtdocumento.addActionListener(this);
-        txttelefono.addActionListener(this);
-        txtapellidom.addActionListener(this);
-        txtdireccion.addActionListener(this);
-        txtedad.addActionListener(this);
+        
 
-        txtapellidop.addKeyListener(this);
-        txtapellidom.addKeyListener(this);
-        txtnombre.addKeyListener(this);
-        txtdocumento.addKeyListener(this);
-        txttelefono.addKeyListener(this);
-        txtdireccion.addKeyListener(this);
-        txtedad.addKeyListener(this);
+       
 //        cbxtipodocumento.getText().isEmpty()||
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        if (!ExistenVacios()) {
-            this.jbGuardar.doClick();
-        }
-        if (source == txtnombre) {
-            txtnombre.transferFocus();
-
-        } else if (source == txtapellidop) {
-            txtapellidop.transferFocus();
-
-        } else if (source == txtapellidom) {
-//            cbxtipodocumento.setPopupVisible(true);
-            txtapellidom.transferFocus();
-        } else if (source == txtdocumento) {
-            txtdocumento.transferFocus();
-        } else if (source == txtdireccion) {
-            txttelefono.requestFocus();
-        } else if (source == txttelefono) {
-            frmClientes.jbGuardar.doClick();
-        } else if (source == txtedad) {
-            txtedad.transferFocus();
-        }
-    }
+   
 
     public void personalizartipoletra() {
         nombre.setFont(fontboton);
@@ -110,93 +69,6 @@ public class RegistrarCliente extends EstrategiaPanelRegistrar implements Action
             return true;
         } else {
             return false;
-        }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent ke) {
-        Object source = ke.getSource();
-//        if (source != cbxtipodocumento) {
-        ke.getComponent().setBackground(Color.white);
-//        }
-
-        if (source == txtapellidom || source == txtapellidop || source == txtnombre || source == txtdireccion) {
-            char c = ke.getKeyChar();
-            if (Character.isLowerCase(c)) {
-                String cad = ("" + c).toUpperCase();
-                c = cad.charAt(0);
-                ke.setKeyChar(c);
-            }
-            if (((ke.getKeyChar() < 97 || ke.getKeyChar() > 122)) && (ke.getKeyChar() < 65 || ke.getKeyChar() > 90) && source != txtdireccion) {
-                ke.consume();
-            }
-        } else if (source == txttelefono || source == txtdocumento) {
-            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
-                ke.consume();
-            }
-            if (source == txtdocumento) {
-                if (txtdocumento.getText().length() >= 8) {
-                    ke.consume();
-                }
-            }
-            if (source == txttelefono) {
-                if (txttelefono.getText().length() >= 9) {
-                    ke.consume();
-                }
-            }
-        } else if (source == txtedad) {
-            if (ke.getKeyChar() < 48 || ke.getKeyChar() > 57) {
-
-                ke.consume();
-            }
-            if (txtedad.getText().length() >= 2) {
-                ke.consume();
-            }
-        }
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        Object source = ke.getSource();
-//        if (source == cbxtipodocumento) {
-//            if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-//                cbxtipodocumento.setPopupVisible(false);
-//                cbxtipodocumento.transferFocus();
-//            }
-//        }
-        if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-            if (source == txttelefono) {
-                txtdireccion.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocusBackward();
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-            if (source == txttelefono) {
-                txtnombre.requestFocus();
-                return;
-            }
-            if (source == txtdireccion) {
-                txttelefono.requestFocus();
-                return;
-            }
-            ke.getComponent().transferFocus();
-        }
-        if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            frmClientes.jbCancelar.doClick();
-
-        }
-        if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
-            teclaunida = true;
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_S && teclaunida) {
-            frmClientes.jbGuardar.doClick();
-            teclaunida = false;
         }
     }
 

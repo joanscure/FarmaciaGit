@@ -8,15 +8,12 @@ package farmacia.vista.mantenimientoEmpresa;
 import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
-import farmacia.calculos.configuracionImagenes;
-import farmacia.calculos.configuracionesTabla;
 import farmacia.diseño.estrategias.EstrategiaPaneListado;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.empresa;
 import farmacia.jdbc.modelado.empresacliente;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -24,7 +21,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -39,7 +35,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class ListadoEmpresa extends EstrategiaPaneListado implements ActionListener, KeyListener {
+public class ListadoEmpresa extends EstrategiaPaneListado implements ActionListener {
   public static  JTable tabla;
    
 
@@ -120,9 +116,7 @@ public class ListadoEmpresa extends EstrategiaPaneListado implements ActionListe
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
-        tabla.addKeyListener(this);
-        txtBuscar.addKeyListener(this);
-        buscarPor.addKeyListener(this);
+        
 
     }
 
@@ -143,13 +137,7 @@ public class ListadoEmpresa extends EstrategiaPaneListado implements ActionListe
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
-        tabla.getSelectionModel().addListSelectionListener(e -> {
-            if (control) {
-                frmEmpresa.jbEliminar.setEnabled(true);
-                frmEmpresa.jbModificar.setEnabled(true);
-            }
-        }
-        );
+        
         tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
         pane.setBackground(c);
         int[] tamaño = {0, 0, 150, 150, 250, 150, 150, 0};
@@ -183,66 +171,6 @@ public class ListadoEmpresa extends EstrategiaPaneListado implements ActionListe
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        Object source = e.getSource();
-        if (source == tabla) {
-            if(tabla.getSelectedRow()==-1)
-            {
-                return;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//                int index = tabla.getSelectedRow();
-//                if (index == 0) {
-//                    index = tabla.getRowCount();
-//                }
-//                index--;
-//                control = false;
-//                tabla.changeSelection(index, 0, false, false);
-//                //se pasa el index como parametro o se usa el selected
-////            control = true;
-                frmEmpresa.jbModificar.doClick();
-
-            } else if (e.getKeyCode() == KeyEvent.VK_DELETE) {
-                frmEmpresa.jbEliminar.doClick();
-            }
-        }
-        else if(source==txtBuscar)
-        {
-             if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                  buscarPor.setPopupVisible(true);
-               buscarPor.requestFocus();
-            }
-         
-        }else if (source == buscarPor) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                buscarPor.setPopupVisible(false);
-                buscarPor.transferFocus();
-            }
-        }
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                frmEmpresa.jbSalir.doClick();
-            }
-         
-        
-        if (e.getExtendedKeyCode()== KeyEvent.VK_CONTROL ) {
-                  teclamas=true;
-            }
-        
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-      
-       if (e.getKeyCode() == KeyEvent.VK_N &&teclamas) {
-                    frmEmpresa.jbNuevo.doClick();
-                    teclamas=false;
-                }
-    }
+  
 
 }
