@@ -158,13 +158,13 @@ public class ListadoEmpleado extends EstrategiaPaneListado implements ActionList
         Object source = e.getSource();
         if (source == buscar || source == txtBuscar) {
             if (buscarPor.getSelectedItem().toString().equals("Por Nombre")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 2));
             } else if (buscarPor.getSelectedItem().toString().equals("Por Apellido")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 4, 5));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3, 5));
             } else if (buscarPor.getSelectedItem().toString().equals("Por Documento")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 5));
             }else if (buscarPor.getSelectedItem().toString().equals("Por Edad")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 7));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
             }
 
             if (tabla.getRowCount() == 0) {

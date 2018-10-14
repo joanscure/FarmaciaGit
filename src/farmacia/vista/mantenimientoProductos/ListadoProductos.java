@@ -146,10 +146,10 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         Object source = e.getSource();
         if (source == buscar || source == txtBuscar) {
             if (buscarPor.getSelectedItem().toString().equals("Por Nombre")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 2));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
             } 
             else if (buscarPor.getSelectedItem().toString().equals("Por Codigo")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 0));
             } 
 
             if (tabla.getRowCount() == 0) {

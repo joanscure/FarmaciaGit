@@ -157,7 +157,7 @@ public class ListadoEmpresa extends EstrategiaPaneListado implements ActionListe
             if (buscarPor.getSelectedItem().toString().equals("Por Razon social")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 2));
             }else if (buscarPor.getSelectedItem().toString().equals("Por RUC")) {
-                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 6));
+                elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 3));
             }
 
             if (tabla.getRowCount() == 0) {
