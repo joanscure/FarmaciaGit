@@ -107,6 +107,7 @@ public class frmEmpresa extends EstrategiaIFrame implements ActionListener, KeyL
                 jbEliminar.setEnabled(false);
                 jbGuardar.setEnabled(false);
                 pane1.control = true;
+                frmprincipal.visibleempresa=false;
 
                 dispose();
                 frmprincipal.visibleempleados = false;

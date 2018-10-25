@@ -36,7 +36,6 @@ public abstract class EstrategiaPaneListado extends JPanel {
     public JTextField txtBuscar;
     public JComboBox buscarPor;
     public JLabel contador;
-    public TextAutoCompleter autocompletar;
     public TableRowSorter<TableModel> elQueOrdena;
      public int indexSelecion = -1;
     public configuracionesTabla config = new configuracionesTabla();

@@ -73,7 +73,6 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
 
     public  void Iniciar_componentes(String titulo){
         tabla = new JTable(20, 20);
-
         modelo = new DefaultTableModel();
         pane1 = new JPanel(new BorderLayout());
         pane1.setBackground(c);
@@ -90,7 +89,6 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);
         pane_buscador.add(buscar);
-        autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
         pane1.add(getTabla(), BorderLayout.CENTER);
