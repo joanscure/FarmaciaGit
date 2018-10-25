@@ -357,6 +357,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             txtigv.setText(calculosTotales.sumaigv(tabla, 5) + "");
             txttotalPago.setText(calculosTotales.sumatotal(Double.parseDouble(txtsubtotal.getText()), Double.parseDouble(txtigv.getText()), Double.parseDouble(txtdescuento.getText())) + "");
             txtcodigo.requestFocus();
+            bnquitar.setEnabled(false);
         } else if (source == bnnuevo) {
             action = "nuevo";
             habilitar();
