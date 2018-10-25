@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Descuento" table="descuento" catalog="basefarmacia" optimistic-lock="version">
+        <id name="iddescuento" type="java.lang.Integer">
+            <column name="iddescuento" />
+            <generator class="identity" />
+        </id>
+        <property name="nombredescuento" type="string">
+            <column name="nombredescuento" length="32" not-null="true" />
+        </property>
+        <property name="condicion" type="string">
+            <column name="condicion" length="32" not-null="true" />
+        </property>
+        <property name="porcentaje" type="double">
+            <column name="porcentaje" precision="2" not-null="true" />
+        </property>
+        <property name="descripciondescuento" type="string">
+            <column name="descripciondescuento" length="64" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+        <set name="productodescuentos" table="productodescuento" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="iddescuento" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Productodescuento" />
+        </set>
+    </class>
+</hibernate-mapping>

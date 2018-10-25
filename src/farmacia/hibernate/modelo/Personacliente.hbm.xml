@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Personacliente" table="personacliente" catalog="basefarmacia" optimistic-lock="version">
+        <id name="idpersonacliente" type="java.lang.Integer">
+            <column name="idpersonacliente" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="persona" class="farmacia.hibernate.modelo.Persona" fetch="select">
+            <column name="idpersona" not-null="true" />
+        </many-to-one>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+        <set name="boletacabeceras" table="boletacabecera" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idpersonacliente" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Boletacabecera" />
+        </set>
+    </class>
+</hibernate-mapping>

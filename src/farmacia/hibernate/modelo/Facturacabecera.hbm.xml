@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Facturacabecera" table="facturacabecera" catalog="basefarmacia" optimistic-lock="version">
+        <id name="idfacturacabecera" type="java.lang.Integer">
+            <column name="idfacturacabecera" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="empleado" class="farmacia.hibernate.modelo.Empleado" fetch="select">
+            <column name="idempleado" not-null="true" />
+        </many-to-one>
+        <many-to-one name="empresacliente" class="farmacia.hibernate.modelo.Empresacliente" fetch="select">
+            <column name="idempresacliente" not-null="true" />
+        </many-to-one>
+        <property name="correlativofactura" type="string">
+            <column name="correlativofactura" length="4" not-null="true" />
+        </property>
+        <property name="numerofactura" type="string">
+            <column name="numerofactura" length="8" not-null="true" />
+        </property>
+        <property name="fechaemisionfactura" type="date">
+            <column name="fechaemisionfactura" length="10" not-null="true" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+        <set name="facturadetalles" table="facturadetalle" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idfacturacabecera" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Facturadetalle" />
+        </set>
+    </class>
+</hibernate-mapping>
