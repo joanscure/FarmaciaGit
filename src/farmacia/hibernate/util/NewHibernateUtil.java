@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package farmacia.util;
+package farmacia.hibernate.util;
 
 //import javax.imageio.spi.ServiceRegistry;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -43,5 +43,13 @@ public class NewHibernateUtil {
 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+    
+    public static void cerrar(){
+        sessionFactory.close();
+    }
+    
+    public static void cerrar(SessionFactory sessionFactory){
+        sessionFactory.close();
     }
 }
