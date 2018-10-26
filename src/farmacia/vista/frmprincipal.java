@@ -297,10 +297,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
 
         } else if (source == iproductos) {
             if (!visibleproductos) {
-                if (frmproducto != null) {
-                    frmproducto.setVisible(true);
-                    return;
-                }
+              
                 try {
                     frmproducto = new frmProducto("Producto");
                     desktopPane.add(frmproducto);

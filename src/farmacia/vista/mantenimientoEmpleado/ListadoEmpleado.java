@@ -95,11 +95,14 @@ public class ListadoEmpleado extends EstrategiaPaneListado implements ActionList
         buscarPor.addItem("Por Apellido");
         buscarPor.addItem("Por Documento");
         buscarPor.addItem("Por Edad");
+        
         txtBuscar = new JTextField(10);
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);
         pane_buscador.add(buscar);
+        bnreport=new JButton("Generar Reporte");
+        pane_buscador.add(bnreport);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
         pane1.add(getTabla(), BorderLayout.CENTER);
@@ -175,6 +178,11 @@ public class ListadoEmpleado extends EstrategiaPaneListado implements ActionList
 
         } 
 
+    }
+
+    @Override
+    public void generarReporte() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
   
