@@ -22,7 +22,7 @@ public class boletadetalleSQL implements boletadetalleDAO {
     private final String DELETEALL = "UPDATE boletadetalle SET status = 0 WHERE idboletacabecera = ?";
     private final String GETALL = "SELECT * FROM boletadetalle WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM boletadetalle WHERE idboletadetalle = ? AND status = 1";
-    private final String GETDETAILS = "SELECT * FROM boletadetalle WHERE idboletacabecera = ? AND status = 1";
+    private final String GETDETAILS = "SELECT * FROM boletadetalle WHERE idboletacabecera = ? AND status = 1 ORDER BY idproducto";
 
     public boletadetalleSQL(Connection conexion) {
         this.conexion = conexion;

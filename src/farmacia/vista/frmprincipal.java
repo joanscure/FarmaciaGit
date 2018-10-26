@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -29,7 +31,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
 
     public JMenu malmacen, mconsultas, mherramientas, mayuda, mventas, mmantenimiento, manulaciones;
     public static JMenu marchivo;
-    private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda, iconsumo, iconsultaventas;
+    private JMenuItem iempresa, iproductos, isalir, icerrarsesion, iventas, iusuarios_accesos, itipousuario, icambiarPass, ianularventas, iclientes, iacercade, iayuda, iconsultaventas;
     public JDesktopPane desktopPane;
     private JMenuBar barra;
     public static Long jlidpersona, jlidempleado;
@@ -42,13 +44,12 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
     frmEmpleados frmempleados;
     frmVentas frmventas;
     frmEmpresa frmempresa;
-    frmConsumos frmconsumo;
     frmConsultas frmconsulta;
     configuracionImagenes imageconfig = new configuracionImagenes();
     frmusuariologin login;
     boolean[] permiso = new boolean[12];
     public boolean controlpriincipal = true;
-    public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false, visibleventas = false,visibleconsumo=false,visibleconsulta;
+    public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false, visibleventas = false, visibleconsulta;
 
     public frmprincipal(frmusuariologin login) throws DAOException {
 
@@ -69,7 +70,6 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
         iempresa.addActionListener(this);
         icambiarPass.addActionListener(this);
         isalir.addActionListener(this);
-        iconsumo.addActionListener(this);
         iconsultaventas.addActionListener(this);
         setMinimumSize(new Dimension(600, 600));
         setVisible(true);
@@ -141,7 +141,6 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
         iayuda.setFont(fontitem);
         iempresa.setFont(fontitem);
         iconsultaventas.setFont(fontitem);
-        iconsumo.setFont(fontitem);
     }
 
     public void inciar_componentes() {
@@ -202,10 +201,6 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
         iconsultaventas.setIcon(imageconfig.obtenerIcono("consulta.png", 40));
         iconsultaventas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
 
-        iconsumo = new JMenuItem("Consumos");
-        iconsumo.setIcon(imageconfig.obtenerIcono("consumos.png", 40));
-        iconsumo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0));
-
         iusuarios_accesos = new JMenuItem("Usuarios y Accesos");
         iusuarios_accesos.setIcon(new ImageIcon(getClass().getResource("/Files/trabajadores.png")));
         iusuarios_accesos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0));
@@ -238,7 +233,6 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
         mventas.add(iempresa);
 
         mconsultas.add(iconsultaventas);
-        mconsultas.add(iconsumo);
 
         mmantenimiento.add(iusuarios_accesos);
         mmantenimiento.add(itipousuario);
@@ -349,7 +343,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
                 desktopPane.add(frmventas);
                 frmventas.toFront();
                 frmventas.setVisible(true);
-                visibleventas=true;
+                visibleventas = true;
                 frmventas.bnnuevo.requestFocus();
             }
 
@@ -361,7 +355,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
                     desktopPane.add(frmempresa);
                     frmempresa.toFront();
                     frmempresa.setVisible(true);
-                    visibleempresa=true;
+                    visibleempresa = true;
                     frmempresa.permisoeliminar = permiso[9];
                     frmempresa.pane1.txtBuscar.requestFocus();
 
@@ -375,32 +369,18 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
             frmCambioClave frm = new frmCambioClave(this);
             frm.setVisible(true);
             frm.toFront();
-        }
-        else if(source==iconsumo)
-        {
-             if (!visibleconsumo) {
-                
-                    frmconsumo = new frmConsumos();
-                    desktopPane.add(frmconsumo);
-                    frmconsumo.toFront();
-                    frmconsumo.setVisible(true);
-                    visibleconsumo=true;
-                    frmconsumo.txtbuscarcliente.requestFocus();
+        } else if (source == iconsultaventas) {
+            if (!visibleconsulta) {
 
-               
-
-            }
-        } else if(source==iconsultaventas)
-        {
-             if (!visibleconsulta) {
-                
+                try {
                     frmconsulta = new frmConsultas();
                     desktopPane.add(frmconsulta);
                     frmconsulta.toFront();
                     frmconsulta.setVisible(true);
-                    visibleconsulta=true;
-
-               
+                    visibleconsulta = true;
+                } catch (DAOException ex) {
+                    System.out.println("Error en la bd " + ex.getMessage());
+                }
 
             }
         }

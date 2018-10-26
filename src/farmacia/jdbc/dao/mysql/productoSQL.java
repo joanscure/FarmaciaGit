@@ -38,7 +38,7 @@ public class productoSQL implements productoDAO {
             stat.setString(1, obj.getNombreproducto());
             stat.setString(2, obj.getDescripcionproducto());
             stat.setString(3, obj.getDosisproducto());
-            stat.setDouble(4, obj.getPreciofinal());
+            stat.setDouble(4, obj.getPrecioventa());
             stat.setDouble(5, obj.getIgv());
             stat.setDouble(6, obj.getPreciofinal());
             stat.setInt(7, obj.getStock());
@@ -68,7 +68,7 @@ public class productoSQL implements productoDAO {
             stat.setString(1, obj.getNombreproducto());
             stat.setString(2, obj.getDescripcionproducto());
             stat.setString(3, obj.getDosisproducto());
-            stat.setDouble(4, obj.getPreciofinal());
+            stat.setDouble(4, obj.getPrecioventa());
             stat.setDouble(5, obj.getIgv());
             stat.setDouble(6, obj.getPreciofinal());
             stat.setInt(7, obj.getStock());
