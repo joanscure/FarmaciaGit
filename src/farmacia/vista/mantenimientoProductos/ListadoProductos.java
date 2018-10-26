@@ -44,8 +44,8 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         super(titulo);
     }
 
-    public void actualizartabla() throws DAOException {
-        for (int i = 0; i < modelo.getRowCount();) {
+      public void actualizartabla() throws DAOException {
+         for (int i = 0; i < modelo.getRowCount(); ) {
             modelo.removeRow(i);
         }
         DAOManagerSQL manager = null;
