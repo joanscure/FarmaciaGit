@@ -396,7 +396,9 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         } else if (source == bncancelar) {
             tabla.clearSelection();
             accionProducto = "cancelarVenta";
+            for (int i = 0; i <tabla.getRowCount(); ) {
             notificar();
+            }
             deshabilitar();
             action = "nothing";
             bnquitar.setEnabled(false);
@@ -1200,22 +1202,18 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
     public ArrayList<Object> buscarProducto(String cod) {
         ArrayList<producto> p = new ArrayList<>();
+        producto pr = new producto();
         p.ensureCapacity(0);
         switch (accionProducto) {
             case "agregarProducto":
                 p.clear();
                 for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
-                    Long idaux = new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
+                    Long idaux = new Long(String.valueOf(frmvistaproducto.tabla.getValueAt(i, 0)));
                     if (Long.compare(Long.parseLong(cod), idaux) == 0) {
-                        int stockNuevo = ((int) frmvistaproducto.tabla.getValueAt(i, 7)) - Integer.parseInt(txtcantidad.getText());
-                        p.add(new producto(frmvistaproducto.tabla.getValueAt(i, 1).toString(),
-                                frmvistaproducto.tabla.getValueAt(i, 2).toString(),
-                                frmvistaproducto.tabla.getValueAt(i, 3).toString(),
-                                (double) frmvistaproducto.tabla.getValueAt(i, 4),
-                                (double) frmvistaproducto.tabla.getValueAt(i, 5),
-                                (double) frmvistaproducto.tabla.getValueAt(i, 6),
-                                stockNuevo));
-                        p.get(0).setIdproducto(Long.parseLong(cod));
+                        int stockNuevo = (Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(i, 7)))) - Integer.parseInt(txtcantidad.getText());
+                        pr.setIdproducto(Long.parseLong(cod));
+                        pr.setStock(stockNuevo);
+                        p.add(pr);
                     }
                 }
                 break;
@@ -1223,23 +1221,33 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 p.clear();
                 int index = tabla.getSelectedRow();
                 for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
-                    Long idaux = new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
+                    Long idaux = new Long(String.valueOf(frmvistaproducto.tabla.getValueAt(i, 0)));
                     if (Long.compare(Long.parseLong((String) tabla.getValueAt(index, 0)), idaux) == 0) {
                         int stockNuevo = Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(i, 7))) + Integer.parseInt((String.valueOf(tabla.getValueAt(index, 3))));
-                        p.add(new producto(tabla.getValueAt(index, 1).toString(),
-                                tabla.getValueAt(index, 2).toString(),
-                                "",
-                                0,
-                                0,
-                                Double.parseDouble(String.valueOf(tabla.getValueAt(index, 4))),
-                                stockNuevo));
-                        p.get(0).setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(index, 0))));
+                        pr.setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(index, 0))));
+                        pr.setStock(stockNuevo);
+                        p.add(pr);
                         break;
                     }
                 }
                 break;
             case "cancelarVenta":
-               //J
+                
+                   Long idaux = new Long(String.valueOf(tabla.getValueAt(0, 0)));
+                   int cantidad=Integer.parseInt(String.valueOf(tabla.getValueAt(0, 3)));
+                    for (int j = 0; j < frmvistaproducto.tabla.getRowCount(); j++) {
+                         Long idaux2 = new Long(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 0)));
+                        if(Long.compare(idaux,idaux2)==0){
+                            int cantidadstock=(int) frmvistaproducto.tabla.getValueAt(j, 7);
+                            int nuevostock=cantidad+cantidadstock;
+                            pr.setIdproducto(idaux2);
+                            pr.setStock(nuevostock);
+                            p.add(pr);
+                        }
+                        
+                    }
+                    modelo.removeRow(0);
+                
                 break;
 
             default:
