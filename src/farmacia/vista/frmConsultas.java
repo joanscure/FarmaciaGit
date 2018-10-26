@@ -10,6 +10,14 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.jdbc.dao.DAOException;
+import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.modelado.boletacabecera;
+import farmacia.jdbc.modelado.boletadetalle;
+import farmacia.jdbc.modelado.empleado;
+import farmacia.jdbc.modelado.persona;
+import farmacia.jdbc.modelado.personacliente;
+import farmacia.jdbc.modelado.producto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,17 +27,19 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
@@ -43,7 +53,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class frmConsultas extends JInternalFrame implements ActionListener {
+public class frmConsultas extends JInternalFrame implements ActionListener, MouseListener {
 
     JDateChooser fechainicisl, fechafinal;
     JTable tablaconsulta;
@@ -61,12 +71,12 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
     public Color c = new java.awt.Color(255, 204, 102);
     private JPanel principal;
 
-    public frmConsultas() {
+    public frmConsultas() throws DAOException {
         super("Formulario Consultas", false, true, false, true);
         Iniciar_componentes();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
-
+        actualizarTablacabecera();
         addInternalFrameListener(new InternalFrameAdapter() {
             @Override
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -74,6 +84,71 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
             }
 
         });
+        
+    }
+
+    public void actualizarTablaDetalle() throws DAOException {
+        for (int i = 0; i < modelodetalle.getRowCount();) {
+            modelodetalle.removeRow(i);
+        }
+        int index = tablaconsulta.getSelectedRow();
+        if (index == -1) {
+            return;
+        }
+        Long idcabecera = new Long((long) tablaconsulta.getValueAt(index, 0));
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+
+            List<boletadetalle> lista = manager.getBoletaDetalleDAO().obtenerDetallesBoleta(idcabecera);
+
+            for (int i = 0; i < lista.size(); i++) {
+                producto p = manager.getProductoDAO().obtener(lista.get(i).getIdproducto());
+                String nombre = p.getNombreproducto();
+                String dosis = p.getDosisproducto();
+                String descri = p.getDescripcionproducto();
+
+                Object obj[] = {lista.get(i).getIdboletadetalle(), lista.get(i).getIdboletacabecera(), lista.get(i).getIdproducto(),
+                    nombre, descri, dosis, lista.get(i).getCantidad(), lista.get(i).getSubtotal(), lista.get(i).isStatus()};
+
+                modelodetalle.addRow(obj);
+
+            }
+            contadordetalle.setText("Existen " + modelodetalle.getRowCount() + " Ventas");
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
+    }
+
+    public void actualizarTablacabecera() throws DAOException {
+        for (int i = 0; i < modeloconsulta.getRowCount();) {
+            modeloconsulta.removeRow(i);
+        }
+        DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+
+            List<boletacabecera> lista = manager.getBoletaCabeceraDAO().obtenertodos();
+
+            for (int i = 0; i < lista.size(); i++) {
+                personacliente cliente = manager.getPersonaClienteDAO().obtener(lista.get(i).getIdpersonacliente());
+                persona per = manager.getPersonaDAO().obtener(cliente.getIdpersona());
+                String nombre = per.getNombre() + " " + per.getAppaterno() + " " + per.getApmaterno();
+                empleado emp = manager.getEmpleadoDAO().obtener(lista.get(i).getIdempleado());
+                persona peremp = manager.getPersonaDAO().obtener(emp.getIdpersona());
+                String empleado = peremp.getNombre() + " " + peremp.getAppaterno() + " " + peremp.getApmaterno();
+                Object obj[] = {lista.get(i).getIdboletacabecera(), lista.get(i).getCorrelativoboleta(), lista.get(i).getNumeroboleta(),
+                    lista.get(i).getFechaemisionboleta(), nombre, empleado, lista.get(i).isStatus()};
+
+                modeloconsulta.addRow(obj);
+
+            }
+            contadorconsulta.setText("Existen " + modeloconsulta.getRowCount() + " Productos");
+            manager.cerrarConexion();
+        } catch (DAOException ex) {
+            throw new DAOException("error al buscar" + ex.getMessage());
+        }
     }
 
     @Override
@@ -86,6 +161,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
             } else {
                 bndetalle.setText("Detalle >>");
                 paneSouth.setVisible(true);
+               
             }
             pack();
         }
@@ -107,10 +183,11 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
         elQueOrdena = new TableRowSorter<TableModel>(modeloconsulta);
         tablaconsulta.setRowSorter(elQueOrdena);
         tablaconsulta.getTableHeader().setReorderingAllowed(false);
-
+        tablaconsulta.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tablaconsulta.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "selectColumnCell");
         pane.setBackground(c);
-
+        int[] tamaño = {0, 100, 100, 120, 250, 250, 0};
+        config.fijarTamaño(tablaconsulta, tamaño);
         int[] columnas = {0, 6};
         config.ocultarColumnas(tablaconsulta, columnas);
         tablaconsulta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -122,7 +199,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
     public JScrollPane gettablaDetalle() {
 
         Object[][] data = new Object[0][0];
-        String[] lista = {"idboletadetalle", "idboletacabecera", "idproducto", "cantidad ", "Sub-total", "estado"};
+        String[] lista = {"idboletadetalle", "idboletacabecera", "idproducto", "Nombre Producto", "descripcion", "dosis", "cantidad ", "Sub-total", "estado"};
         modelodetalle = new DefaultTableModel(data, lista) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -134,10 +211,12 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
         elQueOrdena = new TableRowSorter<TableModel>(modelodetalle);
         tabladetalle.setRowSorter(elQueOrdena);
         tabladetalle.getTableHeader().setReorderingAllowed(false);
-
+        tabladetalle.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabladetalle.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "selectColumnCell");
         pane.setBackground(c);
-        int[] columnas = {0, 1, 5};
+        int[] tamaño = {0, 0, 120, 150, 200, 120, 100, 100, 0};
+        config.fijarTamaño(tabladetalle, tamaño);
+        int[] columnas = {0, 1, 8};
         config.ocultarColumnas(tabladetalle, columnas);
         tabladetalle.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabladetalle.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
@@ -177,7 +256,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
         paneNorth.add(pane_buscador, BorderLayout.NORTH);
         paneNorth.add(getTablaconsulta(), BorderLayout.CENTER);
         paneNorth.add(contadorconsulta, BorderLayout.SOUTH);
-        paneNorth.setPreferredSize(new Dimension(700, 300));
+        paneNorth.setPreferredSize(new Dimension(850, 300));
 
         setLayout(new FlowLayout());
         paneNorth.setBorder(BorderFactory.createCompoundBorder(
@@ -186,9 +265,9 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
 
         JPanel panedetalle = new JPanel(new BorderLayout());
         bndetalle = new JButton("Detalle <<");
-        panedetalle.add(bndetalle,BorderLayout.EAST);
+        panedetalle.add(bndetalle, BorderLayout.EAST);
         panedetalle.setBackground(c);
-
+        bndetalle.setEnabled(false);
         tabladetalle = new JTable(20, 20);
         modelodetalle = new DefaultTableModel();
         paneSouth = new JPanel(new BorderLayout());
@@ -197,7 +276,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
         contadordetalle = new JLabel("Existen 0 usuarios");
         paneSouth.add(gettablaDetalle(), BorderLayout.CENTER);
         paneSouth.add(contadordetalle, BorderLayout.SOUTH);
-        paneSouth.setPreferredSize(new Dimension(700, 200));
+        paneSouth.setPreferredSize(new Dimension(850, 200));
 
         setLayout(new FlowLayout());
         paneSouth.setBorder(BorderFactory.createCompoundBorder(
@@ -206,7 +285,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
 
         bnbuscar.addActionListener(this);
         bndetalle.addActionListener(this);
-
+        tablaconsulta.addMouseListener(this);
         setLayout(new GridLayout(1, 1));
         principal = new JPanel(new BorderLayout());
         principal.add(paneNorth, BorderLayout.NORTH);
@@ -217,6 +296,39 @@ public class frmConsultas extends JInternalFrame implements ActionListener {
 
         add(principal);
 
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Object source = e.getSource();
+        if (source == tablaconsulta) {
+            int index = tablaconsulta.getSelectedRow();
+            if (index == -1) {
+                return;
+            }
+            bndetalle.setEnabled(true);
+            try {
+                actualizarTablaDetalle();
+            } catch (DAOException ex) {
+                System.out.println("Error");
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 
 }
