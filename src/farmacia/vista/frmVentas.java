@@ -23,11 +23,8 @@ import farmacia.jdbc.modelado.factura;
 import farmacia.jdbc.modelado.facturacabecera;
 import farmacia.jdbc.modelado.facturadetalle;
 import farmacia.jdbc.modelado.producto;
-<<<<<<< HEAD
 import farmacia.vista.mantenimientoProductos.ListadoProductos;
-=======
 import farmacia.reportes.Reportes;
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -60,11 +57,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
     //Array de observadores
     private ArrayList<Observador> observadores;
-<<<<<<< HEAD
     public ListadoProductos pane1;
-=======
-
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
     //paneles
     JPanel paneprincipal, paneventa, panebotones;
     //datos venta
@@ -243,13 +236,10 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         txttotalPago.setText("0.00");
         txtdescuento.setText("0.00");
         txtigv.setText("0.00");
-<<<<<<< HEAD
         for (int i = 0; i < modelo.getRowCount();) {
             modelo.removeRow(i);
 
         }
-=======
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
 
     }
 
@@ -385,13 +375,10 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
         } else if (source == bnquitar) {
             int index = tabla.getSelectedRow();
-<<<<<<< HEAD
-=======
             if (index == -1) {
                 bnquitar.setEnabled(false);
                 return;
             }
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
             accionProducto = "quitarProducto";
             notificar();
             modelo.removeRow(index);
@@ -407,20 +394,14 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             mostrarcorrelativo();
             bnquitar.setEnabled(false);
         } else if (source == bncancelar) {
-<<<<<<< HEAD
-=======
             tabla.clearSelection();
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
             accionProducto = "cancelarVenta";
             notificar();
             deshabilitar();
             action = "nothing";
             bnquitar.setEnabled(false);
         } else if (source == bnguardar) {
-<<<<<<< HEAD
-=======
             tabla.clearSelection();
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
             if (txtidcliente.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Debe ingresar un  Cliente", "Campo en blanco", JOptionPane.ERROR_MESSAGE);
                 bnagregarCliente.requestFocus();
@@ -1213,11 +1194,6 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             }
         }
     }
-
-<<<<<<< HEAD
-    @Override
-=======
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
     public void enlazarObservador(Observador o) {
         observadores.add(o);
     }
@@ -1226,10 +1202,6 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         ArrayList<producto> p = new ArrayList<>();
         p.ensureCapacity(0);
         switch (accionProducto) {
-<<<<<<< HEAD
-=======
-
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
             case "agregarProducto":
                 p.clear();
                 for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
@@ -1267,7 +1239,6 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 }
                 break;
             case "cancelarVenta":
-<<<<<<< HEAD
                 p.clear();
                 //int cont=0;
                 for (int i = 0; i < tabla.getRowCount(); i++) {
@@ -1284,7 +1255,6 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                             System.out.println("Stcok a sumar: " + Integer.parseInt((String.valueOf(tabla.getValueAt(i, 3)))));
                             System.out.println("nuevo stock: " + stockNuevo);
                             producto pr = new producto(tabla.getValueAt(i, 1).toString(),
-=======
                 int cont = 0;
                 for (int i = 0; i < tabla.getRowCount(); i++) {
                     Long idaux = new Long(String.valueOf(tabla.getValueAt(i, 0)));
@@ -1292,13 +1262,11 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                         if (Long.compare(Long.parseLong(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 0))), idaux) == 0) {
                             int stockNuevo = Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 7))) + Integer.parseInt((String.valueOf(tabla.getValueAt(i, 3))));
                             p.add(new producto(tabla.getValueAt(i, 1).toString(),
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
                                     tabla.getValueAt(i, 2).toString(),
                                     "",
                                     0,
                                     0,
                                     Double.parseDouble(String.valueOf(tabla.getValueAt(i, 4))),
-<<<<<<< HEAD
                                     stockNuevo);
                             pr.setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(i, 0))));
                             p.add(pr);
@@ -1309,11 +1277,9 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                             } catch (Exception ex) {
                                 JOptionPane.showMessageDialog(null, "No se pudo actualizar la tabla");
                             }
-=======
                                     stockNuevo));
                             p.get(cont).setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(i, 0))));
                             cont++;
->>>>>>> cd1771c3b918533ee237f1b4481340ce6c7695bd
                         }
                     }
                 }
