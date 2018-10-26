@@ -16,7 +16,7 @@ public class DescuentoIMPL implements DescuentoDAO {
     private Session sesion;
     private Transaction tx;
 
-    public DescuentoIMPL(Session session) {
+    public DescuentoIMPL(Session sesion) {
         this.sesion = sesion;
     }
 

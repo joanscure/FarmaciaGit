@@ -5,6 +5,6 @@ import farmacia.hibernate.modelo.Empresacliente;
 
 public interface EmpresaclienteDAO extends DAO<Empresacliente, Integer> {
 
-    void insertarNuevo(Empresacliente cliente, Empresa emp) throws DAOException;
+    Integer insertarNuevo(Empresacliente cliente, Empresa emp) throws DAOException;
         
 }

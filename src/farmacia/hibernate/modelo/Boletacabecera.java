@@ -101,7 +101,10 @@ public class Boletacabecera  implements java.io.Serializable {
     }
 
 
-
+    public static void main(String[] args) {
+        Integer i = 123;
+        System.out.println(i);
+    }
 
 }
 

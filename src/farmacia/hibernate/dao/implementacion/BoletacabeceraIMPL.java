@@ -17,7 +17,7 @@ public class BoletacabeceraIMPL implements BoletacabeceraDAO {
     private Session sesion;
     private Transaction tx;
 
-    public BoletacabeceraIMPL(Session session) {
+    public BoletacabeceraIMPL(Session sesion) {
         this.sesion = sesion;
     }
 

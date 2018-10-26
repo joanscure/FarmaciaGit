@@ -4,6 +4,7 @@ import farmacia.hibernate.dao.DAOException;
 import farmacia.hibernate.dao.EmpleadoDAO;
 import farmacia.hibernate.modelo.Empleado;
 import farmacia.hibernate.modelo.Persona;
+import farmacia.hibernate.modelo.Tipotrabajador;
 import farmacia.hibernate.util.NewHibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,22 +121,16 @@ public class EmpleadoIMPL implements EmpleadoDAO {
 
     @Override
     public void insertarNuevo(Persona per, Empleado emp) throws DAOException {
+        Integer id = null;
         try {
-            
             iniciarOperacion();
-            TipotrabajadorIMPL trabajador = new TipotrabajadorIMPL(sesion);
-            PersonaIMPL persona = new PersonaIMPL(sesion);
-            
-            if(trabajador.obtener(emp.getTipotrabajador().getIdtipotrabajador()) == null){
+            if(sesion.get(Tipotrabajador.class, emp.getTipotrabajador().getIdtipotrabajador()) == null){
                 throw new DAOException("No existe clave foranea");
             }
-            
-            Integer idPersona = persona.insertar(per);
+            Integer idPersona = (Integer) sesion.save(per);
             emp.getPersona().setIdpersona(idPersona);
-            insertar(emp);
-            
+            id = (Integer) sesion.save(emp);
             tx.commit();
-
         } catch (HibernateException ex) {
             manejarExcepcion(ex);
 

@@ -89,15 +89,4 @@ boolean verificar=false;
             throw new DAOException("error al buscar" + ex.getMessage());
         }
     }
-    public static void main(String args[]) {
-        try {
-            javax.swing.UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            
-             new frmcarga().setVisible(true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-               
-           
-    }
 }

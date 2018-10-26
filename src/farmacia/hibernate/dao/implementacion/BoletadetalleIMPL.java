@@ -123,12 +123,14 @@ public class BoletadetalleIMPL implements BoletadetalleDAO {
         try {
             
             iniciarOperacion();
-            List<Boletadetalle> lista = obtenerDetallesBoleta(idBoletacabecera);
+            List<Boletadetalle> lista; 
+            lista = sesion.createQuery("from Boletadetalle where idboletacabecera = "
+                    +"'"+idBoletacabecera+"' and status = 1").list();
             for (Boletadetalle i : lista){
-                eliminar(obtener(i.getIdboletadetalle()));
+                i.setStatus(true);
+                sesion.update(i);
             }
             tx.commit();
-
         } catch (HibernateException ex) {
             manejarExcepcion(ex);
 
