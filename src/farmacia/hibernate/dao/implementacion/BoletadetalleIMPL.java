@@ -120,7 +120,21 @@ public class BoletadetalleIMPL implements BoletadetalleDAO {
 
     @Override
     public void eliminarDetallesBoleta(Integer idBoletacabecera) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            
+            iniciarOperacion();
+            List<Boletadetalle> lista = obtenerDetallesBoleta(idBoletacabecera);
+            for (Boletadetalle i : lista){
+                eliminar(obtener(i.getIdboletadetalle()));
+            }
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
+        }
     }
 
     @Override
@@ -128,7 +142,8 @@ public class BoletadetalleIMPL implements BoletadetalleDAO {
         List<Boletadetalle> lista = new ArrayList<>();
         try {
             iniciarOperacion();
-            lista = sesion.createQuery("from Boletadetalle where idboletacabecera = "+"'"+idBoletacabecera+"'").list();
+            lista = sesion.createQuery("from Boletadetalle where idboletacabecera = "
+                    +"'"+idBoletacabecera+"' and status = 1").list();
             tx.commit();
         } catch (HibernateException ex) {
             manejarExcepcion(ex);

@@ -121,7 +121,25 @@ public class EmpresaclienteIMPL implements EmpresaclienteDAO {
 
     @Override
     public void insertarNuevo(Empresacliente cliente, Empresa emp) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+
+            iniciarOperacion();
+            EmpresaIMPL empresa = new EmpresaIMPL(sesion);
+
+            Integer idEmpresa = empresa.insertar(emp);
+
+            cliente.getEmpresa().setIdempresa(idEmpresa);
+
+            insertar(cliente);
+
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
+        }
     }
 
 }

@@ -124,12 +124,14 @@ public class PersonaIMPL implements PersonaDAO {
         PersonaIMPL ap = new PersonaIMPL();
         Persona p = new Persona("Carlos", "Beblera", "Chigon", "12345678", true);
         try {
-            ap.insertar(p);
-            ap.eliminar(ap.obtener(1));
-            List<Persona> lista = ap.obtenertodos();
-            for (Persona i : lista) {
-                System.out.println(i.getIdpersona() + " " + i.getNombre());
-            }
+            
+            System.out.println("" + ap.obtener(15));
+//            ap.insertar(p);
+//            ap.eliminar(ap.obtener(1));
+//            List<Persona> lista = ap.obtenertodos();
+//            for (Persona i : lista) {
+//                System.out.println(i.getIdpersona() + " " + i.getNombre());
+//            }
         } catch (DAOException ex) {
             Logger.getLogger(PersonaIMPL.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

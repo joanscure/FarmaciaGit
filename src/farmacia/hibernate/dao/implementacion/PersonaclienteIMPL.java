@@ -1,6 +1,7 @@
 package farmacia.hibernate.dao.implementacion;
 
 import farmacia.hibernate.dao.DAOException;
+import farmacia.hibernate.dao.DAOManager;
 import farmacia.hibernate.dao.PersonaclienteDAO;
 import farmacia.hibernate.modelo.Persona;
 import farmacia.hibernate.modelo.Personacliente;
@@ -119,8 +120,40 @@ public class PersonaclienteIMPL implements PersonaclienteDAO{
     }
 
     @Override
-    public void ingresarNuevo(Personacliente cliente, Persona per) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer ingresarNuevo(Personacliente cliente, Persona per) throws DAOException {
+        Integer id = null; 
+        try {
+
+            iniciarOperacion();
+            PersonaIMPL persona = new PersonaIMPL();
+
+            Integer idPersona = persona.insertar(per);
+            
+            cliente.getPersona().setIdpersona(idPersona);
+
+            id = insertar(cliente);
+
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
+        }
+        return id;
+    }
+    
+    public static void main(String[] args) throws DAOException {
+        DAOManager man = new DAOManagerIMPL(); 
+        
+        Persona per = new Persona("jose", "miguel", "summer", "12345678", true);
+        
+        
+        Personacliente cliente = new Personacliente(per, true);
+        Integer idCliente = man.getPersonaClienteDAO().insertar(cliente);
+        cliente.setIdpersonacliente(idCliente);
+        System.out.println("asdasda");
     }
 
 }
