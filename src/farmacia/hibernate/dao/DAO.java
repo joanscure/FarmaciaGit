@@ -1,10 +1,9 @@
 package farmacia.hibernate.dao;
 
-import farmacia.jdbc.dao.*;
+
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
+import org.hibernate.HibernateException;
 
 public interface DAO<O, PK extends Serializable> {
 
@@ -16,6 +15,10 @@ public interface DAO<O, PK extends Serializable> {
 
     List<O> obtenertodos() throws DAOException;//todos los registros en un list
 
-    O obtener(PK id) throws DAOException;//obtiene un registro con su identidicador 
+    O obtener(PK id) throws DAOException;//obtiene un registro con su identidicador
+    
+    void iniciarOperacion() throws DAOException;
+    
+    void manejarExcepcion(HibernateException ex) throws DAOException;
 
 }

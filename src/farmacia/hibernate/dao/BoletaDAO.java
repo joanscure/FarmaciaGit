@@ -6,13 +6,8 @@
 package farmacia.hibernate.dao;
 
 import farmacia.hibernate.modelo.Boleta;
-import farmacia.jdbc.dao.*;
-import farmacia.jdbc.modelado.boleta;
 
-/**
- *
- * @author fecyp
- */
+
 public interface BoletaDAO  extends DAO<Boleta, Integer>{
     
 }
