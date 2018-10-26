@@ -22,6 +22,7 @@ import farmacia.jdbc.modelado.facturadetalle;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.personacliente;
 import farmacia.jdbc.modelado.producto;
+import farmacia.reportes.Reportes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,6 +34,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,7 +67,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
     JDateChooser fechainicisl, fechafinal;
     JTable tablaconsulta;
     JTable tabladetalle;
-    JButton bndetalle, bnbuscar;
+    JButton bndetalle, bnbuscar, bnreporte;
     JLabel jlinicio, jlfin;
     JPanel paneNorth, paneSouth;
     public DefaultTableModel modeloconsulta, modelodetalle;
@@ -92,6 +95,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
 
         });
         jcbtipoConsulta.addActionListener(this);
+        bnreporte.addActionListener(this);
     }
 
     @Override
@@ -109,7 +113,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
             pack();
         } else if (source == bnbuscar || source == jcbtipoConsulta) {
             try {
-                if (jcbtipoConsulta.getItemAt(jcbtipoConsulta.getSelectedIndex()).equals("Boleta")) {
+                if (jcbtipoConsulta.getSelectedIndex() == 0) {
                     actualizarTablaBoletacabecera();
                 } else {
                     actualizarTablaFacturacabecera();
@@ -117,6 +121,37 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
             } catch (DAOException ex) {
                 System.out.println("error");
             }
+        } else if (source == bnreporte) {
+            int index = tablaconsulta.getSelectedRow();
+            if (index == -1) {
+                return;
+            }
+            Long id = new Long((long) tablaconsulta.getValueAt(index, 0));
+            double suma = 0.0;
+            for (int i = 0; i < tabladetalle.getRowCount(); i++) {
+                suma += ((Double) tabladetalle.getValueAt(i, 7));
+
+            }
+            BigDecimal bd = new BigDecimal(suma);
+            bd = bd.setScale(2, RoundingMode.HALF_UP);
+            if (jcbtipoConsulta.getSelectedIndex() == 0) {
+                try {
+                    Reportes repor = new Reportes("localhost", "basefarmacia", "root", "");
+                    repor.reporteboleta(id, bd.doubleValue());
+                } catch (Exception ex) {
+                    System.out.println("Error");
+                }
+            } else {
+                try {
+                    Reportes repor = new Reportes("localhost", "basefarmacia", "root", "");
+                    repor.reporteboleta(id, bd.doubleValue());
+                } catch (Exception ex) {
+                    System.out.println("Error");
+                }
+
+            }
+            bnreporte.setEnabled(false);
+            tablaconsulta.clearSelection();
         }
 
     }
@@ -201,14 +236,17 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
         fin.add(jlfin, BorderLayout.WEST);
         fin.add(fechafinal, BorderLayout.EAST);
         bnbuscar = new JButton("Buscar ventas", configIma.obtenerIcono("buscar.png", 15));
+        bnreporte = new JButton("Generar Reporte");
+        bnreporte.setEnabled(false);
         String[] lista = {"Boleta", "Factura"};
-        JPanel tipo=new JPanel();
+        JPanel tipo = new JPanel();
         jcbtipoConsulta = new JComboBox(lista);
         tipo.add(jcbtipoConsulta);
         pane_buscador.add(tipo);
         pane_buscador.add(inicio);
         pane_buscador.add(fin);
         pane_buscador.add(bnbuscar);
+        pane_buscador.add(bnreporte);
         inicio.setBackground(c);
         fin.setBackground(c);
         tipo.setBackground(c);
@@ -268,11 +306,12 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
                 return;
             }
             bndetalle.setEnabled(true);
+            bnreporte.setEnabled(true);
             try {
-                if (jcbtipoConsulta.getItemAt(jcbtipoConsulta.getSelectedIndex()).equals("Boleta")) {
-                    actualizarTablaBoletacabecera();
+                if (jcbtipoConsulta.getSelectedIndex() == 0) {
+                    actualizarTablaBoletaDetalle();
                 } else {
-                    actualizarTablaFacturacabecera();
+                    actualizarTablaFacturaDetalle();
                 }
             } catch (DAOException ex) {
                 System.out.println("Error");

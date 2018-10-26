@@ -15,6 +15,9 @@ public class facturacabecera {
     private Date fechaemisionfactura;
     private boolean status;
 
+    public facturacabecera() {
+    }
+
     public facturacabecera(Long idempresacliente, Long idempleado, String correlativofactura, String numerofactura, Date fechaemisionfactura) {
         this.idempresacliente = idempresacliente;
         this.idempleado = idempleado;

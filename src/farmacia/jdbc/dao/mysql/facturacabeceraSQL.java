@@ -22,7 +22,8 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
     private final String DELETE = "UPDATE facturacabecera SET status = 0 WHERE idfacturacabecera = ?";
     private final String GETALL = "SELECT * FROM facturacabecera WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM facturacabecera WHERE idfacturacabecera = ?";
-     private final String GETALLTIME="SELECT * FROM boletacabecera bc WHERE bc.fechaemisionboleta >=? AND bc.fechaemisionboleta <=? AND status=1 ORDER by fechaemisionboleta";
+    private final String GETALLTIME = "SELECT * FROM facturacabecera fc WHERE fc.fechaemisionfactura >=? AND bc.fechaemisionfactura <=? AND status=1 ORDER by fechaemisionfactura";
+    private final String GETID = "SELECT idfacturacabecera  FROM facturacabecera fc WHERE fc.correlativofactura=? AND fc.numerofactura=?";
 
     public facturacabeceraSQL(Connection conexion) {
         this.conexion = conexion;
@@ -51,7 +52,7 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
                 obj.setIdfacturacabecera(rs.getLong(1));
             }
         } catch (SQLException ex) {
-            throw new DAOException("Error de sql."+ ex.getMessage());
+            throw new DAOException("Error de sql." + ex.getMessage());
         } finally {
             UtilSQL.cerrar(stat, rs);
         }
@@ -71,13 +72,13 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
             stat.setLong(5, obj.getIdempleado());
             stat.setBoolean(6, (boolean) obj.isStatus());
             stat.setLong(7, obj.getIdfacturacabecera());
-            
+
             if (stat.executeUpdate() == 0) {
                 throw new DAOException("Error al ingresar un registro.");
             }
 
         } catch (SQLException ex) {
-            throw new DAOException("Error de sql."+ ex.getMessage());
+            throw new DAOException("Error de sql." + ex.getMessage());
         } finally {
             UtilSQL.cerrar(stat);
         }
@@ -143,16 +144,16 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
     @Override
     public facturacabecera convertir(ResultSet rs) throws DAOException {
         facturacabecera f = null;
-        try{
-        String correlativofactura = rs.getString("correlativofactura");
-        String numerofactura = rs.getString("numeroboleta");
-        Date fechaemisionfactura = rs.getDate("fechaemisionfactura");
-        Long idempresacliente = rs.getLong("idempresacliente");
-        Long idempleado = rs.getLong("idempleado");
-        f = new facturacabecera(idempresacliente, idempleado, correlativofactura, numerofactura, fechaemisionfactura);
-        f.setIdfacturacabecera(rs.getLong("idfacturacabecera"));
-        f.setStatus(rs.getBoolean("status"));
-        }catch (SQLException ex){
+        try {
+            String correlativofactura = rs.getString("correlativofactura");
+            String numerofactura = rs.getString("numeroboleta");
+            Date fechaemisionfactura = rs.getDate("fechaemisionfactura");
+            Long idempresacliente = rs.getLong("idempresacliente");
+            Long idempleado = rs.getLong("idempleado");
+            f = new facturacabecera(idempresacliente, idempleado, correlativofactura, numerofactura, fechaemisionfactura);
+            f.setIdfacturacabecera(rs.getLong("idfacturacabecera"));
+            f.setStatus(rs.getBoolean("status"));
+        } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             throw new DAOException("Error en SQL.", ex);
         }
@@ -161,12 +162,12 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
 
     @Override
     public List<facturacabecera> obtenerportiempo(java.util.Date min, java.util.Date max) throws DAOException {
-       PreparedStatement stat = null;
+        PreparedStatement stat = null;
         ResultSet rs = null;
         List<facturacabecera> lista = new ArrayList<>();
         try {
             stat = conexion.prepareStatement(GETALLTIME);
-            stat.setDate(1,new Date(min.getTime()));
+            stat.setDate(1, new Date(min.getTime()));
             stat.setDate(2, new Date(max.getTime()));
             rs = stat.executeQuery();
             while (rs.next()) {
@@ -178,6 +179,29 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
             UtilSQL.cerrar(stat, rs);
         }
         return lista;
+    }
+
+    @Override
+    public Long obtenerid(facturacabecera fc) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        Long b;
+        try {
+            stat = conexion.prepareStatement(GETID);
+            stat.setString(1, fc.getCorrelativofactura());
+            stat.setString(2, fc.getNumerofactura());
+            rs = stat.executeQuery();
+            if (rs.next()) {
+                b = rs.getLong("idfacturacabecera");
+            } else {
+                throw new DAOException("No se ha encontrado registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return b;
     }
 
 }

@@ -23,6 +23,7 @@ import farmacia.jdbc.modelado.factura;
 import farmacia.jdbc.modelado.facturacabecera;
 import farmacia.jdbc.modelado.facturadetalle;
 import farmacia.jdbc.modelado.producto;
+import farmacia.reportes.Reportes;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -145,7 +146,9 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         bnagregarCliente.addActionListener(this);
         bnagregproducto.addActionListener(this);
         txtcodigo.addActionListener(this);
+        bnrecibo.addActionListener(this);
         tabla.addMouseListener(this);
+        cbxtipocomprobante.addActionListener(this);
 
         bnagregarCliente.addKeyListener(this);
         cbxtipocomprobante.addKeyListener(this);
@@ -352,6 +355,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             notificar();//aqui actualiza el stock en fmrProductos
             modelo.addRow(lista);
             bnagregar.setEnabled(false);
+            bnquitar.setEnabled(false);
             txtcodigo.requestFocus();
             txtcodigo.setText("");
             txtnombreProducto.setText("");
@@ -365,7 +369,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
         } else if (source == bnquitar) {
             int index = tabla.getSelectedRow();
-            if (index ==-1) {
+            if (index == -1) {
                 bnquitar.setEnabled(false);
                 return;
             }
@@ -450,11 +454,50 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                     System.out.println("error " + ex.getMessage());
                 }
             }
-            deshabilitar();
-            action = "nothing";
-            mostrarcorrelativo();
+            bnrecibo.setEnabled(true);
+            bncancelar.setEnabled(false);
+            bnguardar.setEnabled(false);
+            action = "recibo";
+
         } else if (source == bnrecibo) {
+            if (cbxtipocomprobante.getSelectedIndex() == 0) {
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    boletacabecera bc = new boletacabecera();
+                    bc.setCorrelativoboleta(scorrelativo);
+                    bc.setNumeroboleta(snumero);
+                    
+                    
+                    Long id = manager.getBoletaCabeceraDAO().obtenerid(bc);
+                    
+                    Reportes repor = new Reportes("localhost", "basefarmacia", "root", "");
+                    repor.reporteboleta(id, Double.parseDouble(txttotalPago.getText()));
+                } catch (DAOException ex) {
+                    System.out.println("Error");
+                }
+            }
+            else 
+            {
+                DAOManagerSQL manager = null;
+                try {
+                    manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+                    facturacabecera fc = new facturacabecera();
+                    fc.setCorrelativofactura(scorrelativo);
+                    fc.setNumerofactura(snumero);
+                    
+                    
+                    Long id = manager.getFacturaCabeceraDAO().obtenerid(fc);
+                    
+                    Reportes repor = new Reportes("localhost", "basefarmacia", "root", "");
+                    repor.reportefactura(id, Double.parseDouble(txttotalPago.getText()));
+                } catch (DAOException ex) {
+                    System.out.println("Error");
+                }
+            }
             deshabilitar();
+            bnrecibo.setEnabled(false);
+            mostrarcorrelativo();
             action = "nothing";
         } else if (source == bnagregarCliente) {
 
@@ -505,6 +548,19 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             }
         } else if (source == txtcantidad) {
             bnagregar.doClick();
+        }
+        else if(source==cbxtipocomprobante)
+        {
+            if (cbxtipocomprobante.getSelectedIndex() == 0) {
+                jlcliente.setText("Cliente:");
+                txtnombrecliente.setText("");
+                txtidcliente.setText("");
+            } else {
+                jlcliente.setText("Empresa:");
+                txtnombrecliente.setText("");
+                txtidcliente.setText("");
+            }
+            mostrarcorrelativo();
         }
 
     }
@@ -728,9 +784,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 txtidcliente.setText("");
             }
             mostrarcorrelativo();
-        }
-        else if(source==tabla)
-        {
+        } else if (source == tabla) {
             bnquitar.setEnabled(true);
         }
 
@@ -1134,13 +1188,15 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             }
         }
     }
-    
-    public void enlazarObservador(Observador o){observadores.add(o);}
-    
-    public  ArrayList<Object> buscarProducto(String cod){
-         ArrayList<producto> p = new ArrayList<>();
-         p.ensureCapacity(0);
-        switch(accionProducto){
+
+    public void enlazarObservador(Observador o) {
+        observadores.add(o);
+    }
+
+    public ArrayList<Object> buscarProducto(String cod) {
+        ArrayList<producto> p = new ArrayList<>();
+        p.ensureCapacity(0);
+        switch (accionProducto) {
 
             case "agregarProducto":
                 for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
@@ -1161,8 +1217,8 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             case "quitarProducto":
                 int index = tabla.getSelectedRow();
                 for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
-                     Long idaux=new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
-                    if (Long.compare(Long.parseLong((String)tabla.getValueAt(index, 0)), idaux ) == 0) {
+                    Long idaux = new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
+                    if (Long.compare(Long.parseLong((String) tabla.getValueAt(index, 0)), idaux) == 0) {
                         int stockNuevo = Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(i, 7))) + Integer.parseInt((String.valueOf(tabla.getValueAt(index, 3))));
                         p.add(new producto(tabla.getValueAt(index, 1).toString(),
                                 tabla.getValueAt(index, 2).toString(),
@@ -1201,10 +1257,10 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 break;
         }
         p.trimToSize();
-        System.out.println("tamaño de p: "+p.size());
+        System.out.println("tamaño de p: " + p.size());
         ArrayList<Object> pro = new ArrayList<>(p.size());
-        pro = (ArrayList<Object>)(Object)p;
-        System.out.println("tamaño de pro: "+pro.size());
+        pro = (ArrayList<Object>) (Object) p;
+        System.out.println("tamaño de pro: " + pro.size());
         return pro;
     }
 }

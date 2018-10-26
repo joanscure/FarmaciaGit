@@ -297,6 +297,10 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
 
         } else if (source == iproductos) {
             if (!visibleproductos) {
+                if (frmproducto != null) {
+                    frmproducto.setVisible(true);
+                    return;
+                }
                 try {
                     frmproducto = new frmProducto("Producto");
                     desktopPane.add(frmproducto);
@@ -337,6 +341,17 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
             }
 
         } else if (source == iventas) {
+            if (frmproducto == null) {
+                try {
+                    frmproducto = new frmProducto("Producto");
+                    desktopPane.add(frmproducto);
+                    frmproducto.permisoeliminar = permiso[8];
+                    frmproducto.pane1.txtBuscar.requestFocus();
+                } catch (DAOException ex) {
+                    System.out.println("error" + ex.getMessage());
+                }
+
+            }
             if (!visibleventas) {
                 frmventas = new frmVentas();
                 frmventas.enlazarObservador(frmproducto);//enlazamos un observador

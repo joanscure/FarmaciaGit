@@ -23,7 +23,7 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
     private final String GETALL = "SELECT * FROM boletacabecera WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM boletacabecera WHERE idboletacabecera = ? AND status = 1";
     private final String GETALLTIME="SELECT * FROM boletacabecera bc WHERE bc.fechaemisionboleta >=? AND bc.fechaemisionboleta <=? AND status=1 ORDER by fechaemisionboleta";
-
+    private final String GETID="SELECT idboletacabecera  FROM boletacabecera bc WHERE bc.correlativoboleta=? AND bc.numeroboleta=?";
     public boletacabeceraSQL(Connection conexion) {
         this.conexion = conexion;
     }
@@ -184,4 +184,27 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
         return lista;
     }
 
+    @Override
+    public Long obtenerid(boletacabecera bc) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        Long b;
+        try {
+            stat = conexion.prepareStatement(GETID);
+            stat.setString(1, bc.getCorrelativoboleta());
+            stat.setString(2, bc.getNumeroboleta());
+            rs = stat.executeQuery();
+            if (rs.next()) {
+                b = rs.getLong("idboletacabecera");
+            } else {
+                throw new DAOException("No se ha encontrado registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return b;
+    }
+     
 }
