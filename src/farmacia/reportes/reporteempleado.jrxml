@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5b7648e9-f05a-4011-960c-cd5bd5b9f8cc">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     empleado.`idempleado` AS empleado_idempleado,
+     empleado.`idpersona` AS empleado_idpersona,
+     empleado.`login` AS empleado_login,
+     empleado.`password` AS empleado_password,
+     empleado.`fechaalta` AS empleado_fechaalta,
+     empleado.`idtipotrabajador` AS empleado_idtipotrabajador,
+     empleado.`status` AS empleado_status,
+     persona.`idpersona` AS persona_idpersona,
+     Concat(persona.`nombre`,' ',
+     persona.`appaterno` ,' ',
+     persona.`apmaterno`) AS nombre,
+     persona.`numerodni` AS persona_numerodni,
+     persona.`personaedad` AS persona_personaedad,
+     persona.`direccion` AS persona_direccion,
+     persona.`telefono` AS persona_telefono,
+     persona.`status` AS persona_status
+FROM
+     `persona` persona INNER JOIN `empleado` empleado ON persona.`idpersona` = empleado.`idpersona`
+where persona.`status`=true and persona.`idpersona` = empleado.`idpersona`]]>
+	</queryString>
+	<field name="empleado_idempleado" class="java.lang.Integer"/>
+	<field name="empleado_idpersona" class="java.lang.Integer"/>
+	<field name="empleado_login" class="java.lang.String"/>
+	<field name="empleado_password" class="java.lang.String"/>
+	<field name="empleado_fechaalta" class="java.sql.Date"/>
+	<field name="empleado_idtipotrabajador" class="java.lang.Integer"/>
+	<field name="empleado_status" class="java.lang.Boolean"/>
+	<field name="persona_idpersona" class="java.lang.Integer"/>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="persona_numerodni" class="java.lang.String"/>
+	<field name="persona_personaedad" class="java.lang.Integer"/>
+	<field name="persona_direccion" class="java.lang.String"/>
+	<field name="persona_telefono" class="java.lang.String"/>
+	<field name="persona_status" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="121" y="28" width="326" height="37" uuid="242c592b-2dd4-4a30-a63e-a414afcb5150"/>
+				<textElement>
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTADO DE EMPLEADOS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="170" height="20" forecolor="#3333FF" uuid="8a67fa24-3b0f-412d-b65b-080906cb096f"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOMBRES Y APELLIDOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="100" height="20" forecolor="#3333FF" uuid="2dfdabb7-9212-4fa3-8cef-cbf1b3f5158a"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="0" width="100" height="20" forecolor="#3333FF" uuid="32cc2d1a-454c-494d-9ce5-e263a57993ac"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIRECCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="447" y="2" width="100" height="20" forecolor="#3333FF" uuid="125a3348-8c88-48a1-96f1-d720d27924c3"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TELEFONO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="10" width="170" height="20" uuid="eac06bc1-b1b9-4776-8ca1-5db443018af7"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="10" width="100" height="20" uuid="6dbd9491-a436-46e7-b57d-a883a1554347"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{persona_numerodni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="10" width="100" height="20" uuid="91345f02-f648-4807-8edb-38495bb51178"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{persona_direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="447" y="10" width="100" height="20" uuid="161c83ce-0b87-43aa-a240-2d52f2c26d2c"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{persona_telefono}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

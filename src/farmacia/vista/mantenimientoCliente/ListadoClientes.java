@@ -5,7 +5,6 @@
  */
 package farmacia.vista.mantenimientoCliente;
 
-import com.mxrck.autocompleter.TextAutoCompleter;
 import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.diseño.estrategias.EstrategiaPaneListado;
@@ -110,6 +109,7 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
+        bnreport.addActionListener(this);
         
 
     }
@@ -166,6 +166,10 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
             }
 
         }
+        else if(source==bnreport)
+        {
+            generarReporte();
+        }
 
     }
 
@@ -177,12 +181,6 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
         } catch (Exception ex) {
             System.out.println("Error");
         }
-    }
-
-    
-
-  
-
-  
+    }  
 
 }

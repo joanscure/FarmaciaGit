@@ -128,7 +128,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener, Key
 
         }
         
-        if (source == pane2.txtnombre) {
+        else if (source == pane2.txtnombre) {
             pane2.txtnombre.transferFocus();
 
         } else if (source == pane2.txtapellidop) {
@@ -146,10 +146,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener, Key
         } else if (source == pane2.txtedad) {
             pane2.txtedad.transferFocus();
         }
-        else if(source==pane1.bnreport)
-        {
-            pane1.generarReporte();
-        }
+        
     }
 
     public void Iniciar_componentes(String titulo) {
@@ -180,7 +177,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener, Key
         jbEliminar.addActionListener(this);
         jbSalir.addActionListener(this);
         jbModificar.addActionListener(this);
-        pane1.bnreport.addActionListener(this);
+        
 
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);

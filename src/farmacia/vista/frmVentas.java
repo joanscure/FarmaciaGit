@@ -1239,52 +1239,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 }
                 break;
             case "cancelarVenta":
-                p.clear();
-                //int cont=0;
-                for (int i = 0; i < tabla.getRowCount(); i++) {
-                    Long idaux = new Long(String.valueOf(tabla.getValueAt(i, 0)));
-                    for (int j = 0; j < frmvistaproducto.tabla.getRowCount(); j++) {
-                        //try{
-                        //  pane1.actualizartabla();
-                        //}catch (Exception ex){
-                        //JOptionPane.showMessageDialog(null, "No se pudo actualizar la tabla");
-                        //}
-                        if (Long.compare(Long.parseLong(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 0))), idaux) == 0) {
-                            int stockNuevo = Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 7))) + Integer.parseInt((String.valueOf(tabla.getValueAt(i, 3))));
-                            System.out.println("stock de frmvistaproducto: " + Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 7))));
-                            System.out.println("Stcok a sumar: " + Integer.parseInt((String.valueOf(tabla.getValueAt(i, 3)))));
-                            System.out.println("nuevo stock: " + stockNuevo);
-                            producto pr = new producto(tabla.getValueAt(i, 1).toString(),
-                int cont = 0;
-                for (int i = 0; i < tabla.getRowCount(); i++) {
-                    Long idaux = new Long(String.valueOf(tabla.getValueAt(i, 0)));
-                    for (int j = 0; j < frmvistaproducto.tabla.getRowCount(); j++) {
-                        if (Long.compare(Long.parseLong(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 0))), idaux) == 0) {
-                            int stockNuevo = Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(j, 7))) + Integer.parseInt((String.valueOf(tabla.getValueAt(i, 3))));
-                            p.add(new producto(tabla.getValueAt(i, 1).toString(),
-                                    tabla.getValueAt(i, 2).toString(),
-                                    "",
-                                    0,
-                                    0,
-                                    Double.parseDouble(String.valueOf(tabla.getValueAt(i, 4))),
-                                    stockNuevo);
-                            pr.setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(i, 0))));
-                            p.add(pr);
-                            //p.get(cont).setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(i, 0))));
-                            //cont++;
-                            try {
-                                frmvistaproducto.actualizartabla();
-                            } catch (Exception ex) {
-                                JOptionPane.showMessageDialog(null, "No se pudo actualizar la tabla");
-                            }
-                                    stockNuevo));
-                            p.get(cont).setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(i, 0))));
-                            cont++;
-                        }
-                    }
-                }
-
-                System.out.println("tamaño con el que sale la lista: " + p.size());
+               //J
                 break;
 
             default:
