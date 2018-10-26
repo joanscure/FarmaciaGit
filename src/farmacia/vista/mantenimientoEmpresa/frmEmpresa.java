@@ -135,6 +135,10 @@ public class frmEmpresa extends EstrategiaIFrame implements ActionListener, KeyL
         } else if (source == pane2.txttelefono) {
             jbGuardar.doClick();
         }
+        else if(source==pane1.bnreport)
+        {
+            pane1.generarReporte();
+        }
     }
 
     public void Iniciar_componentes(String titulo) {
@@ -165,6 +169,7 @@ public class frmEmpresa extends EstrategiaIFrame implements ActionListener, KeyL
         jbEliminar.addActionListener(this);
         jbSalir.addActionListener(this);
         jbModificar.addActionListener(this);
+        pane1.bnreport.addActionListener(this);
 
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);

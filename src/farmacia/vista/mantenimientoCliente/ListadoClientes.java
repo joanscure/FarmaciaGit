@@ -13,6 +13,7 @@ import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.persona;
 import farmacia.jdbc.modelado.personacliente;
+import farmacia.reportes.Reportes;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -170,7 +171,12 @@ public class ListadoClientes extends EstrategiaPaneListado implements ActionList
 
     @Override
     public void generarReporte() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      try {
+            Reportes repor = new Reportes("localhost", "basefarmacia", "root", "");
+            repor.reporteclientes();
+        } catch (Exception ex) {
+            System.out.println("Error");
+        }
     }
 
     

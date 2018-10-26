@@ -73,6 +73,74 @@ public class Reportes {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
+     public void reporteproducto() {
+        Map<String,Object> p = new HashMap();
+
+        JasperReport report;
+        JasperPrint print;
+
+        try {
+            report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/farmacia/reportes/reporteproducto.jrxml");
+            print = JasperFillManager.fillReport(report, p, conexion);
+            JasperViewer view = new JasperViewer(print, false);
+            view.setTitle("Reporte de Listados ");
+            view.setVisible(true);
+             view.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+     public void reporteclientes() {
+        Map<String,Object> p = new HashMap();
+
+        JasperReport report;
+        JasperPrint print;
+
+        try {
+            report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/farmacia/reportes/reportecliente.jrxml");
+            print = JasperFillManager.fillReport(report, p, conexion);
+            JasperViewer view = new JasperViewer(print, false);
+            view.setTitle("Reporte de Listados");
+            view.setVisible(true);
+             view.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+      public void reporteEmpleado() {
+        Map<String,Object> p = new HashMap();
+
+        JasperReport report;
+        JasperPrint print;
+
+        try {
+            report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/farmacia/reportes/reporteempleado.jrxml");
+            print = JasperFillManager.fillReport(report, p, conexion);
+            JasperViewer view = new JasperViewer(print, false);
+            view.setTitle("Reporte de Listados");
+            view.setVisible(true);
+             view.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+        public void reporteEmpresa() {
+        Map<String,Object> p = new HashMap();
+
+        JasperReport report;
+        JasperPrint print;
+
+        try {
+            report = JasperCompileManager.compileReport(new File("").getAbsolutePath() + "/src/farmacia/reportes/reporteempresa.jrxml");
+            print = JasperFillManager.fillReport(report, p, conexion);
+            JasperViewer view = new JasperViewer(print, false);
+            view.setTitle("Reporte de Listados");
+            view.setVisible(true);
+             view.toFront();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
     public static void main(String[] args) {
         try {
                   

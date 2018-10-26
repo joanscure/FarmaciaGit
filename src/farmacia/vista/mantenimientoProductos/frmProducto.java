@@ -10,6 +10,7 @@ import farmacia.diseño.observador.Observador;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
+import farmacia.reportes.Reportes;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
 import static farmacia.vista.frmprincipal.visibleproductos;
@@ -32,7 +33,7 @@ import javax.swing.RowFilter;
  *
  * @author fecyp
  */
-public class frmProducto extends EstrategiaIFrame implements ActionListener, KeyListener, Observador{
+public class frmProducto extends EstrategiaIFrame implements ActionListener, KeyListener, Observador {
 
     public ListadoProductos pane1;
     public RegistrarProductos pane2;
@@ -141,6 +142,8 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
             jbGuardar.doClick();
         } else if (source == pane2.txtigv) {
             pane2.txtigv.transferFocus();
+        } else if (source == pane1.bnreport) {
+            pane1.generarReporte();
         }
     }
 
@@ -175,6 +178,7 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
 
         jbModificar.addActionListener(this);
         jbCancelar.addActionListener(this);
+        pane1.bnreport.addActionListener(this);
         funcionregistrar();
         funcionlistado();
     }
@@ -276,7 +280,7 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
             pane1.actualizartabla();
             JOptionPane.showMessageDialog(null, "Se Registro el Producto satisfactoriamente", "Buen Trabajo ", JOptionPane.INFORMATION_MESSAGE);
             deshabilitar();
-             action = "nothing";
+            action = "nothing";
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
         } catch (DAOException ex) {
@@ -444,7 +448,6 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
                 pane1.buscarPor.transferFocus();
             }
         }
-        
 
         if (ke.getExtendedKeyCode() == KeyEvent.VK_CONTROL) {
             pane1.teclamas = true;
@@ -506,8 +509,8 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
             pane2.txtpreciofinal.setText(bd.doubleValue() + "");
         }
         if (e.getKeyCode() == KeyEvent.VK_N && pane1.teclamas) {
-           jbNuevo.doClick();
-           pane1.teclamas = false;
+            jbNuevo.doClick();
+            pane1.teclamas = false;
         }
 
     }
@@ -539,7 +542,7 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
         pane1.txtBuscar.addKeyListener(this);
         pane1.buscarPor.addKeyListener(this);
         tabla.getSelectionModel().addListSelectionListener(e -> {
-            if ( pane1.control) {
+            if (pane1.control) {
                 jbEliminar.setEnabled(true);
                 jbModificar.setEnabled(true);
             }
@@ -549,12 +552,12 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
 
     @Override
     public void update(ArrayList<Object> pro) {
-      DAOManagerSQL manager = null;
+        DAOManagerSQL manager = null;
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
             for (Object object : pro) {
-                System.out.println("tamaño : "+pro.size());
-                producto p=((producto)pro.get(0));
+                System.out.println("tamaño : " + pro.size());
+                producto p = ((producto) pro.get(0));
                 p.setStatus(true);
                 manager.getProductoDAO().cambiarStock(p);
             }

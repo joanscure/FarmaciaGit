@@ -12,6 +12,7 @@ import farmacia.diseño.estrategias.EstrategiaPaneListado;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
+import farmacia.reportes.Reportes;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -36,25 +37,28 @@ import javax.swing.table.TableRowSorter;
  * @author fecyp
  */
 public class ListadoProductos extends EstrategiaPaneListado implements ActionListener {
-  public static  JTable tabla;
+
+    public static JTable tabla;
+
     ListadoProductos(String titulo) {
-        super( titulo);
+        super(titulo);
     }
-     public void actualizartabla() throws DAOException {
-         for (int i = 0; i < modelo.getRowCount(); ) {
+
+    public void actualizartabla() throws DAOException {
+        for (int i = 0; i < modelo.getRowCount();) {
             modelo.removeRow(i);
-         }
+        }
         DAOManagerSQL manager = null;
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
             List<producto> lista = manager.getProductoDAO().obtenertodos();
             for (int i = 0; i < lista.size(); i++) {
-                Object obj[] = {lista.get(i).getIdproducto(), lista.get(i).getNombreproducto(), lista.get(i).getDescripcionproducto(), lista.get(i).getDosisproducto(), lista.get(i).getPrecioventa(), lista.get(i).getIgv(),lista.get(i).getPreciofinal(),lista.get(i).getStock(), lista.get(i).isStatus()};
+                Object obj[] = {lista.get(i).getIdproducto(), lista.get(i).getNombreproducto(), lista.get(i).getDescripcionproducto(), lista.get(i).getDosisproducto(), lista.get(i).getPrecioventa(), lista.get(i).getIgv(), lista.get(i).getPreciofinal(), lista.get(i).getStock(), lista.get(i).isStatus()};
 
                 modelo.addRow(obj);
 
             }
-            contador.setText("Existen "+modelo.getRowCount()+" productos");
+            contador.setText("Existen " + modelo.getRowCount() + " productos");
             manager.cerrarConexion();
         } catch (DAOException ex) {
             throw new DAOException("error al buscar" + ex.getMessage());
@@ -83,12 +87,12 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         buscarPor.addItem("Por Codigo");
         buscarPor.addItem("Por Nombre");
         txtBuscar = new JTextField(10);
-        
+
         buscar = new JButton(configIma.obtenerIcono("buscar.png", 15));
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);
         pane_buscador.add(buscar);
-        bnreport=new JButton("Generar Reporte");
+        bnreport = new JButton("Generar Reporte");
         pane_buscador.add(bnreport);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
@@ -99,7 +103,7 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         setLayout(new FlowLayout());
         pane1.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                BorderFactory.createTitledBorder("Listado de "+titulo)));
+                BorderFactory.createTitledBorder("Listado de " + titulo)));
 
         setLayout(new GridLayout(1, 1));
         add(pane1);
@@ -108,8 +112,6 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         buscarPor.addActionListener(this);
         buscar.addActionListener(this);
         txtBuscar.addActionListener(this);
-       
-       
 
     }
 
@@ -129,15 +131,15 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         tabla.setRowSorter(elQueOrdena);
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabla.getTableHeader().setReorderingAllowed(false);
-        
-        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0,false), "selectColumnCell");
+
+        tabla.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0, false), "selectColumnCell");
         pane.setBackground(c);
-        int[] tamaño = { 80, 180, 180, 120, 100, 80, 80, 80, 0};
+        int[] tamaño = {80, 180, 180, 120, 100, 80, 80, 80, 0};
         config.fijarTamaño(tabla, tamaño);
         int[] columnas = {8};
         config.ocultarColumnas(tabla, columnas);
         tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-         tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
+        tabla.getTableHeader().setDefaultRenderer(new EstiloTablaHeader());
         tabla.setDefaultRenderer(Object.class, new EstiloTablaRenderer());
         return pane;
     }
@@ -148,27 +150,30 @@ public class ListadoProductos extends EstrategiaPaneListado implements ActionLis
         if (source == buscar || source == txtBuscar) {
             if (buscarPor.getSelectedItem().toString().equals("Por Nombre")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 1));
-            } 
-            else if (buscarPor.getSelectedItem().toString().equals("Por Codigo")) {
+            } else if (buscarPor.getSelectedItem().toString().equals("Por Codigo")) {
                 elQueOrdena.setRowFilter(RowFilter.regexFilter(txtBuscar.getText().toUpperCase().trim(), 0));
-            } 
+            }
 
             if (tabla.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(null, "¡No Se encontraron Productos!","Informacion",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "¡No Se encontraron Productos!", "Informacion", JOptionPane.ERROR_MESSAGE);
                 txtBuscar.requestFocus();
             } else {
                 tabla.requestFocus();
             }
 
         }
+        
 
     }
 
     @Override
     public void generarReporte() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Reportes repor = new Reportes("localhost", "basefarmacia", "root", "");
+            repor.reporteproducto();
+        } catch (Exception ex) {
+            System.out.println("Error");
+        }
     }
-
-   
 
 }
