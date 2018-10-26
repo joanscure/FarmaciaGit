@@ -47,70 +47,6 @@ public class DAOManagerIMPL implements DAOManager {
             }
         }
     }
-    
-//    @Override
-//    public boletacabeceraDAO getBoletaCabeceraDAO() {
-//        if(boletacab == null){
-//            boletacab = new boletacabeceraSQL(conexion);
-//        }
-//        return boletacab;
-//    }
-//
-//    @Override
-//    public boletadetalleDAO getBoletaDetalleDAO() {
-//        if(boletadet == null){
-//            boletadet = new boletadetalleSQL(conexion);
-//        }
-//        return boletadet;
-//    }
-//
-//    @Override
-//    public descuentoDAO getDescuentoDAO() {
-//        if(descuentos== null){
-//            descuentos = new descuentoSQL(conexion);
-//        }
-//        return descuentos;
-//    }
-//
-//    @Override
-//    public empleadoDAO getEmpleadoDAO() {
-//        if (empleados == null){
-//            empleados = new empleadoSQL(conexion);
-//        }
-//        return empleados;
-//    }
-//
-//    @Override
-//    public empresaDAO getEmpresaDAO() {
-//        if (empresas == null){
-//            empresas = new empresaSQL(conexion);
-//        }
-//        return empresas;
-//    }
-//
-//    @Override
-//    public empresaclienteDAO getEmpresaClienteDAO() {
-//        if (empresascliente == null){
-//            empresascliente = new empresaclienteSQL(conexion);
-//        }
-//        return empresascliente;
-//    }
-//
-//    @Override
-//    public facturacabeceraDAO getFacturaCabeceraDAO() {
-//        if (facturacab == null){
-//            facturacab = new facturacabeceraSQL(conexion);
-//        }
-//        return facturacab;
-//    }
-//
-//    @Override
-//    public facturadetalleDAO getFActuraDetalleDAO() {
-//        if (facturadet == null){
-//            facturadet = new facturadetalleSQL(conexion);
-//        }
-//        return facturadet;
-//    }
 
     @Override
     public PersonaDAO getPersonaDAO() {
@@ -130,67 +66,107 @@ public class DAOManagerIMPL implements DAOManager {
 
     @Override
     public BoletadetalleDAO getBoletaDetalleDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (boletadet == null){
+            boletadet = new BoletadetalleIMPL(sessionFac);
+        }
+        return boletadet;
     }
+        
 
     @Override
     public DescuentoDAO getDescuentoDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (descuentos == null){
+            descuentos = new DescuentoIMPL(sessionFac);
+        }
+        return descuentos;
     }
 
     @Override
     public EmpleadoDAO getEmpleadoDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (empleados == null){
+            empleados = new EmpleadoIMPL(sessionFac);
+        }
+        return empleados;
     }
 
     @Override
     public EmpresaDAO getEmpresaDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (empresas == null){
+            empresas = new EmpresaIMPL(sessionFac);
+        }
+        return empresas;
     }
 
     @Override
     public EmpresaclienteDAO getEmpresaClienteDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (empresascliente == null){
+            empresascliente = new EmpresaclienteIMPL(sessionFac);
+        }
+        return empresascliente;
     }
 
     @Override
     public FacturacabeceraDAO getFacturaCabeceraDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (facturacab == null){
+            facturacab = new FacturacabeceraIMPL(sessionFac);
+        }
+        return facturacab;
     }
 
     @Override
     public FacturadetalleDAO getFActuraDetalleDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (facturadet == null){
+            facturadet = new FacturadetalleIMPL(sessionFac);
+        }
+        return facturadet;
     }
 
     @Override
     public PersonaclienteDAO getPersonaClienteDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (personascliente == null){
+            personascliente = new PersonaclienteIMPL(sessionFac);
+        }
+        return personascliente;
     }
 
     @Override
     public ProductoDAO getProductoDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (productos == null){
+            productos = new ProductoIMPL(sessionFac);
+        }
+        return productos;
     }
 
     @Override
     public ProductodescuentoDAO getProductoDescuentoDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (productodes == null){
+            productodes = new ProductodescuentoIMPL(sessionFac);
+        }
+        return productodes;
     }
 
     @Override
     public TipotrabajadorDAO getTipoTrabajadorDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (tipostrabajador == null){
+            tipostrabajador = new TipotrabajadorIMPL(sessionFac);
+        }
+        return tipostrabajador;
     }
 
     @Override
     public BoletaDAO getBoleta() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (boleta == null){
+            boleta = new BoletaIMPL(sessionFac);
+        }
+        return boleta;
     }
 
     @Override
     public FacturaDAO getFactura() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (factura == null){
+            factura = new FacturaIMPL(sessionFac);
+        }
+        return factura;
     }
 
 }

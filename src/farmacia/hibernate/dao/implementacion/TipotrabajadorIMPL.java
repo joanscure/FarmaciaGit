@@ -2,15 +2,6 @@ package farmacia.hibernate.dao.implementacion;
 
 import farmacia.hibernate.dao.TipotrabajadorDAO;
 import farmacia.hibernate.modelo.Tipotrabajador;
-import farmacia.jdbc.dao.mysql.*;
-import farmacia.jdbc.dao.DAOException;
-import farmacia.jdbc.dao.tipotrabajadorDAO;
-import farmacia.jdbc.modelado.tipotrabajador;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TipotrabajadorIMPL implements TipotrabajadorDAO {
