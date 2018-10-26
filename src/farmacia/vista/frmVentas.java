@@ -1183,7 +1183,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                             stockNuevo));
                             p.get(cont).setIdproducto(Long.parseLong(String.valueOf(tabla.getValueAt(i, 0))));
                             cont++;
-                        }   
+                        }
                     }
                 }
                 break;
