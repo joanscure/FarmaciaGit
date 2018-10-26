@@ -29,6 +29,7 @@ public class producto {
     public producto() {
     }
 
+
     public Long getIdproducto() {
         return idproducto;
     }
