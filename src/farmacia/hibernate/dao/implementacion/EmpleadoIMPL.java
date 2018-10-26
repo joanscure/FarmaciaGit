@@ -1,24 +1,53 @@
 package farmacia.hibernate.dao.implementacion;
 
-import farmacia.jdbc.dao.mysql.*;
-import farmacia.jdbc.dao.DAOException;
-import farmacia.jdbc.dao.empleadoDAO;
-import farmacia.jdbc.dao.personaDAO;
-import farmacia.jdbc.modelado.empleado;
-import farmacia.jdbc.modelado.persona;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
+import farmacia.hibernate.dao.EmpleadoDAO;
+import farmacia.hibernate.modelo.Empleado;
+import farmacia.hibernate.modelo.Persona;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class empleadoSQL implements empleadoDAO {
+public class EmpleadoIMPL implements EmpleadoDAO {
 
-    private Connection conexion;
+    @Override
+    public void insertarNuevo(Persona per, Empleado emp) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void actualizarpassword(Empleado emp) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String obtenerOcupacion(Empleado emp) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer insertar(Empleado obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void modificar(Empleado obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void eliminar(Empleado obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Empleado> obtenertodos() throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Empleado obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /*private Connection conexion;
 
     private final String INSERT = "INSERT INTO empleado(idpersona, login, password, fechaalta, idtipotrabajador, status) "
             + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -31,7 +60,7 @@ public class empleadoSQL implements empleadoDAO {
             + "WHERE login=?";
     private final String GETROl="SELECT * FROM `empleado` inner join tipotrabajador on empleado.idtipotrabajador=tipotrabajador.idtipotrabajador where empleado.status=1 and empleado.admin=?  ";
 
-    public empleadoSQL(Connection con) {
+    public EmpleadoIMPL(Connection con) {
         this.conexion = con;
     }
 
@@ -231,5 +260,5 @@ public class empleadoSQL implements empleadoDAO {
         }
         return ocupacion;
     }
-
+*/
 }

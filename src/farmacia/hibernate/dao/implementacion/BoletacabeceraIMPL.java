@@ -1,8 +1,44 @@
 package farmacia.hibernate.dao.implementacion;
 
+import farmacia.hibernate.dao.BoletacabeceraDAO;
+import farmacia.hibernate.dao.DAOException;
+import farmacia.hibernate.modelo.Boletacabecera;
+import java.util.List;
+import org.hibernate.SessionFactory;
 
-public class BoletacabeceraIMPL implements boletacabeceraDAO {
 
+public class BoletacabeceraIMPL implements BoletacabeceraDAO {
+
+    BoletacabeceraIMPL(SessionFactory sessionFac) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer insertar(Boletacabecera obj) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void modificar(Boletacabecera obj) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void eliminar(Boletacabecera obj) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Boletacabecera> obtenertodos() throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Boletacabecera obtener(Integer id) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
     /*
     private Connection conexion;
 

@@ -6,8 +6,6 @@ import farmacia.hibernate.modelo.Persona;
 import farmacia.hibernate.util.NewHibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +19,7 @@ public class PersonaIMPL implements PersonaDAO {
     public PersonaIMPL(SessionFactory sessionFac) {
         this.sessionFac = this.sessionFac;
     }
-    
+
     @Override
     public Integer insertar(Persona obj) throws DAOException {
         Integer id = null;

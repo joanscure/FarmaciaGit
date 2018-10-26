@@ -1,18 +1,37 @@
 package farmacia.hibernate.dao.implementacion;
 
-import farmacia.jdbc.dao.mysql.*;
-import farmacia.jdbc.dao.DAOException;
-import farmacia.jdbc.dao.descuentoDAO;
-import farmacia.jdbc.modelado.descuento;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import farmacia.hibernate.dao.DescuentoDAO;
+import farmacia.hibernate.modelo.Descuento;
 import java.util.List;
 
-public class descuentoSQL implements descuentoDAO {
+public class DescuentoIMPL implements DescuentoDAO {
 
+    @Override
+    public Integer insertar(Descuento obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void modificar(Descuento obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void eliminar(Descuento obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Descuento> obtenertodos() throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Descuento obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    /*
     private Connection conexion;
 
     private final String INSERT = "INSERT INTO descuento(nombredescuento, condicion, porcentaje, descripciondescuento, status) "
@@ -23,7 +42,7 @@ public class descuentoSQL implements descuentoDAO {
     private final String GETALL = "SELECT * FROM descuento WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM descuento WHERE iddescuento = ? AND status = 1";
 
-    public descuentoSQL(Connection conn) {
+    public DescuentoIMPL(Connection conn) {
         this.conexion = conn;
     }
 
@@ -153,5 +172,6 @@ public class descuentoSQL implements descuentoDAO {
         return des;
         
     }
-
+*/
+    
 }

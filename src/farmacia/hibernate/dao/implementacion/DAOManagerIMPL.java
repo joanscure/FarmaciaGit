@@ -120,57 +120,12 @@ public class DAOManagerIMPL implements DAOManager {
         return personas;
     }
 
-//    @Override
-//    public personaclienteDAO getPersonaClienteDAO() {
-//        if (personascliente == null){
-//            personascliente = new personaclienteSQL(conexion);
-//        }
-//        return personascliente;
-//    }
-//
-//    @Override
-//    public productoDAO getProductoDAO() {
-//        if (productos == null){
-//            productos = new productoSQL(conexion);
-//        }
-//        return productos;
-//    }
-//
-//    @Override
-//    public productodescuentoDAO getProductoDescuentoDAO() {
-//        if (productodes == null){
-//            productodes = new productodescuentoSQL(conexion);
-//        }
-//        return productodes;
-//    }
-//
-//    @Override
-//    public tipotrabajadorDAO getTipoTrabajadorDAO() {
-//        if (tipostrabajador == null){
-//            tipostrabajador = new tipotrabajadorSQL(conexion);
-//        }
-//        return tipostrabajador;
-//    }
-//
-//    @Override
-//    public boletaDAO getBoleta() {
-//        if (boleta == null){
-//            boleta = new boletaSQL(conexion);
-//        }
-//        return boleta;
-//    }
-//
-//    @Override
-//    public facturaDAO getFactura() {
-//         if (factura == null){
-//            factura = new facturaSQL(conexion);
-//        }
-//        return factura;
-//    }
-
     @Override
     public BoletacabeceraDAO getBoletaCabeceraDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (boletacab == null){
+            boletacab = new BoletacabeceraIMPL(sessionFac);
+        }
+        return boletacab;
     }
 
     @Override

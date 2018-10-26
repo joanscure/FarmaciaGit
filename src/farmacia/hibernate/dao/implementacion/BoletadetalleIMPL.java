@@ -1,18 +1,49 @@
 package farmacia.hibernate.dao.implementacion;
 
-import farmacia.jdbc.dao.mysql.*;
-import farmacia.jdbc.dao.DAOException;
-import farmacia.jdbc.dao.boletadetalleDAO;
-import farmacia.jdbc.modelado.boletadetalle;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import farmacia.hibernate.dao.BoletadetalleDAO;
+import farmacia.hibernate.modelo.Boletadetalle;
 import java.util.List;
 
-public class boletadetalleSQL implements boletadetalleDAO {
+public class BoletadetalleIMPL implements BoletadetalleDAO {
 
+    @Override
+    public void eliminarDetallesBoleta(Integer idBoletacabecera) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Boletadetalle> obtenerDetallesBoleta(Integer idBoletacabecera) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Integer insertar(Boletadetalle obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void modificar(Boletadetalle obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void eliminar(Boletadetalle obj) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Boletadetalle> obtenertodos() throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Boletadetalle obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+
+    /*
     private Connection conexion;
 
     private final String INSERT = "INSERT INTO boletadetalle(idboletacabecera, idproducto, cantidad, subtotal, status) "
@@ -25,7 +56,7 @@ public class boletadetalleSQL implements boletadetalleDAO {
     private final String GETONE = "SELECT * FROM boletadetalle WHERE idboletadetalle = ? AND status = 1";
     private final String GETDETAILS = "SELECT * FROM boletadetalle WHERE idboletacabecera = ? AND status = 1";
 
-    public boletadetalleSQL(Connection conexion) {
+    public BoletadetalleIMPL(Connection conexion) {
         this.conexion = conexion;
     }
 
@@ -202,5 +233,5 @@ public class boletadetalleSQL implements boletadetalleDAO {
         }
         return lista;
     }
-
+    */
 }

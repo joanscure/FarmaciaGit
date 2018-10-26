@@ -93,7 +93,7 @@ public class NumComprobante {
         DAOManagerSQL manager = null;
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-            List<Boletacabecera> lista = manager.getBoletaCabeceraDAO().obtenertodos();
+            List<boletacabecera> lista = manager.getBoletaCabeceraDAO().obtenertodos();
             System.out.println(lista.size() - 1);
             if (lista.isEmpty()) {
                 num = "B00100000000";
