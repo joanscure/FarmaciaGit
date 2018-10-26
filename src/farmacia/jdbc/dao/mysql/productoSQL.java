@@ -166,7 +166,7 @@ public class productoSQL implements productoDAO {
     public void cambiarStock(producto obj) throws DAOException {
           PreparedStatement stat = null;
         try {
-            stat = conexion.prepareStatement(UPDATE);
+            stat = conexion.prepareStatement(UPDATESTOCK);
             stat.setInt(1, obj.getStock());
             stat.setLong(2, obj.getIdproducto());
             if (stat.executeUpdate() == 0) {
