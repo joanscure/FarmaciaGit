@@ -1131,7 +1131,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
     
     public  ArrayList<Object> buscarProducto(String cod){
          ArrayList<producto> p = new ArrayList<>();
-         p.ensureCapacity(1);
+         p.ensureCapacity(0);
         switch(accionProducto){
             case "agregarProducto":
                 for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
@@ -1152,7 +1152,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             case "quitarProducto":
                 int index = tabla.getSelectedRow();
                 for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
-                    Long idaux=new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
+                     Long idaux=new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
                     if (Long.compare(Long.parseLong((String)tabla.getValueAt(index, 0)), idaux ) == 0) {
                         int stockNuevo = Integer.parseInt(String.valueOf(frmvistaproducto.tabla.getValueAt(i, 7))) + Integer.parseInt((String.valueOf(tabla.getValueAt(index, 3))));
                         p.add(new producto(tabla.getValueAt(index, 1).toString(),
@@ -1192,9 +1192,10 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             break;
         }
         p.trimToSize();
-        ArrayList<Object> pro = new ArrayList<>();
+        System.out.println("tamaño de p: "+p.size());
+        ArrayList<Object> pro = new ArrayList<>(p.size());
         pro = (ArrayList<Object>)(Object)p;
-        pro.trimToSize();
+        System.out.println("tamaño de pro: "+pro.size());
         return pro;
     }
 }
