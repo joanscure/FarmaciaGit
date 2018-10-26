@@ -10,6 +10,7 @@ import farmacia.calculos.EstiloTablaHeader;
 import farmacia.calculos.EstiloTablaRenderer;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.diseño.observador.Observador;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.boletacabecera;
@@ -36,6 +37,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,7 +64,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author fecyp
  */
-public class frmConsultas extends JInternalFrame implements ActionListener, MouseListener {
+public class frmConsultas extends JInternalFrame implements ActionListener, MouseListener, Observador {
 
     JDateChooser fechainicisl, fechafinal;
     JTable tablaconsulta;
@@ -470,6 +472,19 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
             manager.cerrarConexion();
         } catch (DAOException ex) {
             throw new DAOException("error al buscar" + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void update(ArrayList<Object> o) {
+        try {
+            if (jcbtipoConsulta.getSelectedIndex() == 0) {
+                actualizarTablaBoletacabecera();
+            } else {
+                actualizarTablaFacturacabecera();
+            }
+        } catch (DAOException ex) {
+            System.out.println("error");
         }
     }
 }

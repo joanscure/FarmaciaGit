@@ -462,7 +462,14 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                     System.out.println("error " + ex.getMessage());
                 }
             }
+            accionProducto="nothing";
+            if(frmprincipal.visibleconsulta)
+            {
+                notificar();
+            }
             bnrecibo.setEnabled(true);
+            bnsalir.setEnabled(true);
+            bnnuevo.setEnabled(true);
             bncancelar.setEnabled(false);
             bnguardar.setEnabled(false);
             action = "recibo";
@@ -503,6 +510,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                     System.out.println("Error");
                 }
             }
+            
             deshabilitar();
             bnrecibo.setEnabled(false);
             mostrarcorrelativo();

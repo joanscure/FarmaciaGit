@@ -301,6 +301,10 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
                 try {
                     frmproducto = new frmProducto("Producto");
                     //frmventas.enlazarObservador(frmproducto);
+                    if(visibleventas)
+                    {
+                        frmventas.enlazarObservador(frmproducto);
+                    }
                     desktopPane.add(frmproducto);
                     frmproducto.toFront();
                     frmproducto.setVisible(true);
@@ -342,17 +346,26 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
             if (frmproducto == null) {
                 try {
                     frmproducto = new frmProducto("Producto");
-                    desktopPane.add(frmproducto);
-                    frmproducto.permisoeliminar = permiso[8];
-                    frmproducto.pane1.txtBuscar.requestFocus();
+                   frmproducto.dispose();
                 } catch (DAOException ex) {
                     System.out.println("error" + ex.getMessage());
                 }
 
             }
+            if (frmconsulta == null) {
+                try {
+                    frmconsulta = new frmConsultas();
+                   frmconsulta.dispose();
+                } catch (DAOException ex) {
+                    System.out.println("error" + ex.getMessage());
+                }
+
+            }
+            
             if (!visibleventas) {
                 frmventas = new frmVentas();
                 frmventas.enlazarObservador(frmproducto);
+                 frmventas.enlazarObservador(frmconsulta);
                 desktopPane.add(frmventas);
                 frmventas.toFront();
                 frmventas.setVisible(true);
@@ -384,9 +397,13 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
             frm.toFront();
         } else if (source == iconsultaventas) {
             if (!visibleconsulta) {
-
+                
                 try {
                     frmconsulta = new frmConsultas();
+                    if(visibleventas)
+                    {
+                        frmventas.enlazarObservador(frmconsulta);
+                    }
                     desktopPane.add(frmconsulta);
                     frmconsulta.toFront();
                     frmconsulta.setVisible(true);
