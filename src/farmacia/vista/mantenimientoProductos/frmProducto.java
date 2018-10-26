@@ -9,7 +9,6 @@ import farmacia.diseño.estrategias.EstrategiaIFrame;
 import farmacia.diseño.observador.Observador;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
-import farmacia.jdbc.dao.mysql.productoSQL;
 import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
@@ -23,6 +22,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -548,14 +548,15 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
     }
 
     @Override
-    public void update(Object o,Long cod) {
+    public void update(ArrayList<Object> pro) {
       DAOManagerSQL manager = null;
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-            producto p = (producto)o;
-            p.setIdproducto(cod);
-            p.setStatus(true);
-            manager.getProductoDAO().modificar(p);
+            for (Object object : pro) {
+                producto p=((producto)pro.get(0));
+                p.setStatus(true);
+                manager.getProductoDAO().cambiarStock(p);
+            }
             manager.cerrarConexion();
             pane1.actualizartabla();
             pestañas.setEnabledAt(0, true);
