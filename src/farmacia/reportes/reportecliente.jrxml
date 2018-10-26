@@ -5,7 +5,7 @@
 	<property name="ireport.y" value="0"/>
 	<queryString>
 		<![CDATA[SELECT
-     persona.`idpersona` ,' ',
+     persona.`idpersona`,
      concat(persona.`nombre`,' ',
      persona.`appaterno` ,' ',
      persona.`apmaterno`) AS nombre,
@@ -20,9 +20,6 @@ FROM
 where personacliente.`status`=true]]>
 	</queryString>
 	<field name="idpersona" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="nombre" class="java.lang.String">
