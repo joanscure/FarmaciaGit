@@ -2,177 +2,130 @@ package farmacia.hibernate.dao.implementacion;
 
 import farmacia.hibernate.dao.ProductodescuentoDAO;
 import farmacia.hibernate.modelo.Productodescuento;
-import farmacia.jdbc.dao.mysql.*;
-import farmacia.jdbc.dao.DAOException;
-import farmacia.jdbc.dao.productodescuentoDAO;
-import farmacia.jdbc.modelado.descuento;
-import farmacia.jdbc.modelado.producto;
-import farmacia.jdbc.modelado.productodescuento;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import farmacia.hibernate.util.NewHibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class ProductodescuentoIMPL implements ProductodescuentoDAO {
 
+    private SessionFactory sessionFac;
+    private Transaction tx;
+
+    public ProductodescuentoIMPL(SessionFactory sessionFac) {
+        this.sessionFac = this.sessionFac;
+    }
+
     @Override
     public Integer insertar(Productodescuento obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer id = null;
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            id = (Integer) ses.save(obj);
+            tx.commit();
+            
+            
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return id;
     }
 
     @Override
     public void modificar(Productodescuento obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public void eliminar(Productodescuento obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            obj.setStatus(false);
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public List<Productodescuento> obtenertodos() throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Productodescuento> lista = new ArrayList<>();
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            lista = ses.createQuery("from Productodescuento where status = 1").list();
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return lista;
     }
 
     @Override
     public Productodescuento obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        Productodescuento obj = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            obj = (Productodescuento) ses.get(Productodescuento.class, id);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return obj;
     }
-
-//    private Connection conexion;
-//
-//    private final String INSERT = "INSERT INTO productodescuento(idproducto, iddescuento, status) "
-//            + "VALUES (?, ?, ?) ";
-//    private final String UPDATE = "UPDATE productodescuento SET idproducto = ?, iddescuento = ? , status = ? WHERE idproductodescuento = ?";
-//    private final String DELETE = "UPDATE productodescuento SET status = 0 WHERE idproductodescuento = ?";
-//    private final String GETALL = "SELECT * FROM productodescuento WHERE status = 1";
-//    private final String GETONE = "SELECT * FROM productodescuento WHERE idproductodescuento = ?";
-//
-//    public ProductodescuentoIMPL(Connection conexion) {
-//        this.conexion = conexion;
-//    }
-//
-//    @Override
-//    public Long insertar(productodescuento obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        try {
-//            stat = conexion.prepareStatement(INSERT);
-//            stat.setLong(1, obj.getIdproducto());
-//            stat.setLong(2, obj.getIddescuento());
-//            stat.setBoolean(3, obj.isStatus());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al ingresar un registro.");
-//            }
-//            rs = stat.getGeneratedKeys();
-//            if (rs.next()) {
-//                obj.setIdproductodescuento(rs.getLong(1));
-//            } else {
-//                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return obj.getIdproductodescuento();
-//    }
-//
-//    @Override
-//    public void modificar(productodescuento obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        try {
-//            stat = conexion.prepareStatement(UPDATE);
-//            stat.setLong(1, obj.getIdproducto());
-//            stat.setLong(2, obj.getIddescuento());
-//            stat.setBoolean(3, obj.isStatus());
-//            stat.setLong(4, obj.getIdproductodescuento());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al modificar un registro.");
-//            }
-//
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat);
-//        }
-//    }
-//
-//    @Override
-//    public void eliminar(productodescuento obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        try {
-//            stat = conexion.prepareStatement(DELETE);
-//            stat.setLong(1, obj.getIdproductodescuento());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al eliminar registro.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat);
-//        }
-//    }
-//
-//    @Override
-//    public List<productodescuento> obtenertodos() throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        List<productodescuento> lista = new ArrayList<>();
-//        try {
-//            stat = conexion.prepareStatement(GETALL);
-//            rs = stat.executeQuery();
-//            while (rs.next()) {
-//                lista.add(convertir(rs));
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return lista;
-//    }
-//
-//    @Override
-//    public productodescuento obtener(Long id) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        productodescuento pro = null;
-//        try {
-//            stat = conexion.prepareStatement(GETONE);
-//            stat.setLong(1, id);
-//            rs = stat.executeQuery();
-//            if (rs.next()) {
-//                pro = convertir(rs);
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return pro;
-//
-//    }
-//
-//    @Override
-//    public productodescuento convertir(ResultSet rs) throws DAOException {
-//        productodescuento prodes = null;
-//        try{
-//        Long idproductodescuento = rs.getLong("idproductodescuento");//PK
-//        Long idproducto = rs.getLong("idproducto");//indice
-//        Long iddescuento = rs.getLong("iddescuento"); //indice
-//        boolean status = rs.getBoolean("status");
-//        prodes = new productodescuento(idproducto, iddescuento);
-//        prodes.setIdproductodescuento(idproductodescuento);
-//        prodes.setStatus(status);
-//        }catch (SQLException ex){
-//            System.out.println(ex.getMessage());
-//            throw new DAOException("Error en SQL.", ex);
-//        }
-//        return prodes;
-//    }
 
 }

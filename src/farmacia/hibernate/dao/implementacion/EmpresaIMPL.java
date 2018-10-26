@@ -1,171 +1,131 @@
 package farmacia.hibernate.dao.implementacion;
 
+import farmacia.hibernate.dao.DAOException;
 import farmacia.hibernate.dao.EmpresaDAO;
 import farmacia.hibernate.modelo.Empresa;
+import farmacia.hibernate.util.NewHibernateUtil;
+import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class EmpresaIMPL implements EmpresaDAO {
 
+    private SessionFactory sessionFac;
+    private Transaction tx;
+    
+    EmpresaIMPL(SessionFactory sessionFac) {
+        this.sessionFac = sessionFac;
+    }
+
     @Override
     public Integer insertar(Empresa obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Integer id = null;
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            id = (Integer) ses.save(obj);
+            tx.commit();
+            
+            
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return id;
     }
 
     @Override
     public void modificar(Empresa obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public void eliminar(Empresa obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            obj.setStatus(false);
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public List<Empresa> obtenertodos() throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         List<Empresa> lista = new ArrayList<>();
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            lista = ses.createQuery("from Empresa where status = 1").list();
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return lista;
     }
 
     @Override
     public Empresa obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        Empresa obj = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            obj = (Empresa) ses.get(Empresa.class, id);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return obj;
     }
-
-//    private Connection conexion;
-//
-//    private final String INSERT = "INSERT INTO empresa(rucempresa, razonsocial, telefono, direccion, status) "
-//            + "VALUES (?, ?, ?, ?, ?) ";
-//    private final String UPDATE = "UPDATE empresa SET rucempresa = ?, razonsocial = ?, telefono = ?, direccion = ?, status = ? WHERE idempresa = ?";
-//    private final String DELETE = "UPDATE empresa SET status = 0 WHERE idempresa = ?";
-//    private final String GETALL = "SELECT * FROM empresa WHERE status = 1";
-//    private final String GETONE = "SELECT * FROM empresa WHERE idempresa = ? AND status = 1";
-//
-//    public EmpresaIMPL(Connection conn) {
-//        this.conexion = conn;
-//    }
-//
-//    @Override
-//    public Long insertar(empresa obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        try {
-//            stat = conexion.prepareStatement(INSERT,1);
-//            stat.setString(1, String.valueOf(obj.getRucempresa()));
-//            stat.setString(2, obj.getRazonsocial());
-//            stat.setString(3, obj.getTelefono());
-//            stat.setString(4, obj.getDireccion());
-//            stat.setBoolean(5, obj.isStatus());
-//            if(stat.executeUpdate() == 0){
-//                throw new DAOException("Error al ingresar un registro.");
-//            }
-//            rs = stat.getGeneratedKeys();
-//            if (rs.next()){
-//                obj.setIdempresa(rs.getLong(1));
-//            }else{
-//                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL."+ex.getMessage());
-//        } finally {
-//            UtilIMPL.cerrar(stat,rs);
-//        }
-//        return obj.getIdempresa();
-//    }
-//
-//    @Override
-//    public void modificar(empresa obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        try{
-//            stat = conexion.prepareStatement(UPDATE);
-//            stat.setString(1, String.valueOf(obj.getRucempresa()));
-//            stat.setString(2, obj.getRazonsocial());
-//            stat.setString(3, obj.getTelefono());
-//            stat.setString(4, obj.getDireccion());
-//            stat.setBoolean(5, obj.isStatus());
-//            stat.setLong(6, obj.getIdempresa());
-//            if (stat.executeUpdate() == 0){
-//                throw new DAOException("Error al modificar un registro.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        }finally{
-//            UtilIMPL.cerrar(stat);
-//        }
-//        
-//    }
-//
-//    @Override
-//    public void eliminar(empresa obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        try{
-//            stat = conexion.prepareStatement(DELETE);
-//            stat.setLong(1, obj.getIdempresa());
-//            if (stat.executeUpdate() == 0){
-//                throw new DAOException("Error al elimiar un registro.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.",ex);
-//        }finally{
-//            UtilIMPL.cerrar(stat);
-//        }
-//    }
-//
-//    @Override
-//    public List<empresa> obtenertodos() throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        List<empresa> lista = new ArrayList<>();
-//        try {
-//            stat = conexion.prepareStatement(GETALL);
-//            rs = stat.executeQuery();
-//            while (rs.next()) {
-//                lista.add(convertir(rs));
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return lista;
-//    }
-//
-//    @Override
-//    public empresa obtener(Long id) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        empresa emp = null;
-//        try {
-//            stat = conexion.prepareStatement(GETONE);
-//            stat.setLong(1, id);
-//            rs = stat.executeQuery();
-//            if (rs.next()) {
-//                emp = convertir(rs);
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return emp;
-//    }
-//
-//    @Override
-//    public empresa convertir(ResultSet rs) throws DAOException {
-//        empresa emp = null;
-//        try{
-//        String ruc = rs.getString("rucempresa");
-//        char[] rucempresa = ruc.toCharArray();
-//        String razonsocial = rs.getString("razonsocial");
-//        String telefoo = rs.getString("telefono");
-//        String direccion = rs.getString("telefono");
-//        emp = new empresa(rucempresa, razonsocial, telefoo, direccion);
-//        emp.setIdempresa(rs.getLong("idempresa"));
-//        emp.setStatus(rs.getBoolean("status"));
-//        }catch (SQLException ex){
-//            System.out.println(ex.getMessage());
-//            throw new DAOException("Error en SQL.", ex);
-//        }
-//        return emp;
-//    }
-
 }

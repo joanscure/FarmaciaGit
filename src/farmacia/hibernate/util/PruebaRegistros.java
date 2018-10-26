@@ -8,7 +8,9 @@ package farmacia.hibernate.util;
 import farmacia.hibernate.dao.DAOException;
 import farmacia.hibernate.dao.DAOManager;
 import farmacia.hibernate.dao.implementacion.DAOManagerIMPL;
+import farmacia.hibernate.modelo.Empleado;
 import farmacia.hibernate.modelo.Persona;
+import farmacia.hibernate.modelo.Tipotrabajador;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Session;
@@ -41,7 +43,14 @@ public class PruebaRegistros {
 //            System.out.println("2");
             try {
                 DAOManager man = new DAOManagerIMPL();
-                System.out.println(" " + man.getPersonaDAO().insertar(crearPersona()));
+                
+                Tipotrabajador t = man.getTipoTrabajadorDAO().obtener(1);
+                System.out.println(t.getNombretipotrabajador());
+                
+                Persona p = man.getPersonaDAO().obtener(1);
+                System.out.println(p.getApmaterno());
+                
+                
             } catch (DAOException ex) {
                 System.out.println(ex.getMessage() + ":c");;
             }
@@ -51,5 +60,15 @@ public class PruebaRegistros {
         Persona p;
         p = new Persona("Pedro", "Ramirez", "Cruz", "9832413", true);
         return p;
+    }
+    
+    private static Empleado crearEmpledao(){
+        Empleado e;
+        Persona p;
+        Tipotrabajador t;
+        p = new Persona("Miguel", "Estudio", "Carrasco", "12312321", true);
+        t = new Tipotrabajador("Prueba", true, true, true, true, true, true, true, true, true, true, true, true, true);
+        e = new Empleado(p, t, "prueba", "prueba", true);
+        return e;
     }
 }

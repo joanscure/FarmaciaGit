@@ -87,7 +87,6 @@ public class PersonaIMPL implements PersonaDAO {
 
     @Override
     public List<Persona> obtenertodos() throws farmacia.hibernate.dao.DAOException {
-        //listaEmpleados = sesion.createQuery("from Empleado").list();
         List<Persona> lista = new ArrayList<>();
         Session ses = null;
         try{
@@ -111,23 +110,23 @@ public class PersonaIMPL implements PersonaDAO {
     @Override
     public Persona obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
         Session ses = null;
-        Persona per = null;
+        Persona obj = null;
         try{
             sessionFac = NewHibernateUtil.getSessionFactory();
             ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            per = (Persona) ses.get(Persona.class, id);
-            tx.commit();
+            ses.beginTransaction();
+            obj = (Persona) ses.get(Persona.class, id);
+            ses.getTransaction().commit();
         } catch (HibernateException ex){
-            tx.rollback();
+            if (ses.getTransaction().isActive()){
+                ses.getTransaction().rollback();
+            }
             throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+        } finally{
+            //ses.close()
         }
-        return per;
+       
+        return obj;
     }
 
 }

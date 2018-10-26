@@ -8,12 +8,17 @@ package farmacia.hibernate.dao.implementacion;
 import farmacia.hibernate.dao.BoletaDAO;
 import farmacia.hibernate.modelo.Boleta;
 import java.util.List;
+import org.hibernate.SessionFactory;
 
 /**
  *
  * @author fecyp
  */
 public class BoletaIMPL implements BoletaDAO {
+
+    BoletaIMPL(SessionFactory sessionFac) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public Integer insertar(Boleta obj) throws farmacia.hibernate.dao.DAOException {

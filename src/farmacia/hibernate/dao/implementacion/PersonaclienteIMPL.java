@@ -1,196 +1,137 @@
 package farmacia.hibernate.dao.implementacion;
 
+import farmacia.hibernate.dao.DAOException;
 import farmacia.hibernate.dao.PersonaclienteDAO;
 import farmacia.hibernate.modelo.Persona;
 import farmacia.hibernate.modelo.Personacliente;
+import farmacia.hibernate.util.NewHibernateUtil;
+import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class PersonaclienteIMPL implements PersonaclienteDAO{
 
-    @Override
-    public void ingresarNuevo(Personacliente cliente, Persona per) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private SessionFactory sessionFac;
+    private Transaction tx;
+
+    public PersonaclienteIMPL(SessionFactory sessionFac) {
+        this.sessionFac = this.sessionFac;
     }
 
     @Override
-    public Integer insertar(Personacliente obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer insertar(Personacliente obj) throws DAOException {
+        Integer id = null;
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            id = (Integer) ses.save(obj);
+            tx.commit();
+            
+            
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return id;
     }
 
     @Override
-    public void modificar(Personacliente obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(Personacliente obj) throws DAOException {
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public void eliminar(Personacliente obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            obj.setStatus(false);
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public List<Personacliente> obtenertodos() throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Personacliente> lista = new ArrayList<>();
+        Session ses = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            lista = ses.createQuery("from Personacliente where status = 1").list();
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return lista;
     }
 
     @Override
     public Personacliente obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        Personacliente obj = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            obj = (Personacliente) ses.get(Personacliente.class, id);
+            tx.commit();
+        } catch (HibernateException ex){
+            tx.rollback();
+            throw new DAOException("Error en transaccion",ex);
+        } 
+        
+        finally{
+            ses.close();
+            sessionFac.close();
+        }
+        return obj;
     }
 
-//    private Connection conexion;
-//    
-//    private final String INSERT = "INSERT INTO personacliente(idpersona, status) "+
-//    "VALUES (?, ?) ";
-//    private final String UPDATE = "UPDATE personacliente SET idpersona = ? WHERE idpersonacliente = ?";
-//    private final String DELETE = "UPDATE personacliente SET status = 0 WHERE idpersonacliente = ?";
-//    private final String GETALL = "SELECT * FROM personacliente WHERE status = 1";
-//    private final String GETONE = "SELECT * FROM personacliente WHERE idpersonacliente = ?";
-//
-//    public PersonaclienteIMPL(Connection conexion) {
-//        this.conexion = conexion;
-//    }
-//
-//    @Override
-//    public Long insertar(personacliente obj) throws DAOException {  
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        try {
-//            stat = conexion.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);
-//           
-//            stat.setLong(1, obj.getIdpersona());
-//            stat.setBoolean(2, obj.isStatus());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al ingresar un registro.");
-//            }
-//           
-//            rs = stat.getGeneratedKeys();
-//            if(rs.next()){
-//               obj.setIdpersonacliente(rs.getLong(1));
-//            }else{
-//                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
-//            }
-//
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return obj.getIdpersonacliente();    
-//        
-//    }
-//
-//    @Override
-//    public void modificar(personacliente obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        try {
-//            stat = conexion.prepareStatement(UPDATE);
-//           
-//            stat.setLong(1, obj.getIdpersona());
-//            
-//            stat.setLong(2, obj.getIdpersonacliente());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al modificar un registro.");
-//            }
-//           
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat);
-//        }
-//    }
-//
-//    @Override
-//    public void eliminar(personacliente obj) throws DAOException {
-//         PreparedStatement stat = null;
-//        try {
-//            stat = conexion.prepareStatement(DELETE);
-//            stat.setLong(1, obj.getIdpersonacliente());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al eliminar un registro.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat);
-//        }
-//    }
-//
-//
-//    @Override
-//    public List<personacliente> obtenertodos() throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        List<personacliente> lista = new ArrayList<>();
-//        try {
-//            stat = conexion.prepareStatement(GETALL);
-//            rs = stat.executeQuery();
-//            while (rs.next()) {
-//                lista.add(convertir(rs));
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return lista;
-//    }
-//
-//    @Override
-//    public personacliente obtener(Long id) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        personacliente p = null;
-//        try {
-//            stat = conexion.prepareStatement(GETONE);
-//            stat.setLong(1, id);
-//            rs = stat.executeQuery();
-//            if (rs.next()) {
-//                p = convertir(rs);
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return p;
-//    }
-//
-//    @Override
-//    public personacliente convertir(ResultSet rs) throws DAOException {
-//        personacliente per = null;
-//        try{
-//        Long idpersonacliente = rs.getLong("idpersonacliente");
-//        Long idpersona = rs.getLong("idpersona");
-//        boolean status = rs.getBoolean("status");
-//        per = new personacliente(idpersona);
-//        per.setStatus(status);
-//        per.setIdpersonacliente(idpersonacliente);
-//        }catch (SQLException ex){
-//            System.out.println(ex.getMessage());
-//            throw new DAOException("Error en SQL.", ex);
-//        }
-//        return per;
-//    }
-//
-//    @Override
-//    public void ingresarNuevo(personacliente cliente, persona per) throws DAOException {
-//        try{
-//            conexion.setAutoCommit(false);
-//            PersonaIMPL perSQL = new PersonaIMPL(conexion);
-//            cliente.setIdpersona(perSQL.insertar(per));
-//            insertar(cliente);
-//            conexion.commit();
-//        } catch (SQLException ex) {
-//            try {
-//                conexion.rollback();
-//            } catch (SQLException ex1) {
-//                throw new DAOException("Error en transaccion.", ex1);
-//            }
-//            throw new DAOException("Error en SQL.", ex);
-//        } 
-//    }
-//
-//
-//    
+    @Override
+    public void ingresarNuevo(Personacliente cliente, Persona per) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -11,6 +11,6 @@ import farmacia.jdbc.modelado.boleta;
  *
  * @author fecyp
  */
-public interface boletaDAO  extends DAO<boleta, Long>{
+public interface boletaDAO extends DAO<boleta, Long>{
     
 }

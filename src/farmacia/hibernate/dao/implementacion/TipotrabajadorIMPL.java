@@ -1,200 +1,122 @@
 package farmacia.hibernate.dao.implementacion;
 
+import farmacia.hibernate.dao.DAOException;
 import farmacia.hibernate.dao.TipotrabajadorDAO;
 import farmacia.hibernate.modelo.Tipotrabajador;
+import farmacia.hibernate.util.NewHibernateUtil;
+import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class TipotrabajadorIMPL implements TipotrabajadorDAO {
 
-    @Override
-    public Integer insertar(Tipotrabajador obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private SessionFactory sessionFac;
+    private Transaction tx;
+
+    public TipotrabajadorIMPL(SessionFactory sessionFac) {
+        this.sessionFac = this.sessionFac;
     }
 
     @Override
-    public void modificar(Tipotrabajador obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer insertar(Tipotrabajador obj) throws DAOException {
+        Integer id = null;
+        Session ses = null;
+        try {
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            id = (Integer) ses.save(obj);
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            tx.rollback();
+            throw new DAOException("Error en transaccion", ex);
+        } finally {
+            ses.close();
+            sessionFac.close();
+        }
+        return id;
+    }
+
+    @Override
+    public void modificar(Tipotrabajador obj) throws DAOException {
+        Session ses = null;
+        try {
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex) {
+            tx.rollback();
+            throw new DAOException("Error en transaccion", ex);
+        } finally {
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public void eliminar(Tipotrabajador obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        try {
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            obj.setStatus(false);
+            tx = ses.beginTransaction();
+            ses.update(obj);
+            tx.commit();
+        } catch (HibernateException ex) {
+            tx.rollback();
+            throw new DAOException("Error en transaccion", ex);
+        } finally {
+            ses.close();
+            sessionFac.close();
+        }
     }
 
     @Override
     public List<Tipotrabajador> obtenertodos() throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Tipotrabajador> lista = new ArrayList<>();
+        Session ses = null;
+        try {
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            tx = ses.beginTransaction();
+            lista = ses.createQuery("from Tipotrabajador where status = 1").list();
+            tx.commit();
+        } catch (HibernateException ex) {
+            tx.rollback();
+            throw new DAOException("Error en transaccion", ex);
+        } finally {
+            ses.close();
+            sessionFac.close();
+        }
+        return lista;
     }
 
     @Override
     public Tipotrabajador obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Session ses = null;
+        Tipotrabajador obj = null;
+        try{
+            sessionFac = NewHibernateUtil.getSessionFactory();
+            ses = sessionFac.openSession();
+            ses.beginTransaction();
+            obj = (Tipotrabajador) ses.get(Tipotrabajador.class, id);
+            ses.getTransaction().commit();
+        } catch (HibernateException ex){
+            if (ses.getTransaction().isActive()){
+                ses.getTransaction().rollback();
+            }
+            throw new DAOException("Error en transaccion",ex);
+        } finally{
+            ses.close();
+        }
+        
+        return obj;
     }
-
-//    private Connection conexion;
-//
-//    private final String INSERT = "INSERT INTO tipotrabajador(nombretipotrabajador, accederventas, accederproductos, accederclientes, accederconsultas, accederempleados, accedertipousuario, "
-//            + "accedercambioclave, accederanulaciones, accedereliminarproducto, accedereliminarcliente, accedereliminarempleado, accedereliminartipoempleado, status ) "
-//            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-//    private final String UPDATE = "UPDATE tipotrabajador SET nombretipotrabajador = ?, accederventas = ?, accederproductos = ?, accederclientes = ?, accederconsultas = ?, accederempleados = ?, accedertipousuario = ?, "
-//            + "accedercambioclave = ?, accederanulaciones = ?, accedereliminarproducto = ?, accedereliminarcliente = ?, accedereliminarempleado = ?, accedereliminartipoempleado = ?, status = ? where idtipotrabajador=?";
-//    private final String DELETE = "UPDATE tipotrabajador SET status = 0 WHERE idtipotrabajador = ?";
-//    private final String GETALL = "SELECT * FROM tipotrabajador WHERE status = 1";
-//    private final String GETONE = "SELECT * FROM tipotrabajador WHERE idtipotrabajador = ?";
-//
-//    public TipotrabajadorIMPL(Connection conexion) {
-//        this.conexion = conexion;
-//    }
-//
-//    @Override
-//    public Long insertar(tipotrabajador obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        try {
-//            stat = conexion.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
-//            stat.setString(1, obj.getNombretipotrabajador());
-//            stat.setBoolean(2, obj.isAccederventas());
-//            stat.setBoolean(3, obj.isAccederproductos());
-//            stat.setBoolean(4, obj.isAccederclientes());
-//            stat.setBoolean(5, obj.isAccederconsultas());
-//            stat.setBoolean(6, obj.isAccedereliminarempleado());
-//            stat.setBoolean(7, obj.isAccedertipousuario());
-//            stat.setBoolean(8, obj.isAccedercambioclave());
-//            stat.setBoolean(9, obj.isAccederanulaciones());
-//            stat.setBoolean(10, obj.isAccedereliminarproducto());
-//            stat.setBoolean(11, obj.isAccedereliminarcliente());
-//            stat.setBoolean(12, obj.isAccedereliminarempleado());
-//            stat.setBoolean(13, obj.isAccedereliminartipoempleado());
-//            stat.setBoolean(14, obj.isStatus());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al ingresar un registro.");
-//            }
-//
-//            rs = stat.getGeneratedKeys();
-//            if (rs.next()) {
-//                obj.setIdtipotrabajador(rs.getLong(1));
-//            } else {
-//                throw new DAOException("Error al ingresar un registro. No se puede asignar ID.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return obj.getIdtipotrabajador();
-//    }
-//
-//    @Override
-//    public void modificar(tipotrabajador obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        try {
-//            stat = conexion.prepareStatement(UPDATE);
-//            stat.setString(1, obj.getNombretipotrabajador());
-//            stat.setBoolean(2, obj.isAccederventas());
-//            stat.setBoolean(3, obj.isAccederproductos());
-//            stat.setBoolean(4, obj.isAccederclientes());
-//            stat.setBoolean(5, obj.isAccederconsultas());
-//            stat.setBoolean(6, obj.isAccedereliminarempleado());
-//            stat.setBoolean(7, obj.isAccedertipousuario());
-//            stat.setBoolean(8, obj.isAccedercambioclave());
-//            stat.setBoolean(9, obj.isAccederanulaciones());
-//            stat.setBoolean(10, obj.isAccedereliminarproducto());
-//            stat.setBoolean(11, obj.isAccedereliminarcliente());
-//            stat.setBoolean(12, obj.isAccedereliminarempleado());
-//            stat.setBoolean(13, obj.isAccedereliminartipoempleado());
-//            stat.setBoolean(14, obj.isStatus());
-//            stat.setLong(15, obj.getIdtipotrabajador());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al modificar un registro.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL."+ ex.getMessage());
-//        } finally {
-//            UtilIMPL.cerrar(stat);
-//        }
-//    }
-//
-//    @Override
-//    public void eliminar(tipotrabajador obj) throws DAOException {
-//        PreparedStatement stat = null;
-//        try {
-//            stat = conexion.prepareStatement(DELETE);
-//            stat.setLong(1, obj.getIdtipotrabajador());
-//            if (stat.executeUpdate() == 0) {
-//                throw new DAOException("Error al eliminar un registro.");
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat);
-//        }
-//    }
-//
-//    @Override
-//    public List<tipotrabajador> obtenertodos() throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        List<tipotrabajador> lista = new ArrayList<>();
-//        try {
-//            stat = conexion.prepareStatement(GETALL);
-//            rs = stat.executeQuery();
-//            while (rs.next()) {
-//                lista.add(convertir(rs));
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return lista;
-//    }
-//
-//    @Override
-//    public tipotrabajador obtener(Long id) throws DAOException {
-//        PreparedStatement stat = null;
-//        ResultSet rs = null;
-//        tipotrabajador tipo = null;
-//        try {
-//            stat = conexion.prepareStatement(GETONE);
-//            stat.setLong(1, id);
-//            rs = stat.executeQuery();
-//            if (rs.next()) {
-//                tipo = convertir(rs);
-//            }
-//        } catch (SQLException ex) {
-//            throw new DAOException("Error en SQL.", ex);
-//        } finally {
-//            UtilIMPL.cerrar(stat, rs);
-//        }
-//        return tipo;
-//    }
-//
-//    @Override
-//    public tipotrabajador convertir(ResultSet rs) throws DAOException {
-//        tipotrabajador tipo = null;
-//        try{
-//        String nombretipotrabajador = rs.getString("nombretipotrabajador");//32 NULO
-//        boolean accederventas = rs.getBoolean("accederventas");
-//        boolean accederproductos = rs.getBoolean("accederproductos");
-//        boolean accederclientes = rs.getBoolean("accederclientes");
-//        boolean accederconsultas = rs.getBoolean("accederconsultas");
-//        boolean accederempleados = rs.getBoolean("accederempleados");
-//        boolean accedertipousuario = rs.getBoolean("accedertipousuario");
-//        boolean accedercambioclave = rs.getBoolean("accedercambioclave");
-//        boolean accederanulaciones = rs.getBoolean("accederanulaciones");
-//        boolean accedereliminarproducto = rs.getBoolean("accedereliminarproducto");
-//        boolean accedereliminarcliente = rs.getBoolean("accedereliminarcliente");
-//        boolean accedereliminarempleado = rs.getBoolean("accedereliminarempleado");
-//        boolean accedereliminartipoempleado = rs.getBoolean("accedereliminartipoempleado");
-//
-//        tipo = new tipotrabajador(nombretipotrabajador, accederventas, accederproductos, accederclientes, accederconsultas, accederempleados, accedertipousuario, accedercambioclave, accederanulaciones, accedereliminarproducto, accedereliminarcliente, accedereliminarempleado, accedereliminartipoempleado);
-//        tipo.setIdtipotrabajador(rs.getLong("idtipotrabajador"));
-//        tipo.setStatus(rs.getBoolean("status"));
-//        }catch (SQLException ex){
-//            System.out.println(ex.getMessage());
-//            throw new DAOException("Error en SQL.", ex);
-//        }
-//        return tipo;
-//    }
-//
 }
