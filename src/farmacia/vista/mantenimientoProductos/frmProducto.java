@@ -6,8 +6,10 @@
 package farmacia.vista.mantenimientoProductos;
 
 import farmacia.diseño.estrategias.EstrategiaIFrame;
+import farmacia.diseño.observador.Observador;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
+import farmacia.jdbc.dao.mysql.productoSQL;
 import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
@@ -30,7 +32,7 @@ import javax.swing.RowFilter;
  *
  * @author fecyp
  */
-public class frmProducto extends EstrategiaIFrame implements ActionListener, KeyListener {
+public class frmProducto extends EstrategiaIFrame implements ActionListener, KeyListener, Observador{
 
     public ListadoProductos pane1;
     public RegistrarProductos pane2;
@@ -541,6 +543,28 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
             }
         }
         );
+    }
+
+    @Override
+    public void update(Object o,Long cod) {
+      DAOManagerSQL manager = null;
+        try {
+            manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
+            producto p = (producto)o;
+            p.setIdproducto(cod);
+            p.setStatus(true);
+            manager.getProductoDAO().modificar(p);
+            manager.cerrarConexion();
+            pane1.actualizartabla();
+            pestañas.setEnabledAt(0, true);
+            pestañas.setSelectedIndex(0);
+            deshabilitar();
+            pane1.control = true;
+            pane1.txtBuscar.requestFocus();
+            action = "nothing";
+        } catch (DAOException ex) {
+            System.out.println(" error");
+        }
     }
 
 }

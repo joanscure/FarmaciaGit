@@ -341,6 +341,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
         } else if (source == iventas) {
             if (!visibleventas) {
                 frmventas = new frmVentas();
+                //frmventas.enlazarObservador(frmproducto);
                 desktopPane.add(frmventas);
                 frmventas.toFront();
                 frmventas.setVisible(true);

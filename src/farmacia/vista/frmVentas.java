@@ -12,6 +12,8 @@ import farmacia.calculos.NumComprobante;
 import farmacia.calculos.calculosTotales;
 import farmacia.calculos.configuracionImagenes;
 import farmacia.calculos.configuracionesTabla;
+import farmacia.diseño.observador.Observador;
+import farmacia.diseño.observador.SujetoObservable;
 import farmacia.jdbc.dao.DAOException;
 import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.boleta;
@@ -20,6 +22,7 @@ import farmacia.jdbc.modelado.boletadetalle;
 import farmacia.jdbc.modelado.factura;
 import farmacia.jdbc.modelado.facturacabecera;
 import farmacia.jdbc.modelado.facturadetalle;
+import farmacia.jdbc.modelado.producto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -48,8 +51,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author fecyp
  */
-public class frmVentas extends JInternalFrame implements ActionListener, KeyListener, MouseListener {
-
+public class frmVentas extends JInternalFrame implements ActionListener, KeyListener, MouseListener, SujetoObservable{
+    //Array de observadores
+    private ArrayList<Observador> observadores;
     //paneles
     JPanel paneprincipal, paneventa, panebotones;
     //datos venta
@@ -101,7 +105,8 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
 
     public frmVentas() {
         super("Formulario Ventas", false, true, false, true);
-
+        
+        observadores = new ArrayList<Observador>();
         iniciar_componentes();
         changeFont();
         changeColor();
@@ -330,12 +335,14 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                     index = i;
                 }
 
-            }
+            }            
             if(index==-1){
                 return;
             }
             Object[] lista = {txtcodigo.getText(), txtnombreProducto.getText(), frmvistaproducto.tabla.getValueAt(index, 2),
                 txtcantidad.getText(), txtprecio.getText(), txttotal.getText()};
+            //aqui actualiza el stock en fmrProductos
+            notificar();
             modelo.addRow(lista);
             bnagregar.setEnabled(false);
             txtcodigo.requestFocus();
@@ -348,7 +355,7 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
             txtsubtotal.setText(calculosTotales.sumasubtotal(tabla, 5) + "");
             txtigv.setText(calculosTotales.sumaigv(tabla, 5) + "");
             txttotalPago.setText(calculosTotales.sumatotal(Double.parseDouble(txtsubtotal.getText()), Double.parseDouble(txtigv.getText()), Double.parseDouble(txtdescuento.getText())) + "");
-
+            
         } else if (source == bnquitar) {
             int index = tabla.getSelectedRow();
             modelo.removeRow(index);
@@ -469,7 +476,6 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
                 Logger.getLogger(frmVentas.class.getName()).log(Level.SEVERE, null, ex);
             }
             mostrarcorrelativo();
-
         } else if (source == txtcodigo) {
             if (txtnombreProducto.getText().isEmpty()) {
                 if (txtcodigo.getText().isEmpty()) {
@@ -483,7 +489,6 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         } else if (source == txtcantidad) {
             bnagregar.doClick();
         }
-        
 
     }
 
@@ -1103,4 +1108,38 @@ public class frmVentas extends JInternalFrame implements ActionListener, KeyList
         }
     }
 
+    @Override
+    public void notificar() {
+        for (Observador o: observadores) {
+          //  o.update(buscarProducto(txtcodigo.getText()),Long.parseLong(txtcodigo.getText()));
+        }
+    }
+    
+    public void enlazarObservador(Observador o){observadores.add(o);}
+    
+   /* public producto buscarProducto(String cod){
+        //int ind = frmvistaproducto.tabla.getSelectedRow();
+        try{
+            frmvistaproducto.actualizartabla();
+            }catch (Exception ex){
+            JOptionPane.showMessageDialog(null, "No se pudo actualizar la tabla");
+        }
+        producto p = null;
+        for (int i = 0; i < frmvistaproducto.tabla.getRowCount(); i++) {
+                Long idaux=new Long((long) frmvistaproducto.tabla.getValueAt(i, 0));
+                if (Long.compare(Long.parseLong(cod), idaux ) == 0) {
+                    int stockNuevo = ((int)frmvistaproducto.tabla.getValueAt(0, 7))- Integer.parseInt(txtcantidad.getText());
+                    p = new producto(frmvistaproducto.tabla.getValueAt(0, 1).toString(),
+                    frmvistaproducto.tabla.getValueAt(0, 2).toString(),
+                    frmvistaproducto.tabla.getValueAt(0, 3).toString(),
+                    (double)frmvistaproducto.tabla.getValueAt(0, 4),
+                    (double)frmvistaproducto.tabla.getValueAt(0, 5),
+                    (double)frmvistaproducto.tabla.getValueAt(0, 6),
+                    stockNuevo);
+                    p.setIdproducto(new Long(cod));
+            }
+        }
+        return p;
+    }
+*/
 }
