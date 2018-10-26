@@ -50,9 +50,9 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
     boolean[] permiso = new boolean[12];
     public boolean controlpriincipal = true;
     public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false, visibleventas = false, visibleconsulta;
-
+    
     public frmprincipal(frmusuariologin login) throws DAOException {
-
+        
         this.login = login;
 //        this.setResizable(false);
         inciar_componentes();
@@ -266,7 +266,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
                 try {
                     frmclientes = new frmClientes("Cliente");
                     desktopPane.add(frmclientes);
-
+                    
                     frmclientes.toFront();
                     frmclientes.setVisible(true);
                     frmclientes.permisoeliminar = permiso[9];
@@ -299,6 +299,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
             if (!visibleproductos) {
                 try {
                     frmproducto = new frmProducto("Producto");
+                    //frmventas.enlazarObservador(frmproducto);
                     desktopPane.add(frmproducto);
                     frmproducto.toFront();
                     frmproducto.setVisible(true);
@@ -339,7 +340,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
         } else if (source == iventas) {
             if (!visibleventas) {
                 frmventas = new frmVentas();
-                frmventas.enlazarObservador(frmproducto);//enlazamos un observador
+                frmventas.enlazarObservador(frmproducto);
                 desktopPane.add(frmventas);
                 frmventas.toFront();
                 frmventas.setVisible(true);

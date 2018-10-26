@@ -12,6 +12,7 @@ import farmacia.jdbc.dao.mysql.DAOManagerSQL;
 import farmacia.jdbc.modelado.producto;
 import farmacia.vista.frmpermiso;
 import farmacia.vista.frmprincipal;
+import farmacia.vista.frmVentas;
 import static farmacia.vista.frmprincipal.visibleproductos;
 import static farmacia.vista.mantenimientoProductos.ListadoProductos.tabla;
 import java.awt.BorderLayout;
@@ -552,10 +553,15 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
       DAOManagerSQL manager = null;
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
-            for (Object object : pro) {
-                System.out.println("tamaño : "+pro.size());
-                producto p=((producto)pro.get(0));
-                p.setStatus(true);
+            //for (Object object : pro) {
+            //    System.out.println("tamaño : "+pro.size());
+                //producto p=((producto)pro.get());
+            //    ((producto)(object)).setStatus(true);
+            //    manager.getProductoDAO().cambiarStock((producto)(object));
+            //}
+            for (int i = 0; i < pro.size(); i++) {
+                producto p = ((producto)pro.get(i));
+                System.out.println("id: "+p.getIdproducto());
                 manager.getProductoDAO().cambiarStock(p);
             }
             manager.cerrarConexion();
