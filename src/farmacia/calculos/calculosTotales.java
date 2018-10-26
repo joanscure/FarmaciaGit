@@ -21,6 +21,8 @@ public class calculosTotales {
             suma+=Double.parseDouble((String) tabla.getValueAt(i, index));
             
         }
+      double suma2=suma/1.18;
+      suma=suma-suma2;
         BigDecimal bd = new BigDecimal(suma);
                 bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
@@ -32,6 +34,7 @@ public class calculosTotales {
             suma+=Double.parseDouble((String) tabla.getValueAt(i, index));
             
         }
+        suma=suma/1.18;
         BigDecimal bd = new BigDecimal(suma);
                 bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();

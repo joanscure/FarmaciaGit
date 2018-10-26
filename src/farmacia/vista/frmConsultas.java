@@ -37,6 +37,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -126,10 +127,16 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
             modeloconsulta.removeRow(i);
         }
         DAOManagerSQL manager = null;
+        Date min=fechainicisl.getDate();
+        Date max=fechafinal.getDate();
+        if(min.compareTo(max)>0)
+        {
+            JOptionPane.showMessageDialog(null, "no se puede buscar en ese rango","error",JOptionPane.ERROR_MESSAGE);
+        }
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
 
-            List<boletacabecera> lista = manager.getBoletaCabeceraDAO().obtenertodos();
+            List<boletacabecera> lista = manager.getBoletaCabeceraDAO().obtenerportiempo(min, max);
 
             for (int i = 0; i < lista.size(); i++) {
                 personacliente cliente = manager.getPersonaClienteDAO().obtener(lista.get(i).getIdpersonacliente());
@@ -164,6 +171,14 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
                
             }
             pack();
+        }
+        else if(source==bnbuscar)
+        {
+            try {
+                actualizarTablacabecera();
+            } catch (DAOException ex) {
+                System.out.println("error");
+            }
         }
     }
 
@@ -256,7 +271,7 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
         paneNorth.add(pane_buscador, BorderLayout.NORTH);
         paneNorth.add(getTablaconsulta(), BorderLayout.CENTER);
         paneNorth.add(contadorconsulta, BorderLayout.SOUTH);
-        paneNorth.setPreferredSize(new Dimension(850, 300));
+        paneNorth.setPreferredSize(new Dimension(850, 400));
 
         setLayout(new FlowLayout());
         paneNorth.setBorder(BorderFactory.createCompoundBorder(
@@ -276,16 +291,17 @@ public class frmConsultas extends JInternalFrame implements ActionListener, Mous
         contadordetalle = new JLabel("Existen 0 usuarios");
         paneSouth.add(gettablaDetalle(), BorderLayout.CENTER);
         paneSouth.add(contadordetalle, BorderLayout.SOUTH);
-        paneSouth.setPreferredSize(new Dimension(850, 200));
+        paneSouth.setPreferredSize(new Dimension(850, 400));
 
         setLayout(new FlowLayout());
         paneSouth.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(20, 20, 20, 20),
-                BorderFactory.createTitledBorder("detalle")));
+                BorderFactory.createTitledBorder("Detalles")));
 
         bnbuscar.addActionListener(this);
         bndetalle.addActionListener(this);
         tablaconsulta.addMouseListener(this);
+        
         setLayout(new GridLayout(1, 1));
         principal = new JPanel(new BorderLayout());
         principal.add(paneNorth, BorderLayout.NORTH);

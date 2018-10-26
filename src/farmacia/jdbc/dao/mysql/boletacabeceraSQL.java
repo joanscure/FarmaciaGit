@@ -22,6 +22,7 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
     private final String DELETE = "UPDATE boletacabecera SET status = 0 WHERE idboletacabecera = ?";
     private final String GETALL = "SELECT * FROM boletacabecera WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM boletacabecera WHERE idboletacabecera = ? AND status = 1";
+    private final String GETALLTIME="SELECT * FROM boletacabecera bc WHERE bc.fechaemisionboleta >=? AND bc.fechaemisionboleta <=? AND status=1 ORDER by fechaemisionboleta";
 
     public boletacabeceraSQL(Connection conexion) {
         this.conexion = conexion;
@@ -162,6 +163,25 @@ public class boletacabeceraSQL implements boletacabeceraDAO {
         }
         return b;
 
+    }
+     public List<boletacabecera> obtenerportiempo(java.util.Date min,java.util.Date max) throws DAOException {
+        PreparedStatement stat = null;
+        ResultSet rs = null;
+        List<boletacabecera> lista = new ArrayList<>();
+        try {
+            stat = conexion.prepareStatement(GETALLTIME);
+            stat.setDate(1,new Date(min.getTime()));
+            stat.setDate(2, new Date(max.getTime()));
+            rs = stat.executeQuery();
+            while (rs.next()) {
+                lista.add(convertir(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return lista;
     }
 
 }
