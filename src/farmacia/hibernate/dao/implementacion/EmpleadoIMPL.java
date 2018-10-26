@@ -120,17 +120,48 @@ public class EmpleadoIMPL implements EmpleadoDAO {
 
     @Override
     public void insertarNuevo(Persona per, Empleado emp) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            
+            iniciarOperacion();
+            TipotrabajadorIMPL trabajador = new TipotrabajadorIMPL(sesion);
+            PersonaIMPL persona = new PersonaIMPL(sesion);
+            
+            if(trabajador.obtener(emp.getTipotrabajador().getIdtipotrabajador()) == null){
+                throw new DAOException("No existe clave foranea");
+            }
+            
+            Integer idPersona = persona.insertar(per);
+            emp.getPersona().setIdpersona(idPersona);
+            insertar(emp);
+            
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
+        }
     }
 
     @Override
-    public void actualizarpassword(Empleado emp) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void actualizarpassword(Empleado obj) throws DAOException {
+        try {
+            iniciarOperacion();
+            sesion.update(obj);
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
+        }
     }
 
     @Override
-    public String obtenerOcupacion(Empleado emp) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String obtenerOcupacion(Empleado obj) throws DAOException {
+        return obj.getTipotrabajador().getNombretipotrabajador();
     }
 
 }

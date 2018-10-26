@@ -118,14 +118,40 @@ public class FacturadetalleIMPL implements FacturadetalleDAO {
         throw new DAOException("Error en transferencia.", ex);
     }
 
+    
     @Override
     public void eliminarDetallesFactura(Integer idFacturacabecera) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            
+            iniciarOperacion();
+            List<Facturadetalle> lista = obtenerDetallesFactura(idFacturacabecera);
+            for (Facturadetalle i : lista){
+                eliminar(obtener(i.getIdfacturadetalle()));
+            }
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
+        }
     }
 
     @Override
     public List<Facturadetalle> obtenerDetallesFactura(Integer idFacturacabecera) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Facturadetalle> lista = new ArrayList<>();
+        try {
+            iniciarOperacion();
+            lista = sesion.createQuery("from Facturadetalle where idFacturacabecera = "
+                    +"'"+idFacturacabecera+"' and status = 1").list();
+            tx.commit();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
+        }
+        return lista;
     }
 
 }
