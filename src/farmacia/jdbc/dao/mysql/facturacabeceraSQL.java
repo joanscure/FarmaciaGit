@@ -22,6 +22,7 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
     private final String DELETE = "UPDATE facturacabecera SET status = 0 WHERE idfacturacabecera = ?";
     private final String GETALL = "SELECT * FROM facturacabecera WHERE status = 1";//solo obtiene los activos 
     private final String GETONE = "SELECT * FROM facturacabecera WHERE idfacturacabecera = ?";
+     private final String GETALLTIME="SELECT * FROM boletacabecera bc WHERE bc.fechaemisionboleta >=? AND bc.fechaemisionboleta <=? AND status=1 ORDER by fechaemisionboleta";
 
     public facturacabeceraSQL(Connection conexion) {
         this.conexion = conexion;
@@ -156,6 +157,27 @@ public class facturacabeceraSQL implements facturacabeceraDAO {
             throw new DAOException("Error en SQL.", ex);
         }
         return f;
+    }
+
+    @Override
+    public List<facturacabecera> obtenerportiempo(java.util.Date min, java.util.Date max) throws DAOException {
+       PreparedStatement stat = null;
+        ResultSet rs = null;
+        List<facturacabecera> lista = new ArrayList<>();
+        try {
+            stat = conexion.prepareStatement(GETALLTIME);
+            stat.setDate(1,new Date(min.getTime()));
+            stat.setDate(2, new Date(max.getTime()));
+            rs = stat.executeQuery();
+            while (rs.next()) {
+                lista.add(convertir(rs));
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat, rs);
+        }
+        return lista;
     }
 
 }
