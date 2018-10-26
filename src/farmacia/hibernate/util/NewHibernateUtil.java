@@ -9,6 +9,7 @@ package farmacia.hibernate.util;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
@@ -52,4 +53,6 @@ public class NewHibernateUtil {
     public static void cerrar(SessionFactory sessionFactory){
         sessionFactory.close();
     }
+    
+    
 }

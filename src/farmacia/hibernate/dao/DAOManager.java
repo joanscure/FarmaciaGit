@@ -1,38 +1,37 @@
 package farmacia.hibernate.dao;
 
-import farmacia.jdbc.dao.*;
 
 public interface DAOManager {
 
-    boletacabeceraDAO getBoletaCabeceraDAO();
+    BoletacabeceraDAO getBoletaCabeceraDAO();
 
-    boletadetalleDAO getBoletaDetalleDAO();
+    BoletadetalleDAO getBoletaDetalleDAO();
 
-    descuentoDAO getDescuentoDAO();
+    DescuentoDAO getDescuentoDAO();
 
-    empleadoDAO getEmpleadoDAO();
+    EmpleadoDAO getEmpleadoDAO();
 
-    empresaDAO getEmpresaDAO();
+    EmpresaDAO getEmpresaDAO();
 
-    empresaclienteDAO getEmpresaClienteDAO();
+    EmpresaclienteDAO getEmpresaClienteDAO();
 
-    facturacabeceraDAO getFacturaCabeceraDAO();
+    FacturacabeceraDAO getFacturaCabeceraDAO();
 
-    facturadetalleDAO getFActuraDetalleDAO();
+    FacturadetalleDAO getFActuraDetalleDAO();
 
-    personaDAO getPersonaDAO();
+    PersonaDAO getPersonaDAO();
 
-    personaclienteDAO getPersonaClienteDAO();
+    PersonaclienteDAO getPersonaClienteDAO();
 
-    productoDAO getProductoDAO();
+    ProductoDAO getProductoDAO();
 
-    productodescuentoDAO getProductoDescuentoDAO();
+    ProductodescuentoDAO getProductoDescuentoDAO();
 
-    tipotrabajadorDAO getTipoTrabajadorDAO();
+    TipotrabajadorDAO getTipoTrabajadorDAO();
     
-    boletaDAO getBoleta();
+    BoletaDAO getBoleta();
     
-    facturaDAO getFactura();
+    FacturaDAO getFactura();
 
 
 }

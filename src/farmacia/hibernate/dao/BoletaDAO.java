@@ -5,12 +5,14 @@
  */
 package farmacia.hibernate.dao;
 
+import farmacia.hibernate.modelo.Boleta;
 import farmacia.jdbc.dao.*;
-import farmacia.jdbc.modelado.boletadetalle;
-import farmacia.jdbc.modelado.factura;
-import java.util.List;
+import farmacia.jdbc.modelado.boleta;
 
-public interface facturaDAO extends DAO<factura, Long> {
-
+/**
+ *
+ * @author fecyp
+ */
+public interface BoletaDAO  extends DAO<Boleta, Integer>{
     
 }
