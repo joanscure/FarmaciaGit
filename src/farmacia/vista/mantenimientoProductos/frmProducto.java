@@ -553,6 +553,7 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
         try {
             manager = new DAOManagerSQL("localhost", "basefarmacia", "root", "");
             for (Object object : pro) {
+                System.out.println("tamaño : "+pro.size());
                 producto p=((producto)pro.get(0));
                 p.setStatus(true);
                 manager.getProductoDAO().cambiarStock(p);
