@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 public class PersonaIMPL implements PersonaDAO {
@@ -18,7 +17,7 @@ public class PersonaIMPL implements PersonaDAO {
     private Session sesion;
     private Transaction tx;
 
-    public PersonaIMPL(Session session) {
+    public PersonaIMPL(Session sesion) {
         this.sesion = sesion;
     }
 
@@ -123,9 +122,10 @@ public class PersonaIMPL implements PersonaDAO {
     public static void main(String[] args) {
         PersonaIMPL ap = new PersonaIMPL();
         Persona p = new Persona("Carlos", "Beblera", "Chigon", "12345678", true);
+        p.setPersonaedad(15);
         try {
-            
-            System.out.println("" + ap.obtener(15));
+            System.out.println(ap.insertar(p).toString());
+//            System.out.println("" + ap.obtener(15));
 //            ap.insertar(p);
 //            ap.eliminar(ap.obtener(1));
 //            List<Persona> lista = ap.obtenertodos();

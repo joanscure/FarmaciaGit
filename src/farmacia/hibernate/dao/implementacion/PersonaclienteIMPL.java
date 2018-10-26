@@ -12,12 +12,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class PersonaclienteIMPL implements PersonaclienteDAO{
+public class PersonaclienteIMPL implements PersonaclienteDAO {
 
     private Session sesion;
     private Transaction tx;
 
-    public PersonaclienteIMPL(Session session) {
+    public PersonaclienteIMPL(Session sesion) {
         this.sesion = sesion;
     }
 
@@ -121,39 +121,33 @@ public class PersonaclienteIMPL implements PersonaclienteDAO{
 
     @Override
     public Integer ingresarNuevo(Personacliente cliente, Persona per) throws DAOException {
-        Integer id = null; 
+        Integer id = null;
         try {
 
             iniciarOperacion();
-            PersonaIMPL persona = new PersonaIMPL();
-
-            Integer idPersona = persona.insertar(per);
-            
-            cliente.getPersona().setIdpersona(idPersona);
-
-            id = insertar(cliente);
-
+            Integer idPersona = (Integer) sesion.save(per);
+            cliente.setIdpersonacliente(idPersona);
+            id = (Integer) sesion.save(cliente);
             tx.commit();
 
         } catch (HibernateException ex) {
             manejarExcepcion(ex);
 
         } finally {
-            sesion.close();
+                sesion.close();
         }
         return id;
     }
-    
+
     public static void main(String[] args) throws DAOException {
-        DAOManager man = new DAOManagerIMPL(); 
-        
+        DAOManager man = new DAOManagerIMPL();
+
         Persona per = new Persona("jose", "miguel", "summer", "12345678", true);
-        
-        
+
         Personacliente cliente = new Personacliente(per, true);
-        Integer idCliente = man.getPersonaClienteDAO().insertar(cliente);
+        Integer idCliente = man.getPersonaClienteDAO().ingresarNuevo(cliente, per);
         cliente.setIdpersonacliente(idCliente);
-        System.out.println("asdasda");
+        System.out.println(idCliente.toString());
     }
 
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 public class EmpresaclienteIMPL implements EmpresaclienteDAO {
@@ -17,7 +16,7 @@ public class EmpresaclienteIMPL implements EmpresaclienteDAO {
     private Session sesion;
     private Transaction tx;
 
-    public EmpresaclienteIMPL(Session session) {
+    public EmpresaclienteIMPL(Session sesion) {
         this.sesion = sesion;
     }
 
@@ -120,26 +119,27 @@ public class EmpresaclienteIMPL implements EmpresaclienteDAO {
     }
 
     @Override
-    public void insertarNuevo(Empresacliente cliente, Empresa emp) throws DAOException {
+    public Integer insertarNuevo(Empresacliente cliente, Empresa emp) throws DAOException {
+        Integer id = null;
         try {
-
             iniciarOperacion();
-            EmpresaIMPL empresa = new EmpresaIMPL(sesion);
-
-            Integer idEmpresa = empresa.insertar(emp);
-
-            cliente.getEmpresa().setIdempresa(idEmpresa);
-
-            insertar(cliente);
-
+            Integer idEmpresa = (Integer) sesion.save(emp);
+            cliente.setIdempresacliente(idEmpresa);
+            id = (Integer) sesion.save(cliente);
             tx.commit();
-
         } catch (HibernateException ex) {
             manejarExcepcion(ex);
-
         } finally {
             sesion.close();
         }
+        return id;
+    }
+    
+    public static void main(String[] args) throws DAOException {
+        Empresa emp = new Empresa("123456", "2312321", "3123123", "2131231", true);
+        Empresacliente ciente = new Empresacliente(emp, true);
+        EmpresaclienteIMPL ap = new EmpresaclienteIMPL();
+        System.out.println(ap.insertarNuevo(ciente, emp));
     }
 
 }
