@@ -23,7 +23,7 @@ public class productoSQL implements productoDAO {
     private final String DELETE = "UPDATE producto SET status = 0 WHERE idproducto = ?";
     private final String GETALL = "SELECT * FROM producto WHERE status = 1";
     private final String GETONE = "SELECT * FROM producto WHERE idproducto = ? AND status = 1";
-
+    private final String UPDATESTOCK="UPDATE producto set stock=? where idproducto=?";
     public productoSQL(Connection conexion) {
         this.conexion = conexion;
     }
@@ -160,6 +160,23 @@ public class productoSQL implements productoDAO {
         }
         return pro;
 
+    }
+
+    @Override
+    public void cambiarStock(producto obj) throws DAOException {
+          PreparedStatement stat = null;
+        try {
+            stat = conexion.prepareStatement(UPDATESTOCK);
+            stat.setInt(1, obj.getStock());
+            stat.setLong(2, obj.getIdproducto());
+            if (stat.executeUpdate() == 0) {
+                throw new DAOException("Error al modificar un registro.");
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Error en SQL.", ex);
+        } finally {
+            UtilSQL.cerrar(stat);
+        }
     }
 
 }

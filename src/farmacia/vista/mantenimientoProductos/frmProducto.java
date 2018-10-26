@@ -309,6 +309,8 @@ public class frmProducto extends EstrategiaIFrame implements ActionListener, Key
             pane1.control = true;
             pane1.txtBuscar.requestFocus();
             action = "nothing";
+            jbEliminar.setEnabled(false);
+            jbModificar.setEnabled(false);
         } catch (DAOException ex) {
             System.out.println(" errorr");
         }
