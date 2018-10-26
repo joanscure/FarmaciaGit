@@ -328,6 +328,8 @@ public class frmTipousuario extends EstrategiaIFrame implements ActionListener, 
             pane1.control = true;
             pane1.txtBuscar.requestFocus();
             action = "nothing";
+            jbEliminar.setEnabled(false);
+            jbModificar.setEnabled(false);
         } catch (DAOException ex) {
             System.out.println(" error" + ex.getMessage());
 

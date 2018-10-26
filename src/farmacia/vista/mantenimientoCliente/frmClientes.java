@@ -303,6 +303,7 @@ public class frmClientes extends EstrategiaIFrame implements ActionListener, Key
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
+            action="nothing";
         } catch (DAOException ex) {
             System.out.println(" errorr");
 

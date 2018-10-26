@@ -373,6 +373,7 @@ public class frmEmpleados extends EstrategiaIFrame implements ActionListener, Ke
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
+            action="nothing";
         } catch (DAOException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }

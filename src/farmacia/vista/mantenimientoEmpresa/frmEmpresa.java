@@ -266,6 +266,7 @@ public class frmEmpresa extends EstrategiaIFrame implements ActionListener, KeyL
             deshabilitar();
             pestañas.setEnabledAt(0, true);
             pestañas.setSelectedIndex(0);
+            action="nothing";
         } catch (DAOException ex) {
             System.out.println(" errorr" + ex.getMessage());
 
