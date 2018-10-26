@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Facturadetalle" table="facturadetalle" catalog="basefarmacia" optimistic-lock="version">
+        <id name="idfacturadetalle" type="java.lang.Integer">
+            <column name="idfacturadetalle" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="facturacabecera" class="farmacia.hibernate.modelo.Facturacabecera" fetch="select">
+            <column name="idfacturacabecera" not-null="true" />
+        </many-to-one>
+        <many-to-one name="producto" class="farmacia.hibernate.modelo.Producto" fetch="select">
+            <column name="idproducto" not-null="true" />
+        </many-to-one>
+        <property name="cantidad" type="double">
+            <column name="cantidad" precision="5" not-null="true" />
+        </property>
+        <property name="subtotal" type="double">
+            <column name="subtotal" precision="5" not-null="true" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

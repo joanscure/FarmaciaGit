@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Producto" table="producto" catalog="basefarmacia" optimistic-lock="version">
+        <id name="idproducto" type="java.lang.Integer">
+            <column name="idproducto" />
+            <generator class="identity" />
+        </id>
+        <property name="nombreproducto" type="string">
+            <column name="nombreproducto" length="32" not-null="true" />
+        </property>
+        <property name="descripcionproducto" type="string">
+            <column name="descripcionproducto" length="128" not-null="true" />
+        </property>
+        <property name="dosisproducto" type="string">
+            <column name="dosisproducto" length="32" not-null="true" />
+        </property>
+        <property name="precioventa" type="double">
+            <column name="precioventa" precision="5" not-null="true" />
+        </property>
+        <property name="igv" type="double">
+            <column name="igv" precision="5" not-null="true" />
+        </property>
+        <property name="preciofinal" type="double">
+            <column name="preciofinal" precision="5" not-null="true" />
+        </property>
+        <property name="stock" type="int">
+            <column name="stock" not-null="true" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+        <set name="boletadetalles" table="boletadetalle" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idproducto" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Boletadetalle" />
+        </set>
+        <set name="productodescuentos" table="productodescuento" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idproducto" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Productodescuento" />
+        </set>
+        <set name="facturadetalles" table="facturadetalle" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idproducto" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Facturadetalle" />
+        </set>
+    </class>
+</hibernate-mapping>

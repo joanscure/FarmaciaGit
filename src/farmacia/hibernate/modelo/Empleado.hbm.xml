@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Empleado" table="empleado" catalog="basefarmacia" optimistic-lock="version">
+        <id name="idempleado" type="java.lang.Integer">
+            <column name="idempleado" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="persona" class="farmacia.hibernate.modelo.Persona" fetch="select">
+            <column name="idpersona" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tipotrabajador" class="farmacia.hibernate.modelo.Tipotrabajador" fetch="select">
+            <column name="idtipotrabajador" not-null="true" />
+        </many-to-one>
+        <property name="login" type="string">
+            <column name="login" length="32" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="32" not-null="true" />
+        </property>
+        <property name="fechaalta" type="date">
+            <column name="fechaalta" length="10" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+        <set name="facturacabeceras" table="facturacabecera" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idempleado" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Facturacabecera" />
+        </set>
+        <set name="boletacabeceras" table="boletacabecera" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idempleado" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Boletacabecera" />
+        </set>
+    </class>
+</hibernate-mapping>

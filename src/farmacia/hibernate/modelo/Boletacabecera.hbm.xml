@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Boletacabecera" table="boletacabecera" catalog="basefarmacia" optimistic-lock="version">
+        <id name="idboletacabecera" type="java.lang.Integer">
+            <column name="idboletacabecera" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="empleado" class="farmacia.hibernate.modelo.Empleado" fetch="select">
+            <column name="idempleado" not-null="true" />
+        </many-to-one>
+        <many-to-one name="personacliente" class="farmacia.hibernate.modelo.Personacliente" fetch="select">
+            <column name="idpersonacliente" not-null="true" />
+        </many-to-one>
+        <property name="correlativoboleta" type="string">
+            <column name="correlativoboleta" length="4" not-null="true" />
+        </property>
+        <property name="numeroboleta" type="string">
+            <column name="numeroboleta" length="8" not-null="true" />
+        </property>
+        <property name="fechaemisionboleta" type="date">
+            <column name="fechaemisionboleta" length="10" not-null="true" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+        <set name="boletadetalles" table="boletadetalle" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idboletacabecera" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Boletadetalle" />
+        </set>
+    </class>
+</hibernate-mapping>

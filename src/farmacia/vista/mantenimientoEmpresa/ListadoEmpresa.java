@@ -97,7 +97,6 @@ public class ListadoEmpresa extends EstrategiaPaneListado implements ActionListe
         pane_buscador.add(buscarPor);
         pane_buscador.add(txtBuscar);
         pane_buscador.add(buscar);
-        autocompletar = new TextAutoCompleter(txtBuscar);
         contador = new JLabel("Existen 0 usuarios");
         pane1.add(pane_buscador, BorderLayout.NORTH);
         pane1.add(getTabla(), BorderLayout.CENTER);

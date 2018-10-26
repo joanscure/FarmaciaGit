@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 25, 2018 3:35:35 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="farmacia.hibernate.modelo.Tipotrabajador" table="tipotrabajador" catalog="basefarmacia" optimistic-lock="version">
+        <id name="idtipotrabajador" type="java.lang.Integer">
+            <column name="idtipotrabajador" />
+            <generator class="identity" />
+        </id>
+        <property name="nombretipotrabajador" type="string">
+            <column name="nombretipotrabajador" length="32" unique="true" />
+        </property>
+        <property name="accederventas" type="boolean">
+            <column name="accederventas" not-null="true" />
+        </property>
+        <property name="accederproductos" type="boolean">
+            <column name="accederproductos" not-null="true" />
+        </property>
+        <property name="accederclientes" type="boolean">
+            <column name="accederclientes" not-null="true" />
+        </property>
+        <property name="accederconsultas" type="boolean">
+            <column name="accederconsultas" not-null="true" />
+        </property>
+        <property name="accederempleados" type="boolean">
+            <column name="accederempleados" not-null="true" />
+        </property>
+        <property name="accedertipousuario" type="boolean">
+            <column name="accedertipousuario" not-null="true" />
+        </property>
+        <property name="accedercambioclave" type="boolean">
+            <column name="accedercambioclave" not-null="true" />
+        </property>
+        <property name="accederanulaciones" type="boolean">
+            <column name="accederanulaciones" not-null="true" />
+        </property>
+        <property name="accedereliminarproducto" type="boolean">
+            <column name="accedereliminarproducto" not-null="true" />
+        </property>
+        <property name="accedereliminarcliente" type="boolean">
+            <column name="accedereliminarcliente" not-null="true" />
+        </property>
+        <property name="accedereliminarempleado" type="boolean">
+            <column name="accedereliminarempleado" not-null="true" />
+        </property>
+        <property name="accedereliminartipoempleado" type="boolean">
+            <column name="accedereliminartipoempleado" not-null="true" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="status" not-null="true" />
+        </property>
+        <set name="empleados" table="empleado" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="idtipotrabajador" not-null="true" />
+            </key>
+            <one-to-many class="farmacia.hibernate.modelo.Empleado" />
+        </set>
+    </class>
+</hibernate-mapping>

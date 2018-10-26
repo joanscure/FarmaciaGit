@@ -42,11 +42,13 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
     frmEmpleados frmempleados;
     frmVentas frmventas;
     frmEmpresa frmempresa;
+    frmConsumos frmconsumo;
+    frmConsultas frmconsulta;
     configuracionImagenes imageconfig = new configuracionImagenes();
     frmusuariologin login;
     boolean[] permiso = new boolean[12];
     public boolean controlpriincipal = true;
-    public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false, visibleventas = false;
+    public static boolean visibleclientes = false, visibleproductos = false, visibleempleados = false, visibletipo = false, visibleempresa = false, visibleventas = false,visibleconsumo=false,visibleconsulta;
 
     public frmprincipal(frmusuariologin login) throws DAOException {
 
@@ -67,6 +69,8 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
         iempresa.addActionListener(this);
         icambiarPass.addActionListener(this);
         isalir.addActionListener(this);
+        iconsumo.addActionListener(this);
+        iconsultaventas.addActionListener(this);
         setMinimumSize(new Dimension(600, 600));
         setVisible(true);
         perzonalizartipoletra();
@@ -357,6 +361,7 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
                     desktopPane.add(frmempresa);
                     frmempresa.toFront();
                     frmempresa.setVisible(true);
+                    visibleempresa=true;
                     frmempresa.permisoeliminar = permiso[9];
                     frmempresa.pane1.txtBuscar.requestFocus();
 
@@ -370,6 +375,34 @@ public class frmprincipal extends JFrame implements ActionListener, KeyListener 
             frmCambioClave frm = new frmCambioClave(this);
             frm.setVisible(true);
             frm.toFront();
+        }
+        else if(source==iconsumo)
+        {
+             if (!visibleconsumo) {
+                
+                    frmconsumo = new frmConsumos();
+                    desktopPane.add(frmconsumo);
+                    frmconsumo.toFront();
+                    frmconsumo.setVisible(true);
+                    visibleconsumo=true;
+                    frmconsumo.txtbuscarcliente.requestFocus();
+
+               
+
+            }
+        } else if(source==iconsultaventas)
+        {
+             if (!visibleconsulta) {
+                
+                    frmconsulta = new frmConsultas();
+                    desktopPane.add(frmconsulta);
+                    frmconsulta.toFront();
+                    frmconsulta.setVisible(true);
+                    visibleconsulta=true;
+
+               
+
+            }
         }
     }
 
