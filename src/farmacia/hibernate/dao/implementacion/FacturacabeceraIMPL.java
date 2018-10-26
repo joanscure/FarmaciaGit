@@ -13,109 +13,109 @@ import org.hibernate.Transaction;
 
 public class FacturacabeceraIMPL implements FacturacabeceraDAO {
 
-    private SessionFactory sessionFac;
+  private Session sesion;
     private Transaction tx;
 
-    FacturacabeceraIMPL(SessionFactory sessionFac) {
-        this.sessionFac = sessionFac;
+    public FacturacabeceraIMPL(Session session) {
+        this.sesion = sesion;
+    }
+
+    public FacturacabeceraIMPL() {
     }
 
     @Override
     public Integer insertar(Facturacabecera obj) throws DAOException {
         Integer id = null;
-        Session ses = null;
         try {
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            id = (Integer) ses.save(obj);
+            iniciarOperacion();
+            id = (Integer) sesion.save(obj);
             tx.commit();
 
         } catch (HibernateException ex) {
-            tx.rollback();
-            throw new DAOException("Error en transaccion", ex);
+            manejarExcepcion(ex);
+
         } finally {
-            ses.close();
-            sessionFac.close();
+            sesion.close();
         }
         return id;
     }
 
     @Override
     public void modificar(Facturacabecera obj) throws DAOException {
-        Session ses = null;
         try {
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            ses.update(obj);
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
+
         } catch (HibernateException ex) {
-            tx.rollback();
-            throw new DAOException("Error en transaccion", ex);
+            manejarExcepcion(ex);
+
         } finally {
-            ses.close();
-            sessionFac.close();
+            sesion.close();
         }
     }
 
     @Override
-    public void eliminar(Facturacabecera obj) throws DAOException {
-        Session ses = null;
+    public void eliminar(Facturacabecera obj) throws farmacia.hibernate.dao.DAOException {
         try {
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
             obj.setStatus(false);
-            tx = ses.beginTransaction();
-            ses.update(obj);
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
+
         } catch (HibernateException ex) {
-            tx.rollback();
-            throw new DAOException("Error en transaccion", ex);
+            manejarExcepcion(ex);
+
         } finally {
-            ses.close();
-            sessionFac.close();
+            sesion.close();
         }
     }
 
     @Override
-    public List<Facturacabecera> obtenertodos() throws DAOException {
+    public List<Facturacabecera> obtenertodos() throws farmacia.hibernate.dao.DAOException {
         List<Facturacabecera> lista = new ArrayList<>();
-        Session ses = null;
         try {
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            lista = ses.createQuery("from Facturacabecera where status = 1").list();
+            iniciarOperacion();
+            lista = sesion.createQuery("from Facturacabecera where status = 1").list();
             tx.commit();
         } catch (HibernateException ex) {
-            tx.rollback();
-            throw new DAOException("Error en transaccion", ex);
+            manejarExcepcion(ex);
         } finally {
-            ses.close();
-            sessionFac.close();
+            sesion.close();
         }
         return lista;
     }
 
     @Override
-    public Facturacabecera obtener(Integer id) throws DAOException {
-        Session ses = null;
+    public Facturacabecera obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
         Facturacabecera obj = null;
         try {
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            obj = (Facturacabecera) ses.get(Facturacabecera.class, id);
+            iniciarOperacion();
+            obj = (Facturacabecera) sesion.get(Facturacabecera.class, id);
             tx.commit();
         } catch (HibernateException ex) {
-            tx.rollback();
-            throw new DAOException("Error en transaccion", ex);
+            manejarExcepcion(ex);
         } finally {
-            ses.close();
-            sessionFac.close();
+            sesion.close();
         }
+
         return obj;
+    }
+
+    @Override
+    public void iniciarOperacion() throws DAOException {
+        try {
+            sesion = NewHibernateUtil.getSessionFactory().openSession();
+            tx = sesion.beginTransaction();
+        } catch (HibernateException ex) {
+            throw new DAOException("Error en transferencia.", ex);
+        }
+    }
+
+    @Override
+    public void manejarExcepcion(HibernateException ex) throws DAOException {
+        tx.rollback();
+        throw new DAOException("Error en transferencia.", ex);
     }
 
 }

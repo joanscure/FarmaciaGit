@@ -1,56 +1,311 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d355604b-4814-4ec3-bd70-cb1bb0e177fd">
-	<queryString language="SQL">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="964fc633-b4f4-4028-9251-42022932ad85">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="405"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="Total" class="java.lang.Double">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="id" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
 		<![CDATA[SELECT
+     concat(persona.`nombre`,' ',persona.`appaterno`,' ',persona.`apmaterno`) AS cliente,
+     concat(persona_A.`nombre`,' ',persona_A.`appaterno`,' ',persona_A.`apmaterno`) AS vendedor,
      boletacabecera.`idboletacabecera` AS boletacabecera_idboletacabecera,
      boletacabecera.`correlativoboleta` AS boletacabecera_correlativoboleta,
      boletacabecera.`numeroboleta` AS boletacabecera_numeroboleta,
      boletacabecera.`fechaemisionboleta` AS boletacabecera_fechaemisionboleta,
-     boletacabecera.`idpersonacliente` AS boletacabecera_idpersonacliente,
-     boletacabecera.`idempleado` AS boletacabecera_idempleado,
-     boletacabecera.`status` AS boletacabecera_status,
      boletadetalle.`idboletadetalle` AS boletadetalle_idboletadetalle,
      boletadetalle.`idboletacabecera` AS boletadetalle_idboletacabecera,
      boletadetalle.`idproducto` AS boletadetalle_idproducto,
      boletadetalle.`cantidad` AS boletadetalle_cantidad,
      boletadetalle.`subtotal` AS boletadetalle_subtotal,
-     boletadetalle.`status` AS boletadetalle_status,
      empleado.`idempleado` AS empleado_idempleado,
      empleado.`idpersona` AS empleado_idpersona,
-     empleado.`status` AS empleado_status,
      persona.`idpersona` AS persona_idpersona,
-     persona.`nombre` AS persona_nombre,
-     persona.`appaterno` AS persona_appaterno,
-     persona.`apmaterno` AS persona_apmaterno,
-     persona.`status` AS persona_status,
+     persona.`numerodni` AS persona_numerodni,
+     persona.`direccion` AS persona_direccion,
      personacliente.`idpersonacliente` AS personacliente_idpersonacliente,
      personacliente.`idpersona` AS personacliente_idpersona,
-     personacliente.`status` AS personacliente_status,
-     persona.`numerodni` AS persona_numerodni
+     persona_A.`idpersona` AS persona_A_idpersona,
+     persona_A.`numerodni` AS persona_A_numerodni,
+     persona_A.`direccion` AS persona_A_direccion,
+     producto.`idproducto` AS producto_idproducto,
+     concat(producto.`nombreproducto`,' ',
+     producto.`descripcionproducto`,' ',
+     producto.`dosisproducto`) AS descripcion,
+     producto.`preciofinal` AS producto_preciofinal
 FROM
      `boletacabecera` boletacabecera INNER JOIN `boletadetalle` boletadetalle ON boletacabecera.`idboletacabecera` = boletadetalle.`idboletacabecera`
      INNER JOIN `empleado` empleado ON boletacabecera.`idempleado` = empleado.`idempleado`
      INNER JOIN `personacliente` personacliente ON boletacabecera.`idpersonacliente` = personacliente.`idpersonacliente`
      INNER JOIN `persona` persona ON personacliente.`idpersona` = persona.`idpersona`
-     AND persona.`idpersona` = empleado.`idpersona`]]>
+     INNER JOIN `persona` persona_A ON empleado.`idpersona` = persona_A.`idpersona`
+     INNER JOIN `producto` producto ON boletadetalle.`idproducto` = producto.`idproducto`
+WHERE
+      boletacabecera.`idboletacabecera`=$P{id}]]>
 	</queryString>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="vendedor" class="java.lang.String"/>
+	<field name="boletacabecera_idboletacabecera" class="java.lang.Integer"/>
+	<field name="boletacabecera_correlativoboleta" class="java.lang.String"/>
+	<field name="boletacabecera_numeroboleta" class="java.lang.String"/>
+	<field name="boletacabecera_fechaemisionboleta" class="java.sql.Date"/>
+	<field name="boletadetalle_idboletadetalle" class="java.lang.Integer"/>
+	<field name="boletadetalle_idboletacabecera" class="java.lang.Integer"/>
+	<field name="boletadetalle_idproducto" class="java.lang.Integer"/>
+	<field name="boletadetalle_cantidad" class="java.lang.Double"/>
+	<field name="boletadetalle_subtotal" class="java.lang.Double"/>
+	<field name="empleado_idempleado" class="java.lang.Integer"/>
+	<field name="empleado_idpersona" class="java.lang.Integer"/>
+	<field name="persona_idpersona" class="java.lang.Integer"/>
+	<field name="persona_numerodni" class="java.lang.String"/>
+	<field name="persona_direccion" class="java.lang.String"/>
+	<field name="personacliente_idpersonacliente" class="java.lang.Integer"/>
+	<field name="personacliente_idpersona" class="java.lang.Integer"/>
+	<field name="persona_A_idpersona" class="java.lang.Integer"/>
+	<field name="persona_A_numerodni" class="java.lang.String"/>
+	<field name="persona_A_direccion" class="java.lang.String"/>
+	<field name="producto_idproducto" class="java.lang.Integer"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="producto_preciofinal" class="java.lang.Double"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="85" splitType="Stretch">
+			<staticText>
+				<reportElement x="110" y="0" width="122" height="35" forecolor="#FF0033" uuid="a974daba-a124-453e-8323-c7d3e0ade2f7"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FARMACIA]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="581" y="0" width="221" height="85" forecolor="#333333" backcolor="#000000" uuid="dec44337-1daa-49b5-8eb5-12bd9d387456"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="110" y="35" width="122" height="20" uuid="a24e7db8-5b2d-4e0d-a5e5-3c610224b93f"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telf: 079-452-64]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="581" y="19" width="221" height="36" uuid="5a7cba08-40d2-429d-a616-cce1282ca7ae"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="647" y="19" width="97" height="36" uuid="f9989055-26cb-405c-8d71-0b12668ff314"/>
+				<textElement>
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BOLETA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="55" width="100" height="20" uuid="0a7aebcc-02bc-476c-93e0-17c9548dd464"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Miraflorez c37]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="232" y="0" width="100" height="35" forecolor="#6633FF" uuid="15a64e5c-0a26-45af-b5ca-012274e74d08"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UNP]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="647" y="65" width="40" height="20" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="f189ede7-70fe-4353-9cc8-acc6882fcea9"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{boletacabecera_correlativoboleta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="703" y="65" width="88" height="20" forecolor="#FFFFFF" uuid="20e6f9a1-0d51-4814-92e5-ca271eb425d2"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{boletacabecera_numeroboleta}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="11" y="0" width="99" height="85" uuid="34ba5f16-12c8-4dff-9729-31e6b050044b"/>
+				<imageExpression><![CDATA["C:\\Users\\fecyp\\OneDrive\\Documentos\\NetBeansProjects\\FarmaciaGit\\src\\Files\\imagenes\\farmacia.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="687" y="65" width="16" height="20" forecolor="#FFFFFF" uuid="3fb61203-b186-4326-bd1f-ce21693cb2fa"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="90" splitType="Stretch">
+			<staticText>
+				<reportElement x="11" y="10" width="100" height="20" uuid="11387020-7062-42c0-bfe1-4414b4d42338"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Señor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="50" width="100" height="20" uuid="3d878cf3-2a1e-41ad-9fac-fcee472da5ca"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Direccion:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="475" y="50" width="56" height="20" uuid="1e532a4d-f00d-4d35-95b6-e092cc8ca26f"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="30" width="100" height="20" uuid="ec1cc45d-15ac-45b0-ad9f-0e8b9c5d765b"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="70" width="100" height="20" uuid="bd7249a4-f071-41a4-ba99-99022e5c6274"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vendedor]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="111" y="10" width="300" height="20" uuid="91d50c3e-b76b-4974-8482-65bf1ac7e707"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="30" width="313" height="20" uuid="0e1d2241-0830-4839-8523-2db1db391394"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{persona_numerodni}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="50" width="313" height="20" uuid="2b2735f6-ea3f-48f7-8c21-79897b1978bd"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{persona_direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="70" width="323" height="20" uuid="4564395d-a60c-4cb1-9789-7f32f11eb01b"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vendedor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="531" y="50" width="191" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="eaa3041b-fa68-4f7a-97a0-20c6474f5870"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="13" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{boletacabecera_fechaemisionboleta}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch"/>
+		<band height="47" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="5" width="802" height="42" uuid="dbeac1aa-0676-4eb9-ad35-68162faad868"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="147" y="12" width="100" height="20" forecolor="#990099" uuid="0d575c5f-d977-4530-a6b2-75b85688cca0"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="691" y="12" width="100" height="20" forecolor="#990099" uuid="08bd778a-e163-4627-ba19-f2736f0c123a"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[P.Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="12" width="100" height="20" forecolor="#990099" uuid="172b7251-83f2-4181-9a8f-94307b443d5d"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="12" width="100" height="20" forecolor="#990099" uuid="0b9385fc-8a9a-463a-8c6c-2e46e2018b66"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[P.Unitario]]></text>
+			</staticText>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="44" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="10" width="100" height="20" uuid="33bbf89c-9f74-434c-9ffb-da8be97d1750"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{boletadetalle_cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="505" y="10" width="100" height="20" uuid="96a14945-d6df-4e00-a7b7-17787462b4fc"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{producto_preciofinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="691" y="10" width="100" height="20" uuid="6c06b54b-bd53-4b03-9c5b-0df4e4528bd0"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{boletadetalle_subtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="147" y="10" width="346" height="20" uuid="846db570-3649-49f6-8d57-38b7fc4f08c8"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch"/>
+		<band height="45" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="619" y="4" width="183" height="41" uuid="705a341f-e7ae-4f0f-b635-5b0ce96a26dc"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="637" y="15" width="41" height="20" forecolor="#FF0033" uuid="68ccd986-5372-4e15-b3b0-a24f68b2f614"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="687" y="15" width="100" height="20" uuid="cc5771bc-4ed4-42bf-aa5c-cc0d27839bd6"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Total}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="54" splitType="Stretch"/>

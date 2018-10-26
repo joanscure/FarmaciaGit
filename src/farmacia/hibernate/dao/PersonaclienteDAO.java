@@ -6,5 +6,5 @@ import farmacia.hibernate.modelo.Personacliente;
 
 public interface PersonaclienteDAO extends DAO<Personacliente, Integer> {
 
-    void ingresarNuevo(Personacliente cliente, Persona per) throws DAOException;
+    Integer ingresarNuevo(Personacliente cliente, Persona per) throws DAOException;
 }

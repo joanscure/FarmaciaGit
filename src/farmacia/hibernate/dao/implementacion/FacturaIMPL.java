@@ -5,14 +5,21 @@
  */
 package farmacia.hibernate.dao.implementacion;
 
+import farmacia.hibernate.dao.DAOException;
 import farmacia.hibernate.dao.FacturaDAO;
 import farmacia.hibernate.modelo.Factura;
 import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class FacturaIMPL implements FacturaDAO {
 
     FacturaIMPL(SessionFactory sessionFac) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    FacturaIMPL(Session sesion) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -204,5 +211,15 @@ public class FacturaIMPL implements FacturaDAO {
 //    public factura convertir(ResultSet rs) throws DAOException {
 //        throw new DAOException("No se puede utilizar este método. Modelacion abstracta.");
 //    }
+
+    @Override
+    public void iniciarOperacion() throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void manejarExcepcion(HibernateException ex) throws DAOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

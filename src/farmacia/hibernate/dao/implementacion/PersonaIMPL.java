@@ -6,6 +6,8 @@ import farmacia.hibernate.modelo.Persona;
 import farmacia.hibernate.util.NewHibernateUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,120 +15,129 @@ import org.hibernate.Transaction;
 
 public class PersonaIMPL implements PersonaDAO {
 
-    private SessionFactory sessionFac;
+    private Session sesion;
     private Transaction tx;
 
-    public PersonaIMPL(SessionFactory sessionFac) {
-        this.sessionFac = this.sessionFac;
+    public PersonaIMPL(Session session) {
+        this.sesion = sesion;
+    }
+
+    public PersonaIMPL() {
     }
 
     @Override
     public Integer insertar(Persona obj) throws DAOException {
         Integer id = null;
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            id = (Integer) ses.save(obj);
+        try {
+            iniciarOperacion();
+            id = (Integer) sesion.save(obj);
             tx.commit();
-            
-            
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
         return id;
     }
 
     @Override
     public void modificar(Persona obj) throws DAOException {
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            ses.update(obj);
+        try {
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
     }
 
     @Override
     public void eliminar(Persona obj) throws farmacia.hibernate.dao.DAOException {
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
+        try {
             obj.setStatus(false);
-            tx = ses.beginTransaction();
-            ses.update(obj);
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
     }
 
     @Override
     public List<Persona> obtenertodos() throws farmacia.hibernate.dao.DAOException {
         List<Persona> lista = new ArrayList<>();
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            lista = ses.createQuery("from Persona where status = 1").list();
+        try {
+            iniciarOperacion();
+            lista = sesion.createQuery("from Persona where status = 1").list();
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
         }
         return lista;
     }
 
     @Override
     public Persona obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
-        Session ses = null;
         Persona obj = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            ses.beginTransaction();
-            obj = (Persona) ses.get(Persona.class, id);
-            ses.getTransaction().commit();
-        } catch (HibernateException ex){
-            if (ses.getTransaction().isActive()){
-                ses.getTransaction().rollback();
-            }
-            throw new DAOException("Error en transaccion",ex);
-        } finally{
-            //ses.close()
+        try {
+            iniciarOperacion();
+            obj = (Persona) sesion.get(Persona.class, id);
+            tx.commit();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
         }
-       
+
         return obj;
+    }
+
+    @Override
+    public void iniciarOperacion() throws DAOException {
+        try {
+            sesion = NewHibernateUtil.getSessionFactory().openSession();
+            tx = sesion.beginTransaction();
+        } catch (HibernateException ex) {
+            throw new DAOException("Error en transferencia.", ex);
+        }
+    }
+
+    @Override
+    public void manejarExcepcion(HibernateException ex) throws DAOException {
+        tx.rollback();
+        throw new DAOException("Error en transferencia.", ex);
+    }
+
+    public static void main(String[] args) {
+        PersonaIMPL ap = new PersonaIMPL();
+        Persona p = new Persona("Carlos", "Beblera", "Chigon", "12345678", true);
+        try {
+            
+            System.out.println("" + ap.obtener(15));
+//            ap.insertar(p);
+//            ap.eliminar(ap.obtener(1));
+//            List<Persona> lista = ap.obtenertodos();
+//            for (Persona i : lista) {
+//                System.out.println(i.getIdpersona() + " " + i.getNombre());
+//            }
+        } catch (DAOException ex) {
+            Logger.getLogger(PersonaIMPL.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            NewHibernateUtil.cerrar();
+        }
+
     }
 
 }

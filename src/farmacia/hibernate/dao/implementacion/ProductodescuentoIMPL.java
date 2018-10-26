@@ -1,5 +1,6 @@
 package farmacia.hibernate.dao.implementacion;
 
+import farmacia.hibernate.dao.DAOException;
 import farmacia.hibernate.dao.ProductodescuentoDAO;
 import farmacia.hibernate.modelo.Productodescuento;
 import farmacia.hibernate.util.NewHibernateUtil;
@@ -7,125 +8,113 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 public class ProductodescuentoIMPL implements ProductodescuentoDAO {
-
-    private SessionFactory sessionFac;
+private Session sesion;
     private Transaction tx;
 
-    public ProductodescuentoIMPL(SessionFactory sessionFac) {
-        this.sessionFac = this.sessionFac;
+    public ProductodescuentoIMPL(Session session) {
+        this.sesion = sesion;
+    }
+
+    public ProductodescuentoIMPL() {
     }
 
     @Override
-    public Integer insertar(Productodescuento obj) throws farmacia.hibernate.dao.DAOException {
+    public Integer insertar(Productodescuento obj) throws DAOException {
         Integer id = null;
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            id = (Integer) ses.save(obj);
+        try {
+            iniciarOperacion();
+            id = (Integer) sesion.save(obj);
             tx.commit();
-            
-            
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
         return id;
     }
 
     @Override
-    public void modificar(Productodescuento obj) throws farmacia.hibernate.dao.DAOException {
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            ses.update(obj);
+    public void modificar(Productodescuento obj) throws DAOException {
+        try {
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
     }
 
     @Override
     public void eliminar(Productodescuento obj) throws farmacia.hibernate.dao.DAOException {
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
+        try {
             obj.setStatus(false);
-            tx = ses.beginTransaction();
-            ses.update(obj);
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
     }
 
     @Override
     public List<Productodescuento> obtenertodos() throws farmacia.hibernate.dao.DAOException {
         List<Productodescuento> lista = new ArrayList<>();
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            lista = ses.createQuery("from Productodescuento where status = 1").list();
+        try {
+            iniciarOperacion();
+            lista = sesion.createQuery("from Productodescuento where status = 1").list();
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
         }
         return lista;
     }
 
     @Override
     public Productodescuento obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
-        Session ses = null;
         Productodescuento obj = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            obj = (Productodescuento) ses.get(Productodescuento.class, id);
+        try {
+            iniciarOperacion();
+            obj = (Productodescuento) sesion.get(Productodescuento.class, id);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new farmacia.hibernate.dao.DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
         }
+
         return obj;
     }
+
+    @Override
+    public void iniciarOperacion() throws DAOException {
+        try {
+            sesion = NewHibernateUtil.getSessionFactory().openSession();
+            tx = sesion.beginTransaction();
+        } catch (HibernateException ex) {
+            throw new DAOException("Error en transferencia.", ex);
+        }
+    }
+
+    @Override
+    public void manejarExcepcion(HibernateException ex) throws DAOException {
+        tx.rollback();
+        throw new DAOException("Error en transferencia.", ex);
+    }
+
 
 }

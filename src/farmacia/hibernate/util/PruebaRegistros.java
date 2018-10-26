@@ -44,11 +44,7 @@ public class PruebaRegistros {
             try {
                 DAOManager man = new DAOManagerIMPL();
                 
-                Tipotrabajador t = man.getTipoTrabajadorDAO().obtener(1);
-                System.out.println(t.getNombretipotrabajador());
-                
-                Persona p = man.getPersonaDAO().obtener(1);
-                System.out.println(p.getApmaterno());
+                man.getEmpleadoDAO().insertar(crearEmpledao());
                 
                 
             } catch (DAOException ex) {

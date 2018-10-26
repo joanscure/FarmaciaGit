@@ -14,123 +14,109 @@ import org.hibernate.Transaction;
 
 public class BoletacabeceraIMPL implements BoletacabeceraDAO {
 
-    private SessionFactory sessionFac;
+    private Session sesion;
     private Transaction tx;
-    
-    BoletacabeceraIMPL(SessionFactory sessionFac) {
-        this.sessionFac = sessionFac;
+
+    public BoletacabeceraIMPL(Session session) {
+        this.sesion = sesion;
+    }
+
+    public BoletacabeceraIMPL() {
     }
 
     @Override
     public Integer insertar(Boletacabecera obj) throws DAOException {
         Integer id = null;
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            id = (Integer) ses.save(obj);
+        try {
+            iniciarOperacion();
+            id = (Integer) sesion.save(obj);
             tx.commit();
-            
-            
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
         return id;
     }
 
     @Override
     public void modificar(Boletacabecera obj) throws DAOException {
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            ses.update(obj);
+        try {
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
     }
 
     @Override
-    public void eliminar(Boletacabecera obj) throws DAOException {
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
+    public void eliminar(Boletacabecera obj) throws farmacia.hibernate.dao.DAOException {
+        try {
             obj.setStatus(false);
-            tx = ses.beginTransaction();
-            ses.update(obj);
+            iniciarOperacion();
+            sesion.update(obj);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
         }
     }
 
     @Override
-    public List<Boletacabecera> obtenertodos() throws DAOException {
+    public List<Boletacabecera> obtenertodos() throws farmacia.hibernate.dao.DAOException {
         List<Boletacabecera> lista = new ArrayList<>();
-        Session ses = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            lista = ses.createQuery("from Boletacabecera where status = 1").list();
+        try {
+            iniciarOperacion();
+            lista = sesion.createQuery("from Boletacabecera where status = 1").list();
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
         }
         return lista;
     }
 
     @Override
-    public Boletacabecera obtener(Integer id) throws DAOException {
-        Session ses = null;
+    public Boletacabecera obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
         Boletacabecera obj = null;
-        try{
-            sessionFac = NewHibernateUtil.getSessionFactory();
-            ses = sessionFac.openSession();
-            tx = ses.beginTransaction();
-            obj = (Boletacabecera) ses.get(Boletacabecera.class, id);
+        try {
+            iniciarOperacion();
+            obj = (Boletacabecera) sesion.get(Boletacabecera.class, id);
             tx.commit();
-        } catch (HibernateException ex){
-            tx.rollback();
-            throw new DAOException("Error en transaccion",ex);
-        } 
-        
-        finally{
-            ses.close();
-            sessionFac.close();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
         }
+
         return obj;
     }
 
-    public static void main(String[] args) {
-        
+    @Override
+    public void iniciarOperacion() throws DAOException {
+        try {
+            sesion = NewHibernateUtil.getSessionFactory().openSession();
+            tx = sesion.beginTransaction();
+        } catch (HibernateException ex) {
+            throw new DAOException("Error en transferencia.", ex);
+        }
     }
+
+    @Override
+    public void manejarExcepcion(HibernateException ex) throws DAOException {
+        tx.rollback();
+        throw new DAOException("Error en transferencia.", ex);
+    }
+
 }

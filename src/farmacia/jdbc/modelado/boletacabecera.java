@@ -13,6 +13,9 @@ public class boletacabecera {
     private Long idempleado;//indice
     private boolean status;
 
+    public boletacabecera() {
+    }
+
     public boletacabecera(String correlativoboleta, String numeroboleta, Date fechaemisionboleta, Long idpersonacliente, Long idempleado) {
         this.correlativoboleta = correlativoboleta;
         this.numeroboleta = numeroboleta;

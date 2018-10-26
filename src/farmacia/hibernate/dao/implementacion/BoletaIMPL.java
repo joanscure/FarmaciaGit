@@ -6,43 +6,156 @@
 package farmacia.hibernate.dao.implementacion;
 
 import farmacia.hibernate.dao.BoletaDAO;
+import farmacia.hibernate.dao.DAOException;
+import farmacia.hibernate.dao.DAOManager;
 import farmacia.hibernate.modelo.Boleta;
+import farmacia.hibernate.modelo.Boletacabecera;
+import farmacia.hibernate.modelo.Boletadetalle;
+import farmacia.hibernate.modelo.Empleado;
+import farmacia.hibernate.modelo.Persona;
+import farmacia.hibernate.modelo.Personacliente;
+import farmacia.hibernate.modelo.Producto;
+import farmacia.hibernate.util.NewHibernateUtil;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import org.hibernate.SessionFactory;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-/**
- *
- * @author fecyp
- */
 public class BoletaIMPL implements BoletaDAO {
 
-    BoletaIMPL(SessionFactory sessionFac) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     private Session sesion;
+    private Transaction tx;
+
+    public BoletaIMPL(Session session) {
+        this.sesion = sesion;
+    }
+
+    public BoletaIMPL() {
     }
 
     @Override
-    public Integer insertar(Boleta obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Integer insertar(Boleta obj) throws DAOException {
+        Integer id = null;
+        try {
+            iniciarOperacion();
+            BoletacabeceraIMPL cab = new BoletacabeceraIMPL(sesion);
+            Boletacabecera boleta = obj.getCabecera();
+            Set set = obj.getDetalle().stream().collect(Collectors.toSet());
+            boleta.setBoletadetalles(set);
+            cab.insertar(boleta);
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
+        }
+        return id;
     }
 
     @Override
-    public void modificar(Boleta obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modificar(Boleta obj) throws DAOException {
+        try {
+            iniciarOperacion();
+            sesion.update(obj);
+            tx.commit();
+
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+
+        } finally {
+            sesion.close();
+        }
     }
 
     @Override
     public void eliminar(Boleta obj) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        try {
+//            obj.setStatus(false);
+//            iniciarOperacion();
+//            sesion.update(obj);
+//            tx.commit();
+//
+//        } catch (HibernateException ex) {
+//            manejarExcepcion(ex);
+//
+//        } finally {
+//            sesion.close();
+//        }
     }
 
     @Override
     public List<Boleta> obtenertodos() throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Boleta> lista = new ArrayList<>();
+        try {
+            iniciarOperacion();
+            lista = sesion.createQuery("from Boleta where status = 1").list();
+            tx.commit();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
+        }
+        return lista;
     }
 
     @Override
     public Boleta obtener(Integer id) throws farmacia.hibernate.dao.DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Boleta obj = null;
+        try {
+            iniciarOperacion();
+            obj = (Boleta) sesion.get(Boleta.class, id);
+            tx.commit();
+        } catch (HibernateException ex) {
+            manejarExcepcion(ex);
+        } finally {
+            sesion.close();
+        }
+
+        return obj;
+    }
+
+    @Override
+    public void iniciarOperacion() throws DAOException {
+        try {
+            sesion = NewHibernateUtil.getSessionFactory().openSession();
+            tx = sesion.beginTransaction();
+        } catch (HibernateException ex) {
+            throw new DAOException("Error en transferencia.", ex);
+        }
+    }
+
+    @Override
+    public void manejarExcepcion(HibernateException ex) throws DAOException {
+        tx.rollback();
+        throw new DAOException("Error en transferencia.", ex);
+    }
+    
+    public static void main(String[] args) throws DAOException {
+        DAOManager man = new DAOManagerIMPL();
+        Empleado empleado = man.getEmpleadoDAO().obtener(1);
+        
+        Persona per = new Persona("jose", "miguel", "summer", "12345678", true);
+        Personacliente cliente = new Personacliente(per, true);
+        Integer idCliente = man.getPersonaClienteDAO().ingresarNuevo(cliente, per);
+        cliente.setIdpersonacliente(idCliente);
+        
+        
+        List<Boletadetalle> lista = new ArrayList<>();
+        Producto producto = man.getProductoDAO().obtener(1);
+        
+        for (int i = 0; i < 10; i++) {
+            Boletadetalle det;
+            det = new Boletadetalle(null, producto, 12, 12, true);
+            lista.add(det);
+        }
+        
+        Boletacabecera cab = new Boletacabecera(empleado, cliente, "2222", "12345678", new Date(213213L), true);
+        
+        Boleta bol = new Boleta(cab, lista);
+        man.getBoleta().insertar(bol);
     }
 
 //    Connection conexion;
@@ -214,4 +327,6 @@ public class BoletaIMPL implements BoletaDAO {
 //    public boleta convertir(ResultSet rs) throws DAOException {
 //        throw new DAOException("No se puede utilizar este método. Modelacion abstracta.");
 //    }
+
+   
 }

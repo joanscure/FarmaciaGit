@@ -42,6 +42,7 @@ public abstract class EstrategiaPaneListado extends JPanel {
     public configuracionImagenes configIma = new configuracionImagenes();
     public Font fontboton = new Font("Geneva", 1, 13);
     public Color c = new java.awt.Color(255, 204, 102);
+    public JButton bnreport;
     public boolean control = true;
     public boolean teclamas = false;
     public EstrategiaPaneListado(String titulo)
@@ -60,4 +61,5 @@ public abstract class EstrategiaPaneListado extends JPanel {
     public abstract void Iniciar_componentes(String titulo);
     public abstract JScrollPane getTabla();
     public abstract void actualizartabla()throws DAOException;
+    public abstract void generarReporte();
 }
